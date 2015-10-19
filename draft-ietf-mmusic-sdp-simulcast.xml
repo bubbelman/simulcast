@@ -24,20 +24,20 @@
 
           <city>SE-164 80 Stockholm</city>
 
-          <region/>
+          <region></region>
 
-          <code/>
+          <code></code>
 
           <country>Sweden</country>
         </postal>
 
-        <phone/>
+        <phone></phone>
 
-        <facsimile/>
+        <facsimile></facsimile>
 
         <email>bo.burman@ericsson.com</email>
 
-        <uri/>
+        <uri></uri>
       </address>
     </author>
 
@@ -75,13 +75,13 @@
           <country>USA</country>
         </postal>
 
-        <phone/>
+        <phone></phone>
 
-        <facsimile/>
+        <facsimile></facsimile>
 
         <email>snandaku@cisco.com</email>
 
-        <uri/>
+        <uri></uri>
       </address>
     </author>
 
@@ -101,17 +101,17 @@
           <country>USA</country>
         </postal>
 
-        <phone/>
+        <phone></phone>
 
-        <facsimile/>
+        <facsimile></facsimile>
 
         <email>mzanaty@cisco.com</email>
 
-        <uri/>
+        <uri></uri>
       </address>
     </author>
 
-    <date day="18" month="October" year="2015"/>
+    <date day="19" month="October" year="2015" />
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -159,7 +159,7 @@
     </section>
 
     <section anchor="sec-definitions" title="Definitions">
-      <t/>
+      <t></t>
 
       <section title="Terminology">
         <t>This document makes use of the terminology defined in <xref
@@ -169,26 +169,27 @@
         Update</xref>. In addition, the following terms are used:<list
             style="hanging">
             <t hangText="RTP Mixer:">An RTP middle node, defined in <xref
-            target="RFC5117"/> (Section 3.4: Topo-Mixer), further elaborated
-            and extended with other topologies in <xref
-            target="I-D.ietf-avtcore-rtp-topologies-update"/> (Section 3.6 to
-            3.9).</t>
+            target="RFC5117"></xref> (Section 3.4: Topo-Mixer), further
+            elaborated and extended with other topologies in <xref
+            target="I-D.ietf-avtcore-rtp-topologies-update"></xref> (Section
+            3.6 to 3.9).</t>
 
             <t hangText="RTP Switch:">A common short term for the terms
             "switching RTP mixer", "source projecting middlebox", and "video
             switching MCU" as discussed in <xref
-            target="I-D.ietf-avtcore-rtp-topologies-update"/>.</t>
+            target="I-D.ietf-avtcore-rtp-topologies-update"></xref>.</t>
 
             <t hangText="Simulcast Stream:">One Encoded Stream or Dependent
             Stream from a set of concurrently transmitted Encoded Streams and
             optional Dependent Streams, all sharing a common Media Source, as
-            defined in <xref target="I-D.ietf-avtext-rtp-grouping-taxonomy"/>.
-            Decoding a Dependent Stream also requires the related (Dependent
-            and) Encoded Stream(s), but in the context of simulcast that is
-            considered a property of the Dependent Stream constituting the
-            simulcast stream. For example, HD and thumbnail video simulcast
-            versions of a single Media Source sent concurrently as separate
-            RTP Streams.</t>
+            defined in <xref
+            target="I-D.ietf-avtext-rtp-grouping-taxonomy"></xref>. Decoding a
+            Dependent Stream also requires the related (Dependent and) Encoded
+            Stream(s), but in the context of simulcast that is considered a
+            property of the Dependent Stream constituting the simulcast
+            stream. For example, HD and thumbnail video simulcast versions of
+            a single Media Source sent concurrently as separate RTP
+            Streams.</t>
 
             <t hangText="Simulcast Format:">Different formats of a simulcast
             stream serve the same purpose as alternative RTP payload types in
@@ -330,9 +331,9 @@
         <t>It is also common that a currently active speaker participant is
         shown in larger size or higher quality than other participants (the
         sampling or bitrate aspects of <xref
-        target="sec-diverse-receivers"/>). Not sending the active speaker
-        media back to itself means there is some other participant's media
-        that instead has to receive special handling towards the active
+        target="sec-diverse-receivers"></xref>). Not sending the active
+        speaker media back to itself means there is some other participant's
+        media that instead has to receive special handling towards the active
         speaker; typically the previous active speaker. This way, the
         previously active speaker is needed both in larger size (to current
         active speaker) and in small size (to the rest of the participants),
@@ -380,7 +381,7 @@
         <t>The application logic that controls the communication session may
         allow receiving participants to apply preferences to the
         characteristics of the RTP stream they receive, for example in terms
-        of the aspects listed in <xref target="sec-diverse-receivers"/>.
+        of the aspects listed in <xref target="sec-diverse-receivers"></xref>.
         Sending a simulcast of RTP streams is one way of accommodating
         receivers with conflicting or otherwise incompatible preferences.</t>
       </section>
@@ -474,7 +475,7 @@
 
           <t>A single media source per SDP media description is assumed, which
           is aligned with the concepts defined in <xref
-          target="I-D.ietf-avtext-rtp-grouping-taxonomy"/> and will
+          target="I-D.ietf-avtext-rtp-grouping-taxonomy"></xref> and will
           specifically work in a WebRTC context, both with and without <xref
           target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref>
           grouping.</t>
@@ -530,7 +531,7 @@ sc-id       = fmt / rid-identifier / token
 ]]></artwork>
         </figure>
 
-        <t/>
+        <t></t>
 
         <t>There are separate and independent sets of parameters for simulcast
         in send and receive directions. When listing multiple directions, each
@@ -553,8 +554,8 @@ sc-id       = fmt / rid-identifier / token
         order of the listed simulcast versions in the "send" direction conveys
         a rough sense of stream fidelity, in decreasing order: the first
         listed stream will be the stream with highest fidelity <xref
-        target="sec-diverse-receivers"/>, and subsequent streams will have
-        progressively lower fidelity. The order of the listed simulcast
+        target="sec-diverse-receivers"></xref>, and subsequent streams will
+        have progressively lower fidelity. The order of the listed simulcast
         streams in the "recv" direction expresses a preference which simulcast
         streams that are preferred, with the leftmost being most preferred.
         This can be of importance if the number of actually sent simulcast
@@ -562,8 +563,9 @@ sc-id       = fmt / rid-identifier / token
 
         <t>Formats that have explicit <xref
         target="RFC5583">dependencies</xref> <xref
-        target="I-D.pthatcher-mmusic-rid"/> to other formats (even in the same
-        media description) MAY be listed as different simulcast streams.</t>
+        target="I-D.pthatcher-mmusic-rid"></xref> to other formats (even in
+        the same media description) MAY be listed as different simulcast
+        streams.</t>
 
         <t>Alternative simulcast formats MAY be specified as part of the
         attribute parameters by expressing each simulcast stream as a
@@ -947,7 +949,7 @@ a=simulcast: send rid=5;6;7 paused=6,7
       target="I-D.ietf-avtcore-multiplex-guidelines">Guidelines for
       Multiplexing in RTP</xref>. Discussion and clarification on how to
       handle multiple streams in an RTP session can be found in <xref
-      target="I-D.ietf-avtcore-rtp-multi-stream"/>.</t>
+      target="I-D.ietf-avtcore-rtp-multi-stream"></xref>.</t>
 
       <t>The network aspects that are relevant for simulcast are:<list
           style="hanging">
@@ -971,7 +973,7 @@ a=simulcast: send rid=5;6;7 paused=6,7
           enable combining simulcast with multicast.</t>
         </list></t>
 
-      <t/>
+      <t></t>
     </section>
 
     <section anchor="sec-limitation" title="Limitations">
@@ -1015,9 +1017,9 @@ a=simulcast: send rid=5;6;7 paused=6,7
         codecs lacking a codec-specific bandwidth parameter, since the SDP
         "b="-line covers all RTP payload types listed on an "m="-line.</t>
 
-        <t>When using FEC according to <xref target="RFC5109"/> in a single
-        RTP session, there is no way to express the relation between the
-        simulcast stream and the FEC stream protecting it.</t>
+        <t>When using FEC according to <xref target="RFC5109"></xref> in a
+        single RTP session, there is no way to express the relation between
+        the simulcast stream and the FEC stream protecting it.</t>
 
         <t>A simulcast stream signaled as initially paused is not possible to
         resume by a remote peer, because it cannot know which target SSRC to
@@ -1069,7 +1071,7 @@ a=simulcast: send rid=5;6;7 paused=6,7
     </section>
 
     <section anchor="sec-ack" title="Acknowledgements">
-      <t/>
+      <t></t>
     </section>
   </middle>
 
