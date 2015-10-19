@@ -1005,7 +1005,11 @@ a=simulcast: send rid=5;6;7 paused=6,7
         for any technology that adds to the number of required RTP payload
         types in a multiplicative way, such as for example adding <xref
         target="RFC4588">RTP retransmission</xref> and <xref
-        target="RFC5109">Forward Error Correction</xref>.</t>
+        target="RFC5109">Forward Error Correction</xref>. <xref
+        target="I-D.ietf-payload-flexible-fec-scheme">Flexible FEC
+        Scheme</xref> can be used for RTP retransmissions and would avoid the
+        double consumption of the PT space that <xref target="RFC4588">RTP
+        Retransmission</xref> causes. </t>
 
         <t>Only existing SDP attributes and parameters can be used to define
         codec configuration for a simulcast format. Any codec that does not
@@ -1015,11 +1019,7 @@ a=simulcast: send rid=5;6;7 paused=6,7
         dimensions</xref> with necessary precision, or not at all. One example
         of this is the ability to separate simulcast formats by bandwidth for
         codecs lacking a codec-specific bandwidth parameter, since the SDP
-        "b="-line covers all RTP payload types listed on an "m="-line.</t>
-
-        <t>When using FEC according to <xref target="RFC5109"/> in a single
-        RTP session, there is no way to express the relation between the
-        simulcast stream and the FEC stream protecting it.</t>
+        "b="-line covers all RTP payload types listed on an "m="-line. </t>
 
         <t>A simulcast stream signaled as initially paused is not possible to
         resume by a remote peer, because it cannot know which target SSRC to
@@ -1130,6 +1130,8 @@ a=simulcast: send rid=5;6;7 paused=6,7
       <?rfc include='reference.I-D.ietf-avtext-rtp-grouping-taxonomy'?>
 
       <?rfc include='reference.I-D.ietf-payload-vp8'?>
+
+      <?rfc include='reference.I-D.ietf-payload-flexible-fec-scheme'?>
     </references>
 
     <section title="Changes From Earlier Versions">
