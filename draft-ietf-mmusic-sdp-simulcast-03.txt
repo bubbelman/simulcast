@@ -5,10 +5,10 @@
 Network Working Group                                          B. Burman
 Internet-Draft                                             M. Westerlund
 Intended status: Standards Track                                Ericsson
-Expires: April 20, 2016                                    S. Nandakumar
+Expires: April 21, 2016                                    S. Nandakumar
                                                                M. Zanaty
                                                                    Cisco
-                                                        October 18, 2015
+                                                        October 19, 2015
 
 
                 Using Simulcast in SDP and RTP Sessions
@@ -43,7 +43,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 20, 2016.
+   This Internet-Draft will expire on April 21, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 1]
+Burman, et al.           Expires April 21, 2016                 [Page 1]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -91,7 +91,7 @@ Table of Contents
        6.3.2.  Multi-Source Client . . . . . . . . . . . . . . . . .  17
    7.  Network Aspects . . . . . . . . . . . . . . . . . . . . . . .  19
    8.  Limitations . . . . . . . . . . . . . . . . . . . . . . . . .  19
-     8.1.  Single RTP Session  . . . . . . . . . . . . . . . . . . .  20
+     8.1.  Single RTP Session  . . . . . . . . . . . . . . . . . . .  19
      8.2.  SDP Format Identification . . . . . . . . . . . . . . . .  20
      8.3.  RID Identification  . . . . . . . . . . . . . . . . . . .  20
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
@@ -102,18 +102,19 @@ Table of Contents
      13.1.  Normative References . . . . . . . . . . . . . . . . . .  21
      13.2.  Informative References . . . . . . . . . . . . . . . . .  22
    Appendix A.  Changes From Earlier Versions  . . . . . . . . . . .  24
-     A.1.  Modifications Between WG Version -01 and  -02 . . . . . .  25
-     A.2.  Modifications Between WG Version -00 and  -01 . . . . . .  25
-     A.3.  Modifications Between Individual Version -00 and WG
-           Version -00 . . . . . . . . . . . . . . . . . . . . . . .  25
+     A.1.  Modifications Between WG Version -02 and  -03 . . . . . .  24
+     A.2.  Modifications Between WG Version -01 and  -02 . . . . . .  25
+     A.3.  Modifications Between WG Version -00 and  -01 . . . . . .  25
+     A.4.  Modifications Between Individual Version -00 and WG
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 2]
+Burman, et al.           Expires April 21, 2016                 [Page 2]
 
 Internet-Draft                  Simulcast                   October 2015
 
 
+           Version -00 . . . . . . . . . . . . . . . . . . . . . . .  25
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  25
 
 1.  Introduction
@@ -135,7 +136,7 @@ Internet-Draft                  Simulcast                   October 2015
    different purposes.  This document focuses on the case where it is
    desirable to provide a media source as multiple encoded streams over
    RTP [RFC3550] towards an intermediary so that the intermediary can
-   provide the wanted functionality by selecting which RTP stream to
+   provide the wanted functionality by selecting which RTP stream(s) to
    forward to other participants in the session, and more specifically
    how the identification and grouping of the involved RTP streams are
    done.  From an RTP perspective, simulcast is a specific application
@@ -164,8 +165,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-
-Burman, et al.           Expires April 20, 2016                 [Page 3]
+Burman, et al.           Expires April 21, 2016                 [Page 3]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -221,7 +221,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 4]
+Burman, et al.           Expires April 21, 2016                 [Page 4]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -277,7 +277,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 5]
+Burman, et al.           Expires April 21, 2016                 [Page 5]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -333,7 +333,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 6]
+Burman, et al.           Expires April 21, 2016                 [Page 6]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -389,7 +389,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 7]
+Burman, et al.           Expires April 21, 2016                 [Page 7]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -445,7 +445,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 8]
+Burman, et al.           Expires April 21, 2016                 [Page 8]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -501,7 +501,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                 [Page 9]
+Burman, et al.           Expires April 21, 2016                 [Page 9]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -522,13 +522,12 @@ Internet-Draft                  Simulcast                   October 2015
 6.1.  Simulcast Capability
 
    Simulcast capability is expressed as a new media level SDP attribute,
-   "a=simulcast".  For each desired direction (send/recv/sendrecv), the
-   simulcast attribute defines a list of simulcast streams (separated by
+   "a=simulcast".  For each desired direction (send/recv), the simulcast
+   attribute defines a list of simulcast streams (separated by
    semicolons), each of which is a list of simulcast formats (separated
    by commas).  The meaning of the attribute on SDP session level is
-   undefined and MUST NOT be used.  There MUST NOT be more than one
-   "a=simulcast" attribute per media description.  The ABNF [RFC5234]
-   for this attribute is:
+   undefined and MUST NOT be used.  The ABNF [RFC5234] for this
+   attribute is:
 
 sc-attr     = "a=simulcast:" 1*2( WSP sc-str-list ) [WSP sc-pause-list]
 sc-str-list = sc-dir WSP sc-id-type "=" sc-alt-list *( ";" sc-alt-list )
@@ -554,15 +553,15 @@ sc-id       = fmt / rid-identifier / token
    identification methods MUST NOT be used for different directions on a
    single "a=simulcast" line.  Implementations that support both
    identification methods MAY include one "a=simulcast" line for each
+   identification method for the same "m="-line.  Multiple "a=simulcast"
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 10]
+Burman, et al.           Expires April 21, 2016                [Page 10]
 
 Internet-Draft                  Simulcast                   October 2015
 
 
-   identification method for the same "m="-line.  Multiple "a=simulcast"
    lines with the same identification method MUST NOT be used for a
    single "m="-line.
 
@@ -570,15 +569,15 @@ Internet-Draft                  Simulcast                   October 2015
    listing of simulcast stream identifications to be used.  The number
    of (non-alternative, see below) identifications in the list sets a
    limit to the number of supported simulcast streams in that direction.
-   The order of the listed simulcast versions in the "send" direction
-   conveys a rough sense of stream fidelity, in decreasing order: the
-   first listed stream will be the stream with highest fidelity
-   Section 3.1, and subsequent streams will have progressively lower
-   fidelity.  The order of the listed simulcast streams in the "recv"
-   direction expresses a preference which simulcast streams that are
-   preferred, with the leftmost being most preferred.  This can be of
-   importance if the number of actually sent simulcast streams have to
-   be reduced for some reason.
+   The order of the listed simulcast versions in the 'send' direction
+   suggests a proposed order of preference, in decreasing order: the
+   first listed stream will be the stream most preferred Section 3.1,
+   and subsequent streams will have progressively lower preference.  The
+   order of the listed simulcast streams in the "recv" direction
+   expresses a preference which simulcast streams that are preferred,
+   with the leftmost being most preferred.  This can be of importance if
+   the number of actually sent simulcast streams have to be reduced for
+   some reason.
 
    Formats that have explicit dependencies [RFC5583]
    [I-D.pthatcher-mmusic-rid] to other formats (even in the same media
@@ -610,15 +609,15 @@ Internet-Draft                  Simulcast                   October 2015
    simulcast format (if there are such) in the SDP.  The used simulcast
    stream identification SHOULD be the codec format most relevant to the
    media description, if possible to identify, for example the audio
+   codec rather than the DTMF.  What codec format to choose in the case
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 11]
+Burman, et al.           Expires April 21, 2016                [Page 11]
 
 Internet-Draft                  Simulcast                   October 2015
 
 
-   codec rather than the DTMF.  What codec format to choose in the case
    of switching between multiple equally "important" formats is left
    open, but it is assumed that in the presence of such strong relation
    it does not matter which is chosen.
@@ -669,7 +668,8 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 12]
+
+Burman, et al.           Expires April 21, 2016                [Page 12]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -725,7 +725,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 13]
+Burman, et al.           Expires April 21, 2016                [Page 13]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -759,6 +759,8 @@ Internet-Draft                  Simulcast                   October 2015
    expected that the "pt" identification method will provide feature
    parity with the "rid" method, and the different "a=simulcast" lines
    can therefore express different use of simulcast functionality.
+   However, for some configurations the different identification methods
+   can equivalent.
 
    An answerer receiving an offer listing both simulcast stream
    identification methods MUST choose only one and remove the other from
@@ -779,9 +781,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-
-
-Burman, et al.           Expires April 20, 2016                [Page 14]
+Burman, et al.           Expires April 21, 2016                [Page 14]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -837,7 +837,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 15]
+Burman, et al.           Expires April 21, 2016                [Page 15]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -893,7 +893,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 16]
+Burman, et al.           Expires April 21, 2016                [Page 16]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -949,7 +949,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 17]
+Burman, et al.           Expires April 21, 2016                [Page 17]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 18]
+Burman, et al.           Expires April 21, 2016                [Page 18]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -1038,11 +1038,8 @@ Internet-Draft                  Simulcast                   October 2015
 
    NAT/FW Traversal:  Using multiple RTP sessions incurs more cost for
       NAT/FW traversal unless they can re-use the same transport flow,
-      which can be achieved by either one of multiplexing multiple RTP
-      sessions on a single lower layer transport
-      [I-D.westerlund-avtcore-transport-multiplexing] or Multiplexing
-      Negotiation Using SDP Port Numbers
-      [I-D.ietf-mmusic-sdp-bundle-negotiation].
+      which can be achieved by Multiplexing Negotiation Using SDP Port
+      Numbers [I-D.ietf-mmusic-sdp-bundle-negotiation].
 
    Multicast:  Multiple RTP sessions are required to enable combining
       simulcast with multicast.
@@ -1054,24 +1051,21 @@ Internet-Draft                  Simulcast                   October 2015
    simulcast formats of a media source, while others relate to the two
    different simulcast stream identification methods.
 
-
-
-
-
-
-
-
-Burman, et al.           Expires April 20, 2016                [Page 19]
-
-Internet-Draft                  Simulcast                   October 2015
-
-
 8.1.  Single RTP Session
 
    It is not possible to use different simulcast streams on different
    transports, limiting the possibilities to apply different QoS to
    different simulcast streams.  When using unicast, QoS mechanisms
    based on individual packet marking are feasible, since they do not
+
+
+
+
+Burman, et al.           Expires April 21, 2016                [Page 19]
+
+Internet-Draft                  Simulcast                   October 2015
+
+
    require separation of simulcast streams into different RTP sessions
    to apply different QoS.
 
@@ -1113,17 +1107,20 @@ Internet-Draft                  Simulcast                   October 2015
 
    Use of the additional "a=rid"-line in SDP and the corresponding RID
    RTCP SDES item and RTP header extension requires some additional
+   implementation complexity, and incurs some extra bandwidth cost to
+   carry the RID RTCP SDES item and RTP header extension.
 
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 20]
+
+
+
+
+Burman, et al.           Expires April 21, 2016                [Page 20]
 
 Internet-Draft                  Simulcast                   October 2015
 
-
-   implementation complexity, and incurs some extra bandwidth cost to
-   carry the RID RTCP SDES item and RTP header extension.
 
 9.  IANA Considerations
 
@@ -1173,7 +1170,10 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 21]
+
+
+
+Burman, et al.           Expires April 21, 2016                [Page 21]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 22]
+Burman, et al.           Expires April 21, 2016                [Page 22]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -1257,17 +1257,6 @@ Internet-Draft                  Simulcast                   October 2015
               Galligan, "RTP Payload Format for VP8 Video", draft-ietf-
               payload-vp8-17 (work in progress), September 2015.
 
-   [I-D.roach-mmusic-unified-plan]
-              Roach, A., Uberti, J., and M. Thomson, "A Unified Plan for
-              Using SDP with Large Numbers of Media Flows", draft-roach-
-              mmusic-unified-plan-00 (work in progress), July 2013.
-
-   [I-D.westerlund-avtcore-transport-multiplexing]
-              Westerlund, M. and C. Perkins, "Multiplexing Multiple RTP
-              Sessions onto a Single Lower-Layer Transport", draft-
-              westerlund-avtcore-transport-multiplexing-07 (work in
-              progress), October 2013.
-
    [RFC2198]  Perkins, C., Kouvelas, I., Hodson, O., Hardman, V.,
               Handley, M., Bolot, J., Vega-Garcia, A., and S. Fosse-
               Parisis, "RTP Payload for Redundant Audio Data", RFC 2198,
@@ -1283,13 +1272,6 @@ Internet-Draft                  Simulcast                   October 2015
               Comfort Noise (CN)", RFC 3389, DOI 10.17487/RFC3389,
               September 2002, <http://www.rfc-editor.org/info/rfc3389>.
 
-
-
-Burman, et al.           Expires April 20, 2016                [Page 23]
-
-Internet-Draft                  Simulcast                   October 2015
-
-
    [RFC4588]  Rey, J., Leon, D., Miyazaki, A., Varsa, V., and R.
               Hakenberg, "RTP Retransmission Payload Format", RFC 4588,
               DOI 10.17487/RFC4588, July 2006,
@@ -1299,6 +1281,14 @@ Internet-Draft                  Simulcast                   October 2015
               Digits, Telephony Tones, and Telephony Signals", RFC 4733,
               DOI 10.17487/RFC4733, December 2006,
               <http://www.rfc-editor.org/info/rfc4733>.
+
+
+
+
+Burman, et al.           Expires April 21, 2016                [Page 23]
+
+Internet-Draft                  Simulcast                   October 2015
+
 
    [RFC5117]  Westerlund, M. and S. Wenger, "RTP Topologies", RFC 5117,
               DOI 10.17487/RFC5117, January 2008,
@@ -1337,16 +1327,29 @@ Appendix A.  Changes From Earlier Versions
 
    NOTE TO RFC EDITOR: Please remove this section prior to publication.
 
+A.1.  Modifications Between WG Version -02 and -03
+
+   o  Removed explicit references to unified plan draft.
+
+   o  Added possibility to initiate a stream with simulcast streams in
+      paused mode.
+
+   o  Enabled an offerer to offer multiple stream identification (pt or
+      rid) methods and have the answerer choose which to use.
+
+   o  Added a preference indication also in send direction offers.
 
 
 
-
-Burman, et al.           Expires April 20, 2016                [Page 24]
+Burman, et al.           Expires April 21, 2016                [Page 24]
 
 Internet-Draft                  Simulcast                   October 2015
 
 
-A.1.  Modifications Between WG Version -01 and -02
+   o  Added a section on limiations the current proposal, including
+      identification method specific limiations.
+
+A.2.  Modifications Between WG Version -01 and -02
 
    o  Relying on the new RID solution for codec constraints and
       configuration identification.  This has resulted in changes in
@@ -1364,11 +1367,11 @@ A.1.  Modifications Between WG Version -01 and -02
    o  Changed the definition so that ordering of simulcast formats for a
       specific simulcast stream do have a preference order.
 
-A.2.  Modifications Between WG Version -00 and -01
+A.3.  Modifications Between WG Version -00 and -01
 
    o  No changes.  Only preventing expiry.
 
-A.3.  Modifications Between Individual Version -00 and WG Version -00
+A.4.  Modifications Between Individual Version -00 and WG Version -00
 
    o  Added this appendix.
 
@@ -1394,10 +1397,7 @@ Authors' Addresses
 
 
 
-
-
-
-Burman, et al.           Expires April 20, 2016                [Page 25]
+Burman, et al.           Expires April 21, 2016                [Page 25]
 
 Internet-Draft                  Simulcast                   October 2015
 
@@ -1453,4 +1453,4 @@ Internet-Draft                  Simulcast                   October 2015
 
 
 
-Burman, et al.           Expires April 20, 2016                [Page 26]
+Burman, et al.           Expires April 21, 2016                [Page 26]
