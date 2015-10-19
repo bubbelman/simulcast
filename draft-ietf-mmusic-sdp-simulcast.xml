@@ -251,13 +251,6 @@ as updated topologies are in AUTH48.-->
       important to reduce the load on the RTP Mixer and/or minimize QoE impact
       than to achieve an optimal adaptation of resource usage.</t>
 
-      <t>A multicast/broadcast case where the receivers themselves selects the
-      most appropriate simulcast stream and tune in to the right media
-      transport to receive that stream is also <xref
-      target="sec-multicast">considered</xref> . This enables large,
-      heterogeneous receiver populations, when it comes to capabilities and
-      the use of network path bandwidth resources.</t>
-
       <section anchor="sec-diverse-receivers"
                title="Reaching a Diverse Set of Receivers">
         <t>The media sources provided by a sending participant potentially
@@ -341,41 +334,6 @@ as updated topologies are in AUTH48.-->
         active speaker) and in small size (to the rest of the participants),
         which can be solved with a simulcast from the previously active
         speaker to the RTP switch.</t>
-      </section>
-
-      <section anchor="sec-multicast"
-               title="Receiver Adaptation in Multicast/Broadcast">
-        <t>When using broadcast or multicast technology to distribute
-        real-time media streams to large populations of receivers, there can
-        still be significant heterogeneity among the receiver population. This
-        can depend on several factors:<list style="hanging">
-            <t hangText="Network Bandwidth:">The network paths to individual
-            receivers will have variations in the bandwidth, thus putting
-            different limits on the supported bit-rates that can be
-            received.</t>
-
-            <t hangText="Endpoint Capabilities:">The end point's hardware and
-            software can have varying capabilities in relation to screen
-            resolution, decoding capabilities, and supported media codecs.</t>
-          </list></t>
-
-        <t>To handle these variations, a transmitter of real-time media may
-        want to apply simulcast to a media source and provide it as a set of
-        different encoded streams, enabling the receivers to select the best
-        fit from this set themselves. The end point capabilities will usually
-        result in a single initial choice. However, the network bandwidth can
-        vary over time, which requires a client to continuously monitor its
-        reception to determine if the received RTP streams still fit within
-        the available bandwidth. If not, another set of encoded streams from
-        the ones offered in the simulcast will have to be chosen.</t>
-
-        <t>When using IP multicast, the level of granularity that the receiver
-        can select from is decided by its ability to choose different
-        multicast addresses. Thus, different simulcast streams need to be put
-        on different media transports using different multicast addresses. If
-        these simulcast streams are described using SDP, they need to be part
-        of different SDP media descriptions, as SDP binds to transport on
-        media description level.</t>
       </section>
 
       <section anchor="sec-receiver-preferences"
@@ -968,9 +926,6 @@ a=simulcast: send rid=5;6;7 paused=6,7
           transport flow, which can be achieved by <xref
           target="I-D.ietf-mmusic-sdp-bundle-negotiation">Multiplexing
           Negotiation Using SDP Port Numbers</xref>.</t>
-
-          <t hangText="Multicast:">Multiple RTP sessions are required to
-          enable combining simulcast with multicast.</t>
         </list></t>
 
       <t/>
@@ -983,6 +938,11 @@ a=simulcast: send rid=5;6;7 paused=6,7
       different simulcast stream identification methods.</t>
 
       <section title="Single RTP Session">
+        <t>The limitations in this section come from sending all simulcast
+        streams related to a media source under the same SDP media
+        description, which also means they are sent in the same RTP
+        session.</t>
+
         <t>It is not possible to use different simulcast streams on different
         transports, limiting the possibilities to apply different QoS to
         different simulcast streams. When using unicast, QoS mechanisms based
@@ -999,6 +959,10 @@ a=simulcast: send rid=5;6;7 paused=6,7
       </section>
 
       <section title="SDP Format Identification">
+        <t>The limitations in this section come from and thus apply only when
+        using SDP format (RTP payload type) as simulcast stream identification
+        method.</t>
+
         <t>The available RTP payload type number space may not be sufficient
         when many different media formats and/or simulcast streams are used in
         the SDP. This can be particularly prominent when BUNDLE is used, and
@@ -1018,8 +982,8 @@ a=simulcast: send rid=5;6;7 paused=6,7
         "b="-line covers all RTP payload types listed on an "m="-line.</t>
 
         <t>When using FEC according to <xref target="RFC5109"/> in a single
-        RTP session, there is no way to express the relation between the
-        simulcast stream and the FEC stream protecting it.</t>
+        RTP session, there is no defined way to express the relation between
+        the simulcast stream and the FEC stream protecting it.</t>
 
         <t>A simulcast stream signaled as initially paused is not possible to
         resume by a remote peer, because it cannot know which target SSRC to
@@ -1028,6 +992,9 @@ a=simulcast: send rid=5;6;7 paused=6,7
       </section>
 
       <section title="RID Identification">
+        <t>The limitations in this section come from and thus apply only when
+        using RID as simulcast stream identification method.</t>
+
         <t>Use of the additional "a=rid"-line in SDP and the corresponding RID
         RTCP SDES item and RTP header extension requires some additional
         implementation complexity, and incurs some extra bandwidth cost to
@@ -1138,6 +1105,9 @@ a=simulcast: send rid=5;6;7 paused=6,7
 
       <section title="Modifications Between WG Version -02 and  -03">
         <t><list style="symbols">
+            <t>Removed text on multicast / broadcast from use cases, since it
+            is not supported by the solution.</t>
+
             <t>Removed explicit references to unified plan draft.</t>
 
             <t>Added possibility to initiate simulcast streams in paused
