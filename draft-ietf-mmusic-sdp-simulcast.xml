@@ -551,10 +551,10 @@ sc-id       = fmt / rid-identifier / token
         listing of simulcast stream identifications to be used. The number of
         (non-alternative, see below) identifications in the list sets a limit
         to the number of supported simulcast streams in that direction. The
-        order of the listed simulcast versions in the 'send' direction
+        order of the listed simulcast versions in the "send" direction
         suggests a proposed order of preference, in decreasing order: the
-        first listed stream will be the stream most preferred <xref
-        target="sec-diverse-receivers"/>, and subsequent streams will have
+        stream listed first is the most preferred <xref
+        target="sec-diverse-receivers"/>, and subsequent streams have
         progressively lower preference. The order of the listed simulcast
         streams in the "recv" direction expresses a preference which simulcast
         streams that are preferred, with the leftmost being most preferred.
@@ -569,15 +569,16 @@ sc-id       = fmt / rid-identifier / token
         <t>Alternative simulcast formats MAY be specified as part of the
         attribute parameters by expressing each simulcast stream as a
         comma-separated list of alternative format identifiers. In this case,
-        there MUST NOT be any capability restriction in what alternatives can
-        be used across different simulcast streams, like requiring all
-        simulcast streams to use the same codec alternative. The order of the
-        alternatives within a simulcast stream is significant; the
-        alternatives are listed from (left) most preferred to (right) least
-        preferred. For the use of simulcast, this overrides the normal codec
-        preference as expressed by format type ordering on the "m="-line,
-        using regular SDP rules. This is to enable a separation of general
-        codec preferences and simulcast stream configuration preferences.</t>
+        there MUST NOT be any capability restriction in what alternative
+        formats can be used across different simulcast streams, like requiring
+        all simulcast streams to use the same codec format alternative. The
+        order of the format alternatives within a simulcast stream is
+        significant; the alternatives are listed from (left) most preferred to
+        (right) least preferred. For the use of simulcast, this overrides the
+        normal codec preference as expressed by format type ordering on the
+        "m="-line, using regular SDP rules. This is to enable a separation of
+        general codec preferences and simulcast stream configuration
+        preferences.</t>
 
         <t>A simulcast stream can use a codec defined such that the same RTP
         SSRC can change RTP payload type multiple times during a session,
@@ -614,7 +615,7 @@ sc-id       = fmt / rid-identifier / token
         <t>An initially paused simulcast stream in "recv" direction SHOULD
         cause the remote RTP sender to put the stream as unsolicited locally
         paused, unless there are other RTP stream receivers that do not mark
-        the simucast stream as initially paused. The reason to require an
+        the simulcast stream as initially paused. The reason to require an
         initially paused "recv" stream to be considered locally paused by the
         remote RTP sender, instead of making it equivalent to implicitly
         sending a pause request, is because the pausing RTP sender cannot know
@@ -724,7 +725,7 @@ sc-id       = fmt / rid-identifier / token
           parity with the "rid" method, and the different "a=simulcast" lines
           can therefore express different use of simulcast functionality.
           However, for some configurations the different identification
-          methods can equivalent. </t>
+          methods can be equivalent.</t>
 
           <t>An answerer receiving an offer listing both simulcast stream
           identification methods MUST choose only one and remove the other
@@ -1139,17 +1140,17 @@ a=simulcast: send rid=5;6;7 paused=6,7
         <t><list style="symbols">
             <t>Removed explicit references to unified plan draft.</t>
 
-            <t>Added possibility to initiate a stream with simulcast streams
-            in paused mode.</t>
+            <t>Added possibility to initiate simulcast streams in paused
+            mode.</t>
 
             <t>Enabled an offerer to offer multiple stream identification (pt
             or rid) methods and have the answerer choose which to use.</t>
 
-            <t>Added a preference indication also in send direction offers.
-            </t>
+            <t>Added a preference indication also in send direction
+            offers.</t>
 
-            <t>Added a section on limiations the current proposal, including
-            identification method specific limiations. </t>
+            <t>Added a section on limitations of the current proposal,
+            including identification method specific limitations.</t>
           </list></t>
       </section>
 
