@@ -449,32 +449,51 @@
       <t>This section further details the overview <xref
       target="sec-solution-overview">above</xref>.</t>
 
-      <section anchor="sec-cap" title="Simulcast Capability">
-        <t>Simulcast capability is expressed as a new media level SDP
-        attribute, "a=simulcast". For each desired direction (send/recv), the
-        simulcast attribute defines a list of simulcast streams (separated by
-        semicolons), each of which is a list of simulcast formats (separated
-        by commas). The meaning of the attribute on SDP session level is
-        undefined and MUST NOT be used. The <xref target="RFC5234">ABNF</xref>
-        for this attribute is:</t>
+      <section anchor="sec-attr" title="Simulcast Attribute">
+        <t><list style="hanging">
+            <t hangText="Name:">simulcast</t>
+
+            <t hangText="Value:">sc-value</t>
+
+            <t hangText="Usage Level:">media</t>
+
+            <t hangText="Charset Dependent:">no</t>
+          </list>Syntax <xref target="RFC5234"/>:</t>
 
         <figure align="center" anchor="fig-abnf" title="ABNF for Simulcast">
           <artwork align="left"><![CDATA[
-sc-attr      = "a=simulcast:" sc-params
-sc-params    = sc-str-list [SP sc-str-list]
+sc-attr      = "a=simulcast:" sc-value
+sc-value     = sc-str-list [SP sc-str-list]
 sc-str-list  = sc-dir SP sc-alt-list *( ";" sc-alt-list )
 sc-dir       = "send" / "recv"
 sc-alt-list  = sc-id *( "," sc-id )
 sc-id        = [sc-id-paused] rid-identifier / token
 sc-id-paused = "~"
 ; SP defined in [RFC5234]
-; fmt, token defined in [RFC4566]
+; token defined in [RFC4566]
 ; rid-identifier defined in [I-D.ietf-mmusic-rid]
 
 ]]></artwork>
         </figure>
 
-        <t/>
+        <t>Examples:</t>
+
+        <figure align="center" anchor="fig-abnf-examples"
+                title="Simulcast Examples">
+          <artwork align="left"><![CDATA[a=simulcast:send 1,~2,~3;4,5 recv 1;2,~5
+a=simulcast:recv 1;4,5 send 1;2
+
+]]></artwork>
+        </figure>
+      </section>
+
+      <section anchor="sec-cap" title="Simulcast Capability">
+        <t>Simulcast capability is expressed as a new media level <xref
+        target="sec-attr">SDP attribute, "a=simulcast"</xref>. For each
+        desired direction (send/recv), the simulcast attribute defines a list
+        of simulcast streams (separated by semicolons), each of which is a
+        list of simulcast formats (separated by commas). The meaning of the
+        attribute on SDP session level is undefined and MUST NOT be used.</t>
 
         <t>The meaning of including multiple "a=simulcast" lines in a single
         SDP media description is undefined and MUST NOT be used. There are
@@ -945,10 +964,8 @@ a=simulcast:send 5;~6;~7
     </section>
 
     <section anchor="sec-iana" title="IANA Considerations">
-      <t>This document requests to register a new SDP attribute,
-      simulcast.</t>
-
-      <t>Formal registrations to be written.</t>
+      <t>This document requests to register a new SDP attribute, simulcast, as
+      defined in <xref target="sec-attr"/>.</t>
     </section>
 
     <section anchor="sec-security" title="Security Considerations">
@@ -1056,6 +1073,9 @@ a=simulcast:send 5;~6;~7
 
             <t>Changed references for RTP topologies and RTP taxonomy
             documents</t>
+
+            <t>Re-structured section 6 to provide an easy reference by the
+            updated IANA section</t>
           </list></t>
       </section>
 
