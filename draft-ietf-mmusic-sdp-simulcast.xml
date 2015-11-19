@@ -458,6 +458,8 @@
             <t hangText="Usage Level:">media</t>
 
             <t hangText="Charset Dependent:">no</t>
+
+            <t hangText="Multiplex Category:">NORMAL</t>
           </list>Syntax <xref target="RFC5234"/>:</t>
 
         <figure align="center" anchor="fig-abnf" title="ABNF for Simulcast">
@@ -489,11 +491,15 @@ a=simulcast:recv 1;4,5 send 1;2
 
       <section anchor="sec-cap" title="Simulcast Capability">
         <t>Simulcast capability is expressed as a new media level <xref
-        target="sec-attr">SDP attribute, "a=simulcast"</xref>. For each
-        desired direction (send/recv), the simulcast attribute defines a list
-        of simulcast streams (separated by semicolons), each of which is a
-        list of simulcast formats (separated by commas). The meaning of the
-        attribute on SDP session level is undefined and MUST NOT be used.</t>
+        target="sec-attr">SDP attribute, "a=simulcast"</xref>, with <xref
+        target="I-D.ietf-mmusic-sdp-mux-attributes">multiplex category</xref>
+        NORMAL.</t>
+
+        <t>For each desired direction (send/recv), the simulcast attribute
+        defines a list of simulcast streams (separated by semicolons), each of
+        which is a list of simulcast formats (separated by commas). The
+        meaning of the attribute on SDP session level is undefined and MUST
+        NOT be used.</t>
 
         <t>The meaning of including multiple "a=simulcast" lines in a single
         SDP media description is undefined and MUST NOT be used. There are
@@ -1018,6 +1024,8 @@ a=simulcast:send 5;~6;~7
       <?rfc include='reference.I-D.ietf-mmusic-rid'?>
 
       <?rfc include='reference.I-D.ietf-avtext-rtp-stream-pause'?>
+
+      <?rfc include='reference.I-D.ietf-mmusic-sdp-mux-attributes'?>
     </references>
 
     <references title="Informative References">
