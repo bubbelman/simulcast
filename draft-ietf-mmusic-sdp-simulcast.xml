@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="19" month="November" year="2015"/>
+    <date day="15" month="December" year="2015"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -161,7 +161,7 @@
 
       <section title="Terminology">
         <t>This document makes use of the terminology defined in <xref
-        target="RFC7656">RTP Taxonomy</xref>, <xref target="RFC7667">RTP
+        target="RFC7656">RTP Taxonomy</xref>, and <xref target="RFC7667">RTP
         Topologies</xref>. In addition, the following terms are used:<list
             style="hanging">
             <t hangText="RTP Mixer:">An RTP middle node, defined in <xref
@@ -447,7 +447,12 @@
 
     <section anchor="sec-solution" title="Detailed Description">
       <t>This section further details the overview <xref
-      target="sec-solution-overview">above</xref>.</t>
+      target="sec-solution-overview">above</xref>. First formal syntax is
+      <xref target="sec-attr">provided</xref>, which is followed in <xref
+      target="sec-cap"/> by the rest of the SDP attribute definition. <xref
+      target="sec-relating">Relating Simulcast Streams </xref> provides the
+      definition of the RTP/RTCP mechanisms used. The section is concluded
+      with a number of examples.</t>
 
       <section anchor="sec-attr" title="Simulcast Attribute">
         <t><list style="hanging">
@@ -722,8 +727,9 @@ a=simulcast:recv 1;4,5 send 1;2
         description, simulcast RTP streams can be related on RTP level through
         <xref target="I-D.ietf-mmusic-rid">RID</xref> RTCP source description
         (SDES) item in <xref target="RFC5285">RTP header extension</xref> and
-        RTCP SR, as specified in the SDP <xref target="sec-cap">"a=simulcast"
-        attribute </xref> parameters. When using <xref
+        RTCP SDES packet, as specified in the SDP <xref
+        target="sec-cap">"a=simulcast" attribute </xref> parameters. When
+        using <xref
         target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref> with
         multiple SDP media descriptions to specify a single RTP session, the
         SDES MID identification mechanism in RTP header extension and RTCP
@@ -795,7 +801,7 @@ a=simulcast:send 1;2 recv 1
           would have started with the media negotiated in the SDP.</t>
 
           <figure align="center" anchor="fig-up-answer"
-                  title="Unified Plan Simulcast Answer">
+                  title="Single-Source Simulcast Answer">
             <artwork align="left"><![CDATA[
 v=0
 o=server 823479283 1209384938 IN IP4 192.0.2.2
@@ -884,7 +890,7 @@ a=depend:100 lay bar:101
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
 a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rid
 a=rtcp-fb:* ccm pause nowait
-a=simulcast:send 1;~2;~4,~3
+a=simulcast:send 1;2;~4,~3
 
 m=video 49602 RTP/AVPF 96 104
 a=mid:zen
