@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="25" month="January" year="2016"/>
+    <date day="2" month="February" year="2016"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -435,9 +435,10 @@
           <t>The codec configuration for a simulcast stream is expressed
           through use of a separately specified <xref
           target="I-D.ietf-mmusic-rid">RTP-level identification
-          mechanism</xref>, which complements and effectively extends the
-          available simulcast stream identification and configuration
-          possibilities that could be provided by using only SDP formats.</t>
+          mechanism</xref><xref target="I-D.roach-avtext-rid"/>, which
+          complements and effectively extends the available simulcast stream
+          identification and configuration possibilities that could be
+          provided by using only SDP formats.</t>
 
           <t>It is possible, but not required to use <xref
           target="RFC5576">source-specific signaling</xref> with the proposed
@@ -447,9 +448,9 @@
 
     <section anchor="sec-solution" title="Detailed Description">
       <t>This section further details the overview <xref
-      target="sec-solution-overview">above</xref>. First formal syntax is
-      <xref target="sec-attr">provided</xref>, which is followed in <xref
-      target="sec-cap"/> by the rest of the SDP attribute definition. <xref
+      target="sec-solution-overview">above</xref>. First, formal syntax is
+      <xref target="sec-attr">provided</xref>, followed by the rest of the SDP
+      attribute definition in <xref target="sec-cap"/>. <xref
       target="sec-relating">Relating Simulcast Streams </xref> provides the
       definition of the RTP/RTCP mechanisms used. The section is concluded
       with a number of examples.</t>
@@ -473,9 +474,9 @@ sc-attr      = "a=simulcast:" sc-value
 sc-value     = sc-str-list [SP sc-str-list]
 sc-str-list  = sc-dir SP sc-alt-list *( ";" sc-alt-list )
 sc-dir       = "send" / "recv"
-sc-alt-list  = [sc-id-paused] sc-id *( "," sc-id )
+sc-alt-list  = sc-id *( "," sc-id )
 sc-id-paused = "~"
-sc-id        = rid-identifier / token
+sc-id        = [sc-id-paused] rid-identifier / token
 ; SP defined in [RFC5234]
 ; token defined in [RFC4566]
 ; rid-identifier defined in [I-D.ietf-mmusic-rid]
@@ -489,23 +490,52 @@ sc-id        = rid-identifier / token
         streams. Each simulcast stream in that list is separated by a
         semicolon (";"). Each simulcast stream can in turn be offered in one
         or more alternative formats, where each simulcast stream alternative
-        is separated by a comma (","). The simulcast stream alternative is
-        described in the form of a RID, as described by <xref
+        is separated by a comma (","). The simulcast stream alternative MUST
+        be described in the form of a RID, as described by <xref
         target="I-D.ietf-mmusic-rid"/>. Each simulcast stream can be initially
         <xref target="I-D.ietf-avtext-rtp-stream-pause">paused</xref>,
-        indicated by prepending a "~" to the beginning of the simulcast stream
-        alternative list. Such initial pause applies regardless of which
-        alternative is chosen.</t>
+        indicated by prepending a "~" to the simulcast stream. In case there
+        are simulcast stream alternatives, pause can be specified individually
+        for each alternative. The reason to allow separate initial pause
+        states for each simulcast stream alternative is that pause capability
+        can be specified individually for each RTP payload type referenced by
+        a RID, which makes it infeasible to pause RID where any of the related
+        RTP payload type(s) do not have pause capability.</t>
 
         <t>Examples:</t>
 
         <figure align="center" anchor="fig-abnf-examples"
                 title="Simulcast Examples">
-          <artwork align="left"><![CDATA[a=simulcast:send 1,2,3;~4,5 recv 1;~2,5
+          <artwork align="left"><![CDATA[a=simulcast:send 1,2,3;~4,~5 recv 1;~2,~5
 a=simulcast:recv 1;4,5 send 1;2
 
 ]]></artwork>
         </figure>
+
+        <t>Above are two examples of different "a=simulcast" lines.</t>
+
+        <t>The first line is an example offer to send two simulcast streams
+        and to receive two simulcast streams. The first simulcast stream in
+        send direction can be sent as three different alternatives (1, 2, 3),
+        and the second simulcast stream in send direction can be sent as two
+        different alternatives (4, 5). All second stream send alternatives are
+        offered as initially paused. The first simulcast stream in receive
+        direction has no alternatives (only 1). The second simulcast stream in
+        receive direction has two alternatives (2, 5) that are both offered as
+        initially paused.</t>
+
+        <t>The second line is an example answer to the first line, accepting
+        to send and receive the two offered simulcast streams, however send
+        and receive directions are specified in opposite order compared to the
+        first line, which lets the answer keep the same order of simulcast
+        streams in the SDP as in the offer, even though directionality is
+        reversed. This example answer has removed all offered alternatives for
+        the first simulcast stream (keeping only 1), but kept alternative
+        formats for the second simulcast stream in receive direction (4, 5).
+        The answer accepts to send two simulcast streams, without
+        alternatives. The answer does not accept initial pause of any
+        simulcast streams, in either direction. More examples can be found in
+        <xref target="sec-ex"/>.</t>
       </section>
 
       <section anchor="sec-cap" title="Simulcast Capability">
@@ -513,6 +543,12 @@ a=simulcast:recv 1;4,5 send 1;2
         target="sec-attr">SDP attribute, "a=simulcast"</xref>, with <xref
         target="I-D.ietf-mmusic-sdp-mux-attributes">multiplex category</xref>
         NORMAL.</t>
+
+        <!--Open issue: this section should be re-structured in the recommended steps, with sub-sections:
+generating the initial SDP offer, answerer processing the SDP offer, creating the SDP answer,
+offerer processing of the SDP answer, and modifying the session.
+
+-->
 
         <t>For each desired direction (send/recv), the simulcast attribute
         defines a list of simulcast streams (separated by semicolons), each of
@@ -526,8 +562,8 @@ a=simulcast:recv 1;4,5 send 1;2
         receive directions. When listing multiple directions, each direction
         MUST NOT occur more than once on the same line.</t>
 
-        <t>The different simulcast streams are identified through an <xref
-        target="I-D.ietf-mmusic-rid">RTP-level identification
+        <t>The different simulcast streams MUST be identified through the
+        <xref target="I-D.ietf-mmusic-rid">RTP-level "RID" identification
         mechanism</xref>.</t>
 
         <t>Attribute parameters are grouped by direction and consist of a
@@ -623,6 +659,26 @@ a=simulcast:recv 1;4,5 send 1;2
         duplication</xref> procedures SHOULD be considered instead of
         simulcast.</t>
 
+        <section title="Declarative Use">
+          <t>When used as a declarative media description, "a=simulcast" line
+          "recv" direction formats indicate the configured end point's
+          required capability to recognize and receive a specified set of RTP
+          streams as simulcast streams. In the same fashion, "a=simulcast"
+          line "send" direction requests the end point to send a specified set
+          of RTP streams as simulcast streams.</t>
+
+          <t>If multiple simulcast formats are listed, it means that the
+          configured end point MUST be prepared to receive any of the "recv"
+          formats, and MAY send any of the "send" formats for that simulcast
+          stream.</t>
+
+          <t><list style="empty">
+              <t>Editor's note: It may not be beneficial for declarative use
+              to be limited to a single media source per "m=" line, as
+              elaborated further in <xref target="sec-limitation"/>.</t>
+            </list></t>
+        </section>
+
         <section anchor="sec-offer-answer" title="Offer/Answer Use">
           <t>An offerer wanting to use simulcast SHALL include the
           "a=simulcast" attribute in the offer. An offerer that receives an
@@ -715,23 +771,22 @@ a=simulcast:recv 1;4,5 send 1;2
       </section>
 
       <section anchor="sec-relating" title="Relating Simulcast Streams">
-        <t>As long as there is only a single media source per SDP media
-        description, simulcast RTP streams can be related on RTP level through
-        <xref target="I-D.ietf-mmusic-rid">RID</xref> RTCP source description
-        (SDES) item in <xref target="RFC5285">RTP header extension</xref> and
-        RTCP SDES packet, as specified in the SDP <xref
-        target="sec-cap">"a=simulcast" attribute </xref> parameters. When
-        using <xref
-        target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref> with
-        multiple SDP media descriptions to specify a single RTP session, the
-        SDES MID identification mechanism in RTP header extension and RTCP
-        allows relating RTP streams back to individual media descriptions,
-        after which the above described RID relations can be used. Use of the
-        RTP header extension for both MID and RID identifications can be
-        important to ensure rapid initial reception, required to correctly
-        interpret and process the RTP streams. Implementers of this
-        specification MUST support at least one of those methods to signal RID
-        on RTP level, and SHOULD support both methods.</t>
+        <t>Simulcast RTP streams MUST be related on RTP level through <xref
+        target="I-D.roach-avtext-rid">RID</xref>, as specified in the SDP
+        <xref target="sec-cap">"a=simulcast" attribute </xref> parameters.
+        This is sufficient as long as there is only a single media source per
+        SDP media description. When using <xref
+        target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref>, where
+        multiple SDP media descriptions jointly specify a single RTP session,
+        the SDES MID identification mechanism in BUNDLE allows relating RTP
+        streams back to individual media descriptions, after which the above
+        described RID relations can be used. Use of the <xref
+        target="RFC5285">RTP header extension</xref> for both MID and RID
+        identifications can be important to ensure rapid initial reception,
+        required to correctly interpret and process the RTP streams.
+        Implementers of this specification MUST support RTCP source
+        description (SDES) item and SHOULD support RTP header extension method
+        to signal RID on RTP level.</t>
       </section>
 
       <section anchor="sec-ex" title="Signaling Examples">
@@ -1008,8 +1063,11 @@ a=simulcast:send 5;~6;~7
       authenticated to prevent an attacker to change it.</t>
 
       <t>Security considerations related to the use of RID is covered in <xref
-      target="I-D.ietf-mmusic-rid"/>. There are no additional security
+      target="I-D.ietf-mmusic-rid"/> and <xref
+      target="I-D.roach-avtext-rid"/>. There are no additional security
       concerns related to its use in this specification.</t>
+
+      <!--Open issue: Review this! Are there security issues that arise specifically from this draft's use of RID?-->
     </section>
 
     <section title="Contributors">
@@ -1040,6 +1098,8 @@ a=simulcast:send 5;~6;~7
       <?rfc include='reference.RFC.7104'?>
 
       <?rfc include='reference.I-D.ietf-mmusic-rid'?>
+
+      <?rfc include='reference.I-D.roach-avtext-rid'?>
 
       <?rfc include='reference.I-D.ietf-avtext-rtp-stream-pause'?>
 
@@ -1091,17 +1151,24 @@ a=simulcast:send 5;~6;~7
       <section title="Modifications Between WG Version -03 and  -04">
         <t><list style="symbols">
             <t>Changed to only use RID identification, as was consensus during
-            IETF 94</t>
+            IETF 94.</t>
 
-            <t>ABNF improvements</t>
+            <t>ABNF improvements.</t>
 
-            <t>Clarified offer-answer rules for initially paused streams</t>
+            <t>Clarified offer-answer rules for initially paused streams.</t>
 
             <t>Changed references for RTP topologies and RTP taxonomy
-            documents</t>
+            documents that are now published as RFC.</t>
+
+            <t>Added reference to the new RID draft in AVTEXT.</t>
 
             <t>Re-structured section 6 to provide an easy reference by the
-            updated IANA section</t>
+            updated IANA section.</t>
+
+            <t>Added a sub-section 7.1 with a discussion of bitrate
+            adaptation.</t>
+
+            <t>Editorial improvements.</t>
           </list></t>
       </section>
 
