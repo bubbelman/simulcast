@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="22" month="June" year="2016"/>
+    <date day="29" month="June" year="2016"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -185,15 +185,11 @@
             stream serve the same purpose as alternative RTP payload types in
             non-simulcast SDP, to allow multiple alternative media formats for
             a given RTP stream. As for multiple RTP payload types on the
-            m-line, any one of the alternative formats can be used at a given
-            point in time, but not more than one (based on RTP timestamp).
-            What format is used can change dynamically from one RTP packet to
-            another. For example, if all participants in a group video call
-            can decode H.264 and H.265 video, but only some can encode H.265,
-            both H.264 and H.265 can be kept as alternative formats, and the
-            format sent to a certain participant may dynamically switch
-            between H.264 and H.265 as different participants become active
-            speaker.</t>
+            m-line in <xref target="RFC3264">offer/answer</xref>, any one of
+            the negotiated alternative formats can be used in a single RTP
+            stream at a given point in time, but not more than one (based on
+            RTP timestamp). What format is used can change dynamically from
+            one RTP packet to another.</t>
 
             <t hangText="Simulcast Stream Identifier (SCID):">The
             identification value used to refer to individual simulcast
@@ -502,7 +498,9 @@ sc-id        = [sc-id-paused] rid-identifier
         pause can be specified individually for each SCID. The reason to allow
         separate initial pause states for each SCID is that pause capability
         can be specified individually for each RTP payload type referenced by
-        an SCID, which makes it unfeasible to pause SCIDs where any of the
+        an SCID. Since pause capability specified via the "a=rtcp-fb"
+        attribute and SCID specified by "a=rid" can refer to common payload
+        types, it is unfeasible to pause streams with SCID where any of the
         related RTP payload type(s) do not have pause capability.</t>
 
         <t>Examples:</t>
@@ -551,9 +549,9 @@ a=simulcast:recv 1;4,5 send 6;7
 
         <t>For each desired direction (send/recv), the simulcast attribute
         defines a list of simulcast streams (separated by semicolons), each of
-        which is a list of simulcast stream formats (separated by commas). The
-        different simulcast stream formats MUST be identified through the
-        <xref target="I-D.ietf-mmusic-rid">RTP payload format
+        which is a list of alternate simulcast stream formats (separated by
+        commas). The different simulcast stream formats MUST be identified
+        through the <xref target="I-D.ietf-mmusic-rid">RTP payload format
         constraints</xref> <xref target="I-D.ietf-avtext-rid">RTP-level
         identification mechanism</xref>, here denoted SCID. Simulcast streams
         using undefined SCID MUST NOT be used as valid simulcast streams by an
@@ -571,12 +569,12 @@ a=simulcast:recv 1;4,5 send 6;7
         limit to the number of supported simulcast streams in that direction.
         The order of the listed SCID in the "send" direction suggests a
         proposed order of preference, in decreasing order: the SCID listed
-        first is the most preferred <xref target="sec-diverse-receivers"/>,
-        and subsequent streams have progressively lower preference. The order
-        of the listed SCID in the "recv" direction expresses a preference
-        which simulcast streams that are preferred, with the leftmost being
-        most preferred. This can be of importance if the number of actually
-        sent simulcast streams have to be reduced for some reason.</t>
+        first is the most preferred and subsequent streams have progressively
+        lower preference. The order of the listed SCID in the "recv" direction
+        expresses a preference which simulcast streams that are preferred,
+        with the leftmost being most preferred. This can be of importance if
+        the number of actually sent simulcast streams have to be reduced for
+        some reason.</t>
 
         <t>SCID that have explicit <xref target="RFC5583">dependencies</xref>
         <xref target="I-D.ietf-mmusic-rid"/> to other SCID (even in the same
