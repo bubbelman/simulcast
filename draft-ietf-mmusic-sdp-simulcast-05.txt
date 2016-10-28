@@ -5,10 +5,10 @@
 Network Working Group                                          B. Burman
 Internet-Draft                                             M. Westerlund
 Intended status: Standards Track                                Ericsson
-Expires: December 24, 2016                                 S. Nandakumar
+Expires: December 31, 2016                                 S. Nandakumar
                                                                M. Zanaty
                                                                    Cisco
-                                                           June 22, 2016
+                                                           June 29, 2016
 
 
                 Using Simulcast in SDP and RTP Sessions
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 24, 2016.
+   This Internet-Draft will expire on December 31, 2016.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Burman, et al.          Expires December 24, 2016               [Page 1]
+Burman, et al.          Expires December 31, 2016               [Page 1]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -76,20 +76,20 @@ Table of Contents
      2.2.  Requirements Language . . . . . . . . . . . . . . . . . .   4
    3.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .   4
      3.1.  Reaching a Diverse Set of Receivers . . . . . . . . . . .   5
-     3.2.  Application Specific Media Source Handling  . . . . . . .   7
+     3.2.  Application Specific Media Source Handling  . . . . . . .   6
      3.3.  Receiver Media Source Preferences . . . . . . . . . . . .   7
    4.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   7
-   5.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
+   5.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   8
    6.  Detailed Description  . . . . . . . . . . . . . . . . . . . .   9
      6.1.  Simulcast Attribute . . . . . . . . . . . . . . . . . . .   9
      6.2.  Simulcast Capability  . . . . . . . . . . . . . . . . . .  11
      6.3.  Offer/Answer Use  . . . . . . . . . . . . . . . . . . . .  13
        6.3.1.  Generating the Initial SDP Offer  . . . . . . . . . .  13
-       6.3.2.  Creating the SDP Answer . . . . . . . . . . . . . . .  14
+       6.3.2.  Creating the SDP Answer . . . . . . . . . . . . . . .  13
        6.3.3.  Offerer Processing the SDP Answer . . . . . . . . . .  14
        6.3.4.  Modifying the Session . . . . . . . . . . . . . . . .  15
      6.4.  Declarative Use . . . . . . . . . . . . . . . . . . . . .  15
-     6.5.  Relating Simulcast Streams  . . . . . . . . . . . . . . .  16
+     6.5.  Relating Simulcast Streams  . . . . . . . . . . . . . . .  15
      6.6.  Signaling Examples  . . . . . . . . . . . . . . . . . . .  16
        6.6.1.  Single-Source Client  . . . . . . . . . . . . . . . .  16
        6.6.2.  Multi-Source Client . . . . . . . . . . . . . . . . .  18
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Burman, et al.          Expires December 24, 2016               [Page 2]
+Burman, et al.          Expires December 31, 2016               [Page 2]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -165,7 +165,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016               [Page 3]
+Burman, et al.          Expires December 31, 2016               [Page 3]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -187,15 +187,11 @@ Internet-Draft                  Simulcast                      June 2016
    Simulcast Format:  Different formats of a simulcast stream serve the
       same purpose as alternative RTP payload types in non-simulcast
       SDP, to allow multiple alternative media formats for a given RTP
-      stream.  As for multiple RTP payload types on the m-line, any one
-      of the alternative formats can be used at a given point in time,
-      but not more than one (based on RTP timestamp).  What format is
-      used can change dynamically from one RTP packet to another.  For
-      example, if all participants in a group video call can decode
-      H.264 and H.265 video, but only some can encode H.265, both H.264
-      and H.265 can be kept as alternative formats, and the format sent
-      to a certain participant may dynamically switch between H.264 and
-      H.265 as different participants become active speaker.
+      stream.  As for multiple RTP payload types on the m-line in offer/
+      answer [RFC3264], any one of the negotiated alternative formats
+      can be used in a single RTP stream at a given point in time, but
+      not more than one (based on RTP timestamp).  What format is used
+      can change dynamically from one RTP packet to another.
 
    Simulcast Stream Identifier (SCID):  The identification value used to
       refer to individual simulcast streams, identical to the "rid-id"
@@ -218,17 +214,17 @@ Internet-Draft                  Simulcast                      June 2016
    participants.  Thus, these cases target the RTP Mixer type of
    topology.
 
-
-
-
-Burman, et al.          Expires December 24, 2016               [Page 4]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
    There are two principle approaches for an RTP Mixer to provide this
    adapted view of the communication session to each receiving
    participant:
+
+
+
+
+Burman, et al.          Expires December 31, 2016               [Page 4]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    o  Transcoding (decoding and re-encoding) received RTP streams with
       characteristics adapted to each receiving participant.  This often
@@ -274,17 +270,17 @@ Internet-Draft                  Simulcast                      June 2016
       video frame rate.  For audio, spatial sampling relates to the
       number of audio channels and temporal sampling affects audio
       bandwidth.  This may be used to suit different rendering
-
-
-
-Burman, et al.          Expires December 24, 2016               [Page 5]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
       capabilities or needs at the receiving endpoints, as well as a
       method to achieve different transport capabilities, bitrates and
       eventually QoE by controlling the amount of source data.
+
+
+
+
+Burman, et al.          Expires December 31, 2016               [Page 5]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    Bitrate:  This relates to the amount of bits spent per second to
       transmit the media source as an RTP stream, which typically also
@@ -326,24 +322,21 @@ Internet-Draft                  Simulcast                      June 2016
    mainly limited by the amount of processing and uplink network
    resources available to the sending participant.
 
-
-
-
-
-
-
-
-Burman, et al.          Expires December 24, 2016               [Page 6]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
 3.2.  Application Specific Media Source Handling
 
    The application logic that controls the communication session may
    include special handling of some media sources.  It is for example
    commonly the case that the media from a sending participant is not
    sent back to itself.
+
+
+
+
+
+Burman, et al.          Expires December 31, 2016               [Page 6]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    It is also common that a currently active speaker participant is
    shown in larger size or higher quality than other participants (the
@@ -385,15 +378,6 @@ Internet-Draft                  Simulcast                      June 2016
 
    REQ-2:  Transport usage.  The solution must work when using:
 
-
-
-
-
-Burman, et al.          Expires December 24, 2016               [Page 7]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
       REQ-2.1:  Legacy SDP with separate media transports per SDP media
          description.
 
@@ -401,6 +385,14 @@ Internet-Draft                  Simulcast                      June 2016
          media descriptions.
 
    REQ-3:  Capability negotiation.  It must be possible that:
+
+
+
+
+Burman, et al.          Expires December 31, 2016               [Page 7]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
       REQ-3.1:  Sender can express capability of sending simulcast.
 
@@ -441,15 +433,6 @@ Internet-Draft                  Simulcast                      June 2016
       REQ-6.2:  WebRTC environment with a single media source per SDP
          media description.
 
-
-
-
-
-Burman, et al.          Expires December 24, 2016               [Page 8]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
 5.  Overview
 
    As an overview, the above requirements are met by signaling simulcast
@@ -457,6 +440,15 @@ Internet-Draft                  Simulcast                      June 2016
 
    o  An offer or answer can contain a number of simulcast streams,
       separate for send and receive directions.
+
+
+
+
+
+Burman, et al.          Expires December 31, 2016               [Page 8]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    o  An offer or answer can contain multiple, alternative simulcast
       stream formats in the same fashion as multiple, alternative
@@ -492,20 +484,6 @@ Internet-Draft                  Simulcast                      June 2016
    This document defines a new SDP media-level "a=simulcast" attribute
    with the following ABNF [RFC5234] syntax:
 
-
-
-
-
-
-
-
-
-
-Burman, et al.          Expires December 24, 2016               [Page 9]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
    sc-attr      = "a=simulcast:" sc-value
    sc-value     = sc-str-list [SP sc-str-list]
    sc-str-list  = sc-dir SP sc-alt-list *( ";" sc-alt-list )
@@ -518,6 +496,15 @@ Internet-Draft                  Simulcast                      June 2016
 
 
                        Figure 1: ABNF for Simulcast
+
+
+
+
+
+Burman, et al.          Expires December 31, 2016               [Page 9]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    The "a=simulcast" attribute has a parameter in the form of one or two
    simulcast stream descriptions, each consisting of a direction ("send"
@@ -534,8 +521,10 @@ Internet-Draft                  Simulcast                      June 2016
    SCID.  In case there are alternative SCID, pause can be specified
    individually for each SCID.  The reason to allow separate initial
    pause states for each SCID is that pause capability can be specified
-   individually for each RTP payload type referenced by an SCID, which
-   makes it unfeasible to pause SCIDs where any of the related RTP
+   individually for each RTP payload type referenced by an SCID.  Since
+   pause capability specified via the "a=rtcp-fb" attribute and SCID
+   specified by "a=rid" can refer to common payload types, it is
+   unfeasible to pause streams with SCID where any of the related RTP
    payload type(s) do not have pause capability.
 
    Examples:
@@ -554,14 +543,6 @@ Internet-Draft                  Simulcast                      June 2016
    2, 3), and the second simulcast stream in send direction can be sent
    in two different alternative formats (SCID 4, 5).  Both of the second
    stream alternative formats in send direction are offered as initially
-
-
-
-Burman, et al.          Expires December 24, 2016              [Page 10]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
    paused.  The first simulcast stream in receive direction has no
    alternative formats (SCID 6).  The second simulcast stream in receive
    direction has two alternative formats (SCID 7, 8) that are both
@@ -573,6 +554,14 @@ Internet-Draft                  Simulcast                      June 2016
    first line, which lets the answer keep the same order of simulcast
    streams in the SDP as in the offer, for convenience, even though
    directionality is reversed.  This example answer has removed all
+
+
+
+Burman, et al.          Expires December 31, 2016              [Page 10]
+
+Internet-Draft                  Simulcast                      June 2016
+
+
    offered alternative formats for the first simulcast stream (keeping
    only SCID 1), but kept alternative formats for the second simulcast
    stream in receive direction (4, 5).  The answer accepts to send two
@@ -590,12 +579,13 @@ Internet-Draft                  Simulcast                      June 2016
 
    For each desired direction (send/recv), the simulcast attribute
    defines a list of simulcast streams (separated by semicolons), each
-   of which is a list of simulcast stream formats (separated by commas).
-   The different simulcast stream formats MUST be identified through the
-   RTP payload format constraints [I-D.ietf-mmusic-rid] RTP-level
-   identification mechanism [I-D.ietf-avtext-rid], here denoted SCID.
-   Simulcast streams using undefined SCID MUST NOT be used as valid
-   simulcast streams by an RTP stream receiver.
+   of which is a list of alternate simulcast stream formats (separated
+   by commas).  The different simulcast stream formats MUST be
+   identified through the RTP payload format constraints
+   [I-D.ietf-mmusic-rid] RTP-level identification mechanism
+   [I-D.ietf-avtext-rid], here denoted SCID.  Simulcast streams using
+   undefined SCID MUST NOT be used as valid simulcast streams by an RTP
+   stream receiver.
 
    There are separate and independent sets of parameters for simulcast
    in send and receive directions.  When listing multiple directions,
@@ -609,23 +599,24 @@ Internet-Draft                  Simulcast                      June 2016
    limit to the number of supported simulcast streams in that direction.
    The order of the listed SCID in the "send" direction suggests a
    proposed order of preference, in decreasing order: the SCID listed
-   first is the most preferred Section 3.1, and subsequent streams have
-
-
-
-Burman, et al.          Expires December 24, 2016              [Page 11]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
-   progressively lower preference.  The order of the listed SCID in the
-   "recv" direction expresses a preference which simulcast streams that
-   are preferred, with the leftmost being most preferred.  This can be
-   of importance if the number of actually sent simulcast streams have
-   to be reduced for some reason.
+   first is the most preferred and subsequent streams have progressively
+   lower preference.  The order of the listed SCID in the "recv"
+   direction expresses a preference which simulcast streams that are
+   preferred, with the leftmost being most preferred.  This can be of
+   importance if the number of actually sent simulcast streams have to
+   be reduced for some reason.
 
    SCID that have explicit dependencies [RFC5583] [I-D.ietf-mmusic-rid]
    to other SCID (even in the same media description) MAY be used.
+
+
+
+
+
+Burman, et al.          Expires December 31, 2016              [Page 11]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    Alternative SCID MAY be specified as part of the attribute parameters
    by expressing each simulcast stream as a comma-separated list of
@@ -666,14 +657,6 @@ Internet-Draft                  Simulcast                      June 2016
    handled accordingly.  Initially paused simulcast streams are resumed
    as described by the RTP pause/resume specification.  An RTP stream
    receiver that wishes to resume an unsolicited locally paused stream
-
-
-
-Burman, et al.          Expires December 24, 2016              [Page 12]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
    needs to know the SSRC of that stream.  The SSRC of an initially
    paused simulcast stream can be obtained from an RTP stream sender
    RTCP Sender Report (SR) including both the desired SSRC as "SSRC of
@@ -683,6 +666,14 @@ Internet-Draft                  Simulcast                      June 2016
    Including an initially paused simulcast stream in "recv" direction in
    an SDP towards an RTP sender, SHOULD cause the remote RTP sender to
    put the stream as unsolicited locally paused, unless there are other
+
+
+
+Burman, et al.          Expires December 31, 2016              [Page 12]
+
+Internet-Draft                  Simulcast                      June 2016
+
+
    RTP stream receivers that do not mark the simulcast stream as
    initially paused.  The reason to require an initially paused "recv"
    stream to be considered locally paused by the remote RTP sender,
@@ -720,16 +711,6 @@ Internet-Draft                  Simulcast                      June 2016
    MUST be prepared to receive RTP streams for any of those simulcast
    streams and/or alternative formats from the answerer.
 
-
-
-
-
-
-Burman, et al.          Expires December 24, 2016              [Page 13]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
 6.3.2.  Creating the SDP Answer
 
    An answerer that does not understand the concept of simulcast will
@@ -740,6 +721,14 @@ Internet-Draft                  Simulcast                      June 2016
    support simulcast in an indicated direction SHALL reverse
    directionality of the unidirectional direction parameters; "send"
    becomes "recv" and vice versa, and include it in the answer.
+
+
+
+
+Burman, et al.          Expires December 31, 2016              [Page 13]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    An answerer that receives an offer with simulcast containing an
    "a=simulcast" attribute listing alternative SCID MAY keep all the
@@ -778,14 +767,6 @@ Internet-Draft                  Simulcast                      June 2016
 
    An offerer that receives an answer where some SCID alternatives are
    kept MUST be prepared to receive any of the kept send direction SCID
-
-
-
-Burman, et al.          Expires December 24, 2016              [Page 14]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
    alternatives, and MAY send any of the kept receive direction SCID
    alternatives.
 
@@ -797,6 +778,13 @@ Internet-Draft                  Simulcast                      June 2016
    An offerer that offered some of its SCID as initially paused and that
    receives an answer that does not indicate RTP stream pause/resume
    capability, MUST NOT initially pause any simulcast streams.
+
+
+
+Burman, et al.          Expires December 31, 2016              [Page 14]
+
+Internet-Draft                  Simulcast                      June 2016
+
 
    An offerer with RTP stream pause/resume capability that receives an
    answer where some SCID are marked as initially paused, SHOULD
@@ -835,13 +823,6 @@ Internet-Draft                  Simulcast                      June 2016
    single media source per "m=" line, as elaborated further in
    Section 8.
 
-
-
-Burman, et al.          Expires December 24, 2016              [Page 15]
-
-Internet-Draft                  Simulcast                      June 2016
-
-
 6.5.  Relating Simulcast Streams
 
    Simulcast RTP streams MUST be related on RTP level through RID
@@ -853,6 +834,14 @@ Internet-Draft                  Simulcast                      June 2016
    MID identification mechanism in BUNDLE allows relating RTP streams
    back to individual media descriptions, after which the above
    described RID relations can be used.  Use of the RTP header extension
+
+
+
+Burman, et al.          Expires December 31, 2016              [Page 15]
+
+Internet-Draft                  Simulcast                      June 2016
+
+
    [RFC5285] for both MID and RID identifications can be important to
    ensure rapid initial reception, required to correctly interpret and
    process the RTP streams.  Implementers of this specification MUST
@@ -893,7 +882,18 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 16]
+
+
+
+
+
+
+
+
+
+
+
+Burman, et al.          Expires December 31, 2016              [Page 16]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -949,7 +949,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 17]
+Burman, et al.          Expires December 31, 2016              [Page 17]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 18]
+Burman, et al.          Expires December 31, 2016              [Page 18]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 19]
+Burman, et al.          Expires December 31, 2016              [Page 19]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 20]
+Burman, et al.          Expires December 31, 2016              [Page 20]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 21]
+Burman, et al.          Expires December 31, 2016              [Page 21]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 22]
+Burman, et al.          Expires December 31, 2016              [Page 22]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 23]
+Burman, et al.          Expires December 31, 2016              [Page 23]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1298,8 +1298,8 @@ Internet-Draft                  Simulcast                      June 2016
 
    [I-D.ietf-mmusic-sdp-mux-attributes]
               Nandakumar, S., "A Framework for SDP Attributes when
-              Multiplexing", draft-ietf-mmusic-sdp-mux-attributes-12
-              (work in progress), January 2016.
+              Multiplexing", draft-ietf-mmusic-sdp-mux-attributes-13
+              (work in progress), June 2016.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -1341,7 +1341,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 24]
+Burman, et al.          Expires December 31, 2016              [Page 24]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 25]
+Burman, et al.          Expires December 31, 2016              [Page 25]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1453,7 +1453,7 @@ A.1.  Modifications Between WG Version -04 and -05
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 26]
+Burman, et al.          Expires December 31, 2016              [Page 26]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1509,7 +1509,7 @@ A.3.  Modifications Between WG Version -02 and -03
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 27]
+Burman, et al.          Expires December 31, 2016              [Page 27]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1565,7 +1565,7 @@ Authors' Addresses
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 28]
+Burman, et al.          Expires December 31, 2016              [Page 28]
 
 Internet-Draft                  Simulcast                      June 2016
 
@@ -1621,4 +1621,4 @@ Internet-Draft                  Simulcast                      June 2016
 
 
 
-Burman, et al.          Expires December 24, 2016              [Page 29]
+Burman, et al.          Expires December 31, 2016              [Page 29]
