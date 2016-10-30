@@ -5,10 +5,10 @@
 Network Working Group                                          B. Burman
 Internet-Draft                                             M. Westerlund
 Intended status: Standards Track                                Ericsson
-Expires: May 1, 2017                                       S. Nandakumar
+Expires: May 3, 2017                                       S. Nandakumar
                                                                M. Zanaty
                                                                    Cisco
-                                                        October 28, 2016
+                                                        October 30, 2016
 
 
                 Using Simulcast in SDP and RTP Sessions
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 1, 2017.
+   This Internet-Draft will expire on May 3, 2017.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 1]
+Burman, et al.             Expires May 3, 2017                  [Page 1]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -96,36 +96,36 @@ Table of Contents
    7.  RTP Aspects . . . . . . . . . . . . . . . . . . . . . . . . .  21
      7.1.  Outgoing from Endpoint with Media Source  . . . . . . . .  21
      7.2.  RTP Middlebox to Receiver . . . . . . . . . . . . . . . .  21
-       7.2.1.  Media-Switching Mixer . . . . . . . . . . . . . . . .  22
-       7.2.2.  Selective Forwarding Middlebox  . . . . . . . . . . .  23
-     7.3.  RTP Middlebox to RTP Middlebox  . . . . . . . . . . . . .  24
-   8.  Network Aspects . . . . . . . . . . . . . . . . . . . . . . .  25
-     8.1.  Bitrate Adaptation  . . . . . . . . . . . . . . . . . . .  25
-   9.  Limitation  . . . . . . . . . . . . . . . . . . . . . . . . .  25
-   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  26
-   11. Security Considerations . . . . . . . . . . . . . . . . . . .  26
-   12. Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  27
-   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  27
+       7.2.1.  Media-Switching Mixer . . . . . . . . . . . . . . . .  23
+       7.2.2.  Selective Forwarding Middlebox  . . . . . . . . . . .  24
+     7.3.  RTP Middlebox to RTP Middlebox  . . . . . . . . . . . . .  25
+   8.  Network Aspects . . . . . . . . . . . . . . . . . . . . . . .  26
+     8.1.  Bitrate Adaptation  . . . . . . . . . . . . . . . . . . .  26
+   9.  Limitation  . . . . . . . . . . . . . . . . . . . . . . . . .  26
+   10. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  27
+   11. Security Considerations . . . . . . . . . . . . . . . . . . .  27
+   12. Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  28
+   13. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  28
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 2]
+Burman, et al.             Expires May 3, 2017                  [Page 2]
 
 Internet-Draft                  Simulcast                   October 2016
 
 
-   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  27
-     14.1.  Normative References . . . . . . . . . . . . . . . . . .  27
-     14.2.  Informative References . . . . . . . . . . . . . . . . .  28
-   Appendix A.  Changes From Earlier Versions  . . . . . . . . . . .  30
-     A.1.  Modifications Between WG Version -04 and  -05 . . . . . .  30
-     A.2.  Modifications Between WG Version -03 and  -04 . . . . . .  31
-     A.3.  Modifications Between WG Version -02 and  -03 . . . . . .  31
-     A.4.  Modifications Between WG Version -01 and  -02 . . . . . .  32
-     A.5.  Modifications Between WG Version -00 and  -01 . . . . . .  32
+   14. References  . . . . . . . . . . . . . . . . . . . . . . . . .  28
+     14.1.  Normative References . . . . . . . . . . . . . . . . . .  28
+     14.2.  Informative References . . . . . . . . . . . . . . . . .  29
+   Appendix A.  Changes From Earlier Versions  . . . . . . . . . . .  31
+     A.1.  Modifications Between WG Version -04 and  -05 . . . . . .  32
+     A.2.  Modifications Between WG Version -03 and  -04 . . . . . .  32
+     A.3.  Modifications Between WG Version -02 and  -03 . . . . . .  33
+     A.4.  Modifications Between WG Version -01 and  -02 . . . . . .  33
+     A.5.  Modifications Between WG Version -00 and  -01 . . . . . .  33
      A.6.  Modifications Between Individual Version -00 and WG
-           Version -00 . . . . . . . . . . . . . . . . . . . . . . .  32
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  32
+           Version -00 . . . . . . . . . . . . . . . . . . . . . . .  33
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  33
 
 1.  Introduction
 
@@ -165,7 +165,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 3]
+Burman, et al.             Expires May 3, 2017                  [Page 3]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -221,7 +221,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 4]
+Burman, et al.             Expires May 3, 2017                  [Page 4]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -277,7 +277,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 5]
+Burman, et al.             Expires May 3, 2017                  [Page 5]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -333,7 +333,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 6]
+Burman, et al.             Expires May 3, 2017                  [Page 6]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -389,7 +389,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 7]
+Burman, et al.             Expires May 3, 2017                  [Page 7]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -445,7 +445,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 8]
+Burman, et al.             Expires May 3, 2017                  [Page 8]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -501,7 +501,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                  [Page 9]
+Burman, et al.             Expires May 3, 2017                  [Page 9]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -557,7 +557,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 10]
+Burman, et al.             Expires May 3, 2017                 [Page 10]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -613,7 +613,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 11]
+Burman, et al.             Expires May 3, 2017                 [Page 11]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -669,7 +669,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 12]
+Burman, et al.             Expires May 3, 2017                 [Page 12]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -725,7 +725,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 13]
+Burman, et al.             Expires May 3, 2017                 [Page 13]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -781,7 +781,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 14]
+Burman, et al.             Expires May 3, 2017                 [Page 14]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -837,7 +837,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 15]
+Burman, et al.             Expires May 3, 2017                 [Page 15]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -893,7 +893,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 16]
+Burman, et al.             Expires May 3, 2017                 [Page 16]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -949,7 +949,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 17]
+Burman, et al.             Expires May 3, 2017                 [Page 17]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 18]
+Burman, et al.             Expires May 3, 2017                 [Page 18]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 19]
+Burman, et al.             Expires May 3, 2017                 [Page 19]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 20]
+Burman, et al.             Expires May 3, 2017                 [Page 20]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1142,7 +1142,7 @@ Internet-Draft                  Simulcast                   October 2016
    The most straightforward case is the RTP streams being emitted from
    the endpoint that originates a media source.  When simulcast has been
    negotiated to be used in the sending direction, the endpoint can
-   transmit up to the number of RTP streams that it has negotiated
+   transmit up to the number of RTP streams necessary for the negotiated
    simulcast streams for that media source.  Each of these RTP streams
    will be appropriately identified as defined in Section 6.5, i.e. each
    RTP stream (SSRC) will be associated with an RID SDES item
@@ -1160,30 +1160,53 @@ Internet-Draft                  Simulcast                   October 2016
    packets are currently transmitted.  The relation between an RTP
    Stream (SSRC) and a particular simulcast stream, is not expected to
    change.  Only at unusual, likely disruptive situations, such as SSRC
-   collisions, should changes happen.  Signalling updates are recommend
-   at such event.
+   collisions, should changes happen.  For SSRC changes, the usage of
+   the MID and RID should enable the receiver to correctly identify the
+   RTP streams, even after an SSRC chnage.  Signalling updates should be
+   considered at such event.
 
 7.2.  RTP Middlebox to Receiver
 
    The structure and expected RTP stream behavior in a multi-party RTP
    session that utilizes simulcast at least on client to middlebox legs
    are multiple ones.  This is due to the different RTP middlebox
-   behaviors to a large degree, but also the need of the application.
-   This text assumes that the RTP middlebox will perform selection of
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 21]
+Burman, et al.             Expires May 3, 2017                 [Page 21]
 
 Internet-Draft                  Simulcast                   October 2016
 
 
+   behaviors to a large degree, but also the need of the application.
+   This text assumes that the RTP middlebox will perform selection of
    the media sources and which simulcast stream for that media source to
    deliver to the receiver.  It is assumed that at maximum one simulcast
    stream per media source will be transmitted at any instant in time,
    even if the selected simulcast stream may vary.  For cases where this
    does not hold due to application needs, then the RTP stream aspects
    will fall under the middlebox to middlebox case Section 7.3.
+
+   The selection of which simulcast streams to select to forwarded
+   towards the receiver is application specific.  However, in
+   conferencing applications, active speaker selection is common.  And
+   in cases the number of media source possible to forward is limited to
+   N and N is less than the total amount of media sources available in
+   an multi-media session, the current and last speakers (upto N in
+   total) are often the ones forwarded.  To avoid the need for media
+   specific processing to determine the current speaker(s) in the RTP
+   middlebox, the endpoint providing a media source may include meta
+   data, such as the RTP Header Extension for Client-to-Mixer Audio
+   Level Indication [RFC6464].
+
+   The possibilities for stream switching are media type specific, but
+   for media types which significant interframe dependencies in the
+   encoding, like most video coding, there is a need to perform the
+   switching at suitable switching points in the media stream that
+   breaks or otherwise deals with the dependency structure.  Even if
+   switching points can be included periodically, it is common to use
+   mechanisms like Full Intra Requests [RFC5104] to reuqest switching
+   points from the endpoint performing the encoding of the media source.
 
    Inclusion of the RID SDES item for an SSRC in the middlebox to
    receiver direction should only occur when the RID has been negotiated
@@ -1197,8 +1220,19 @@ Internet-Draft                  Simulcast                   October 2016
    is important to remember that the used identifiers will be specific
    to each signalling session, even if the central entity can attempt to
    coordinate, it is likely that the RID identifiers needs to be
-   translated to the leg specific values.  The below cases will not
-   discuss inclusion RID in the mixer to receiver direction.
+   translated to the leg specific values.  The below cases will have as
+   base line that RID is not used in the mixer to receiver direction.
+
+
+
+
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 22]
+
+Internet-Draft                  Simulcast                   October 2016
+
 
 7.2.1.  Media-Switching Mixer
 
@@ -1223,25 +1257,21 @@ Internet-Draft                  Simulcast                   October 2016
    not allow some simulcast streams to be forward on some of the mixer's
    media sources.
 
-   This will result in a single RTP stream for a particular of the RTP
-   mixer's media source.  This RTP stream is at any point in time a
-   selection of one particular RTP stream arriving to the mixer, where
+   This will result in a single RTP stream being used for a particular
+   of the RTP mixer's media source.  This RTP stream is at any point in
+   time a selection of one particular RTP stream arriving to the mixer,
+   where the RTP header field values are rewritten to provide a
+   consistent single RTP stream.  If the RTP mixer doesn't receive any
+   incoming stream matched to this media source, the SSRC will not
+   transmit, but be kept alive using RTCP.  The SSRC and thus RTP stream
+   for the mixer's media source is expected to be long term stable.
+   Only to be changed by signalling or other disruptive events.  Note,
+   although the above talks about a single RTP stream, there can be
+   multiple RTP streams, in some cases to carry the selected simulcast
+   stream for the originating media source and in addition repair or
+   other auxillary RTP streams.
 
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 22]
-
-Internet-Draft                  Simulcast                   October 2016
-
-
-   the RTP header field values are rewritten to provide a consistent
-   single RTP stream.  If the RTP mixer doesn't receive any incoming
-   stream matched to this media source, the SSRC will not transmit, but
-   be kept alive using RTCP.  The SSRC and thus RTP stream for the
-   mixer's media source is expected to be long term stable.  Only to be
-   changed by signalling or other disruptive events.
-
-   The underlying media source may be communicated to the receiver by
+   The originating media source may be communicated to the receiver by
    the mixer, by including the CSRC field and the originating media
    sources SSRC value.  Note, that due to the possibility that the RTP
    mixer switches between simulcast versions of the media source, the
@@ -1252,6 +1282,14 @@ Internet-Draft                  Simulcast                   October 2016
    stream's SSRC.  This as there is nothing in the signalling between
    the mixer and the receiver that is structured around the originating
    media sources, only the mixer's media sources.  If they would be
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 23]
+
+Internet-Draft                  Simulcast                   October 2016
+
+
    associated with the SSRC, the receiver would likely believe that
    there has been an SSRC collision, and that the RTP stream is spurious
    as it doesn't carry the identifiers used to related it to the correct
@@ -1282,14 +1320,6 @@ Internet-Draft                  Simulcast                   October 2016
    media source's simulcast streams onto one RTP stream from the SFM to
    the receiver.
 
-
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 23]
-
-Internet-Draft                  Simulcast                   October 2016
-
-
    This usage will result in that the individual RTP stream(s) for one
    media source can switch between being active to paused based on the
    subset of media sources the SFM wants to provide the receiver for the
@@ -1308,14 +1338,35 @@ Internet-Draft                  Simulcast                   October 2016
    A SFM could expose corresponding RTP streams for all the media
    sources and their simulcast streams, and then on any media source
    that is to be provided forwards one selected simulcast stream.
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 24]
+
+Internet-Draft                  Simulcast                   October 2016
+
+
    However, this is not recommended as it would unnecessary increase the
-   number of RTP stream, require the receiver to timely detect the
+   number of RTP stream, and require the receiver to timely detect the
    switching between simulcast streams.  Where the above usage requires
    the same SFM functionality for switching, while avoiding the
    uncertainties of timely detecting that a RTP streams ends.  The only
    gain would be that the RID value would be implicitly provided, but
    given the possibility to indicate that explicitly exists appear
-   unnecessary.
+   unnecessary.  The issue with timely detecting end of streams,
+   independent if they are temporarily or long term is that there are no
+   explicit indication that the transmission has intentionally been
+   stopped.  The RTCP based Pause and Resume mechanism [RFC7728] do
+   include an PAUSED indication that provides the last RTP sequence
+   number transmitted prior to the pause.  Due to usage, this solutions
+   timeliness depends on when deliveyr using RTCP can occur in relation
+   to the transmission of the last RTP packet.  If no explicit
+   information is provided at all, then detection based on non
+   increasing RTCP SR field values and timers needs to be used to
+   determine pause in RTP packet delivery.  This results in that one can
+   usually not determine when the last RTP packet arrives (if it
+   arrives) that this will be the last.  That it was the last is
+   something that one learns later.
 
 7.3.  RTP Middlebox to RTP Middlebox
 
@@ -1341,7 +1392,12 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 24]
+
+
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 25]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1397,7 +1453,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 25]
+Burman, et al.             Expires May 3, 2017                 [Page 26]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1453,7 +1509,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 26]
+Burman, et al.             Expires May 3, 2017                 [Page 27]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1484,6 +1540,9 @@ Internet-Draft                  Simulcast                   October 2016
 
 13.  Acknowledgements
 
+   The authors like to thank Bernard Aboba, Roni Even, Adam Roach for
+   provided feedback in the develeopment of this document.
+
 14.  References
 
 14.1.  Normative References
@@ -1506,10 +1565,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 27]
+Burman, et al.             Expires May 3, 2017                 [Page 28]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1565,7 +1621,7 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-Burman, et al.             Expires May 1, 2017                 [Page 28]
+Burman, et al.             Expires May 3, 2017                 [Page 29]
 
 Internet-Draft                  Simulcast                   October 2016
 
@@ -1607,24 +1663,29 @@ Internet-Draft                  Simulcast                   October 2016
               DOI 10.17487/RFC4733, December 2006,
               <http://www.rfc-editor.org/info/rfc4733>.
 
+   [RFC5104]  Wenger, S., Chandra, U., Westerlund, M., and B. Burman,
+              "Codec Control Messages in the RTP Audio-Visual Profile
+              with Feedback (AVPF)", RFC 5104, DOI 10.17487/RFC5104,
+              February 2008, <http://www.rfc-editor.org/info/rfc5104>.
+
    [RFC5285]  Singer, D. and H. Desineni, "A General Mechanism for RTP
               Header Extensions", RFC 5285, DOI 10.17487/RFC5285, July
               2008, <http://www.rfc-editor.org/info/rfc5285>.
+
+
+
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 30]
+
+Internet-Draft                  Simulcast                   October 2016
+
 
    [RFC5576]  Lennox, J., Ott, J., and T. Schierl, "Source-Specific
               Media Attributes in the Session Description Protocol
               (SDP)", RFC 5576, DOI 10.17487/RFC5576, June 2009,
               <http://www.rfc-editor.org/info/rfc5576>.
-
-
-
-
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 29]
-
-Internet-Draft                  Simulcast                   October 2016
-
 
    [RFC5583]  Schierl, T. and S. Wenger, "Signaling Media Decoding
               Dependency in the Session Description Protocol (SDP)",
@@ -1646,6 +1707,12 @@ Internet-Draft                  Simulcast                   October 2016
               RFC 6236, DOI 10.17487/RFC6236, May 2011,
               <http://www.rfc-editor.org/info/rfc6236>.
 
+   [RFC6464]  Lennox, J., Ed., Ivov, E., and E. Marocco, "A Real-time
+              Transport Protocol (RTP) Header Extension for Client-to-
+              Mixer Audio Level Indication", RFC 6464,
+              DOI 10.17487/RFC6464, December 2011,
+              <http://www.rfc-editor.org/info/rfc6464>.
+
    [RFC7656]  Lennox, J., Gross, K., Nandakumar, S., Salgueiro, G., and
               B. Burman, Ed., "A Taxonomy of Semantics and Mechanisms
               for Real-Time Transport Protocol (RTP) Sources", RFC 7656,
@@ -1660,6 +1727,17 @@ Appendix A.  Changes From Earlier Versions
 
    NOTE TO RFC EDITOR: Please remove this section prior to publication.
 
+
+
+
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 31]
+
+Internet-Draft                  Simulcast                   October 2016
+
+
 A.1.  Modifications Between WG Version -04 and -05
 
    o  Aligned with recent changes in draft-ietf-mmusic-rid and draft-
@@ -1672,15 +1750,6 @@ A.1.  Modifications Between WG Version -04 and -05
    o  Improved text around simulcast stream identification (as opposed
       to the simulcast stream itself) to consistently use the acronym
       SCID and defined that in the Terminology section.
-
-
-
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 30]
-
-Internet-Draft                  Simulcast                   October 2016
-
 
    o  Changed references for RTP-level pause/resume and VP8 payload
       format that are now published as RFC.
@@ -1713,6 +1782,18 @@ A.2.  Modifications Between WG Version -03 and -04
 
    o  Editorial improvements.
 
+
+
+
+
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 32]
+
+Internet-Draft                  Simulcast                   October 2016
+
+
 A.3.  Modifications Between WG Version -02 and -03
 
    o  Removed text on multicast / broadcast from use cases, since it is
@@ -1729,14 +1810,6 @@ A.3.  Modifications Between WG Version -02 and -03
 
    o  Added a section on limitations of the current proposal, including
       identification method specific limitations.
-
-
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 31]
-
-Internet-Draft                  Simulcast                   October 2016
-
 
 A.4.  Modifications Between WG Version -01 and -02
 
@@ -1766,6 +1839,17 @@ A.6.  Modifications Between Individual Version -00 and WG Version -00
 
 Authors' Addresses
 
+
+
+
+
+
+
+Burman, et al.             Expires May 3, 2017                 [Page 33]
+
+Internet-Draft                  Simulcast                   October 2016
+
+
    Bo Burman
    Ericsson
    Gronlandsgatan 31
@@ -1783,15 +1867,6 @@ Authors' Addresses
 
    Phone: +46 10 714 82 87
    Email: magnus.westerlund@ericsson.com
-
-
-
-
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 32]
-
-Internet-Draft                  Simulcast                   October 2016
 
 
    Suhas Nandakumar
@@ -1826,23 +1901,4 @@ Internet-Draft                  Simulcast                   October 2016
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Burman, et al.             Expires May 1, 2017                 [Page 33]
+Burman, et al.             Expires May 3, 2017                 [Page 34]
