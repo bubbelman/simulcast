@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="30" month="October" year="2016"/>
+    <date day="31" month="October" year="2016"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -162,8 +162,8 @@
       <section title="Terminology">
         <t>This document makes use of the terminology defined in <xref
         target="RFC7656">RTP Taxonomy</xref>, and <xref target="RFC7667">RTP
-        Topologies</xref>. In addition, the following terms are used:<list
-            style="hanging">
+        Topologies</xref>. The following terms are especially noted or here
+        defined:<list style="hanging">
             <t hangText="RTP Mixer:">An RTP middle node, defined in <xref
             target="RFC7667"/> (Section 3.6 to 3.9).</t>
 
@@ -189,10 +189,10 @@
             one RTP packet to another.</t>
 
             <t hangText="Simulcast Stream Identifier (SCID):">The
-            identification value used to refer to individual simulcast
-            streams, identical to the "rid-id" identification value for an
-            <xref target="I-D.ietf-mmusic-rid">RTP Payload Format
-            Restriction</xref> and the corresponding content of <xref
+            identification value used to refer to individual simulcast format,
+            identical to the "rid-id" identification value for an <xref
+            target="I-D.ietf-mmusic-rid">RTP Payload Format Restriction</xref>
+            and the corresponding content of <xref
             target="I-D.ietf-avtext-rid">"RtpStreamId" RTCP SDES
             Item</xref>.</t>
           </list></t>
@@ -340,14 +340,7 @@
 
     <section anchor="sec-requirements" title="Requirements">
       <t>The following requirements need to be met to support the use cases in
-      previous sections:<list style="empty">
-          <t>Editor's note: Consider adding an explicit requirement that the
-          solution supports use of simulcast even when using multiple codecs
-          and multiple redundant RTP streams per defined codec (or something
-          similar), since this is really an existing requirement and should
-          also fully motivate the use of RtpStreamId as identification
-          mechanism.</t>
-        </list><list style="hanging">
+      previous sections:<list style="hanging">
           <t anchor="req-1" hangText="REQ-1:">Identification. It must be
           possible to identify a set of simulcasted RTP streams as originating
           from the same media source:<list style="hanging">
@@ -388,6 +381,12 @@
               <t anchor="req-3.6" hangText="REQ-3.6:">Receiver can detail the
               characteristics of the simulcast streams that it prefers to
               receive.</t>
+
+              <t hangText="REQ-3.7:">A single simulcast stream can consist of
+              multiple RTP streams, to support codecs where a dependent stream
+              is dependent on a set of encoded and dependent stream each
+              potentially carried in their own RTP stream, as well as
+              redundant RTP streams.</t>
             </list></t>
 
           <t anchor="req-4" hangText="REQ-4:">Distinguishing features. It must
@@ -486,16 +485,18 @@ sc-id        = [sc-id-paused] rid-identifier
         </figure>
 
         <t>The "a=simulcast" attribute has a parameter in the form of one or
-        two simulcast stream descriptions, each consisting of a direction
+        two simulcast streams descriptions, each consisting of a direction
         ("send" or "recv"), followed by a list of one or more simulcast
-        streams. The simulcast stream identification (SCID) MUST be have the
-        form of an RTP stream identifier, as described by <xref
+        streams. Each simulcast stream consists of one or more alternative
+        simulcast formats. Each simulcast format is identified by a simulcast
+        stream identification (SCID). The SCID MUST be have the form of an RTP
+        stream identifier, as described by <xref
         target="I-D.ietf-mmusic-rid">RTP Payload Format
         Restrictions</xref>.</t>
 
         <t>In the list of simulcast streams, each simulcast stream is
         separated by a semicolon (";"). Each simulcast stream can in turn be
-        offered in one or more alternative formats, represented by SCID,
+        offered in one or more alternative formats, represented by SCIDs,
         separated by a comma (","). Each SCID can also be specified as
         initially <xref target="RFC7728">paused</xref>, indicated by
         prepending a "~" to the SCID. In case there are alternative SCID,
@@ -767,7 +768,7 @@ a=simulcast:recv 1;4,5 send 6;7
         target="I-D.ietf-mmusic-rid">simulcast stream identification</xref>
         not being defined for use in declarative SDP. If concrete use cases
         for simulcast in declarative SDP use are identified in the future, we
-        expect that additional specifications will address such use. </t>
+        expect that additional specifications will address such use.</t>
 
         <t>It may not be beneficial for declarative use to be limited to a
         single media source per "m=" line, as elaborated further in <xref
@@ -846,6 +847,7 @@ a=rid:1 pt=97 send
 a=rid:2 pt=98 send
 a=rid:3 pt=97 recv
 a=simulcast:send 1;2 recv 3
+a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
 ]]></artwork>
           </figure>
@@ -854,12 +856,16 @@ a=simulcast:send 1;2 recv 3
           the line in the video media description containing the "simulcast"
           attribute. The included "a=fmtp" and "a=imageattr" parameters
           indicates that sent simulcast streams can differ in video
-          resolution.</t>
+          resolution. To avoid issues with the initial binding between RTP
+          streams (SSRCs) and the RtpStreamId identificying the simulcast
+          format and thus simulcast stream, the RTP header extension for RID
+          is offered.</t>
 
           <t>The Answer from the server indicates that it too is simulcast
           capable. Should it not have been simulcast capable, the
           "a=simulcast" line would not have been present and communication
-          would have started with the media negotiated in the SDP.</t>
+          would have started with the media negotiated in the SDP. Also the
+          usage of the RID RTP header extension is accepted.</t>
 
           <figure align="center" anchor="fig-up-answer"
                   title="Single-Source Simulcast Answer">
@@ -882,6 +888,7 @@ a=rid:1 pt=97 recv
 a=rid:2 pt=98 recv
 a=rid:3 pt=97 send
 a=simulcast:recv 1;2 send 3
+a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
 ]]></artwork>
           </figure>
@@ -1023,27 +1030,18 @@ a=simulcast:send 1;~2;~3
       </section>
 
       <section title="RTP Middlebox to Receiver">
-        <t>There are multiple possible structures and expected RTP stream
-        behaviors in a multi-party RTP session that utilizes simulcast at
-        least on client to middlebox legs. This is due to the different RTP
-        middlebox behaviors to a large degree, but also the need of the
-        application. This text assumes that the RTP middlebox will perform
-        selection of the media sources and choose which simulcast stream for
-        that media source to deliver to the receiver. In many cases, at most
-        one simulcast stream per media source will be forwarded at any instant
-        in time, even if the selected simulcast stream may vary. For cases
-        where this does not hold due to application needs, then the RTP stream
-        aspects will fall under the middlebox to middlebox case <xref
-        target="sec-rtp-box-box"/>.<!--BoB: Magnus, what "structures" is it that you're referring to in the first sentence?
-Also, it is not safe to assume that only a single simulcast format is forwarded at any point in time;
-Assume, for example, that video is sent in both full size and thumbnail size from the previously active
-speaker: The current active speaker would typically want the full size video, while everyone else want
-just the thumbnail. In this case, which can be pretty common, both simulcasted representations from the
-previously active speaker are forwarded! There are more examples of this, for example when simulcast is
-used to support different codec "generations", like some participants having just H.264 but there are
-a significant amount of participants implementing H.265 and both codecs are simulcasted to avoid
-transcoding. None of those cases fall only under middlebox-to-middlebox use case!
---></t>
+        <t>There are multiple possible RTP stream behaviors in a multi-party
+        RTP session, when the session utilizes simulcast at least on the media
+        source to middlebox legs. This is due to the different RTP middlebox
+        behaviors to a large degree, but also the need of the application.
+        This text assumes that the RTP middlebox will perform selection of the
+        media sources and choose which simulcast stream for that media source
+        to deliver to a specific receiver. In many cases, at most one
+        simulcast stream per media source will be forwarded at any instant in
+        time to a particular receiver, even if the selected simulcast stream
+        may vary. For cases where this does not hold due to application needs,
+        then the RTP stream aspects will fall under the middlebox to middlebox
+        case <xref target="sec-rtp-box-box"/>.</t>
 
         <t>The selection of which simulcast streams to forward towards the
         receiver, is application specific. However, in conferencing
@@ -1360,9 +1358,9 @@ transcoding. None of those cases fall only under middlebox-to-middlebox use case
     </section>
 
     <section anchor="sec-ack" title="Acknowledgements">
-      <t>The authors would like to thank Bernard Aboba, Roni Even, and Adam
-      Roach for the feedback they provided during the develeopment of this
-      document.</t>
+      <t>The authors would like to thank Bernard Aboba, Thomas Belling, Roni
+      Even, and Adam Roach for the feedback they provided during the
+      develeopment of this document.</t>
     </section>
   </middle>
 
@@ -1374,21 +1372,17 @@ transcoding. None of those cases fall only under middlebox-to-middlebox use case
 
       <?rfc include='reference.RFC.4566'?>
 
-      <?rfc include='reference.RFC.5109'?>
-
       <?rfc include='reference.RFC.5234'?>
 
-      <?rfc include='reference.RFC.7104'?>
-
       <?rfc include='reference.RFC.7728'?>
-
-      <?rfc include='reference.RFC.7741'?>
 
       <?rfc include='reference.I-D.ietf-mmusic-rid'?>
 
       <?rfc include='reference.I-D.ietf-avtext-rid'?>
 
       <?rfc include='reference.I-D.ietf-mmusic-sdp-mux-attributes'?>
+
+      <?rfc include='reference.I-D.ietf-mmusic-sdp-bundle-negotiation'?>
     </references>
 
     <references title="Informative References">
@@ -1404,6 +1398,8 @@ transcoding. None of those cases fall only under middlebox-to-middlebox use case
 
       <?rfc include='reference.RFC.5104'?>
 
+      <?rfc include='reference.RFC.5109'?>
+
       <?rfc include='reference.RFC.5285'?>
 
       <?rfc include='reference.RFC.5576'?>
@@ -1418,15 +1414,17 @@ transcoding. None of those cases fall only under middlebox-to-middlebox use case
 
       <?rfc include='reference.RFC.6464'?>
 
+      <?rfc include='reference.RFC.7104'?>
+
       <?rfc include='reference.RFC.7656'?>
 
       <?rfc include='reference.RFC.7667'?>
 
+      <?rfc include='reference.RFC.7741'?>
+
       <?rfc include='reference.I-D.ietf-avtcore-multiplex-guidelines'?>
 
       <?rfc include='reference.I-D.ietf-avtcore-rtp-multi-stream'?>
-
-      <?rfc include='reference.I-D.ietf-mmusic-sdp-bundle-negotiation'?>
     </references>
 
     <section title="Changes From Earlier Versions">
@@ -1435,7 +1433,19 @@ transcoding. None of those cases fall only under middlebox-to-middlebox use case
 
       <section title="Modifications Between WG Version -05 and  -06">
         <t><list style="symbols">
-            <t>Added,,,</t>
+            <t>Added section on RTP Apsects</t>
+
+            <t>Added a requirement (3-7) on that capability exchange must be
+            capable of handling multi RTP stream cases.</t>
+
+            <t>Added extmap attribute also on first signalling example as it
+            is a recommended to use mechanism. </t>
+
+            <t>Clarified the definition of the simulcast attribute and how
+            simulcast streams relates to simulcasat formats and SCIDs. </t>
+
+            <t>Updated References list and moved around some references
+            between informative and normative categories.</t>
           </list></t>
       </section>
 
