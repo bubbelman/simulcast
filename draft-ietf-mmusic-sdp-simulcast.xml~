@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="28" month="October" year="2016"/>
+    <date day="30" month="October" year="2016"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -995,14 +995,14 @@ a=simulcast:send 5;~6;~7
         <t>The most straightforward case is the RTP streams being emitted from
         the endpoint that originates a media source. When simulcast has been
         negotiated to be used in the sending direction, the endpoint can
-        transmit up to the number of RTP streams that it has negotiated
+        transmit up to the number of RTP streams necessary for the negotiated
         simulcast streams for that media source. Each of these RTP streams
         will be appropriately identified as defined in <xref
         target="sec-relating"/>, i.e. each RTP stream (SSRC) will be
         associated with an RID SDES item transmitted in RTCP and possibly also
         in the RTP header extension. And in cases where multiple media sources
         have been negotiated for the RTP session, also the MID SDES item will
-        be sent similarly to the RID. </t>
+        be sent similarly to the RID.</t>
 
         <t>Each RTP stream may not be continously transmitted due any of the
         following reasons, temporarily paused using <xref
@@ -1013,8 +1013,10 @@ a=simulcast:send 5;~6;~7
         RTCP reports), even if no RTP packets are currently transmitted. The
         relation between an RTP Stream (SSRC) and a particular simulcast
         stream, is not expected to change. Only at unusual, likely disruptive
-        situations, such as SSRC collisions, should changes happen. Signalling
-        updates are recommend at such event. </t>
+        situations, such as SSRC collisions, should changes happen. For SSRC
+        changes, the usage of the MID and RID should enable the receiver to
+        correctly identify the RTP streams, even after an SSRC chnage.
+        Signalling updates should be considered at such event.</t>
       </section>
 
       <section title="RTP Middlebox to Receiver">
@@ -1031,6 +1033,28 @@ a=simulcast:send 5;~6;~7
         will fall under the middlebox to middlebox case <xref
         target="sec-rtp-box-box"/>.</t>
 
+        <t>The selection of which simulcast streams to select to forwarded
+        towards the receiver is application specific. However, in conferencing
+        applications, active speaker selection is common. And in cases the
+        number of media source possible to forward is limited to N and N is
+        less than the total amount of media sources available in an
+        multi-media session, the current and last speakers (upto N in total)
+        are often the ones forwarded. To avoid the need for media specific
+        processing to determine the current speaker(s) in the RTP middlebox,
+        the endpoint providing a media source may include meta data, such as
+        the <xref target="RFC6464">RTP Header Extension for Client-to-Mixer
+        Audio Level Indication</xref>. </t>
+
+        <t>The possibilities for stream switching are media type specific, but
+        for media types which significant interframe dependencies in the
+        encoding, like most video coding, there is a need to perform the
+        switching at suitable switching points in the media stream that breaks
+        or otherwise deals with the dependency structure. Even if switching
+        points can be included periodically, it is common to use mechanisms
+        like <xref target="RFC5104">Full Intra Requests</xref> to reuqest
+        switching points from the endpoint performing the encoding of the
+        media source. </t>
+
         <t>Inclusion of the RID SDES item for an SSRC in the middlebox to
         receiver direction should only occur when the RID has been negotiated
         in that direction. Here is worth noting that one can signal multiple
@@ -1043,8 +1067,8 @@ a=simulcast:send 5;~6;~7
         important to remember that the used identifiers will be specific to
         each signalling session, even if the central entity can attempt to
         coordinate, it is likely that the RID identifiers needs to be
-        translated to the leg specific values. The below cases will not
-        discuss inclusion RID in the mixer to receiver direction. </t>
+        translated to the leg specific values. The below cases will have as
+        base line that RID is not used in the mixer to receiver direction.</t>
 
         <section title="Media-Switching Mixer">
           <t>This section discusses the behavior in cases where the RTP
@@ -1053,7 +1077,7 @@ a=simulcast:send 5;~6;~7
           here is that the media sources delivered from the middlebox will be
           the mixers conceptual or functional. For example one media source
           may be the main speaker in high resolution video, and a number of
-          other media sources are thumbnails of each participant. </t>
+          other media sources are thumbnails of each participant.</t>
 
           <t>The above results in that the RTP stream produced by the mixer is
           one that switches between a number of received incoming RTP streams
@@ -1068,22 +1092,26 @@ a=simulcast:send 5;~6;~7
           not allow some simulcast streams to be forward on some of the
           mixer's media sources.</t>
 
-          <t>This will result in a single RTP stream for a particular of the
-          RTP mixer's media source. This RTP stream is at any point in time a
-          selection of one particular RTP stream arriving to the mixer, where
-          the RTP header field values are rewritten to provide a consistent
-          single RTP stream. If the RTP mixer doesn't receive any incoming
-          stream matched to this media source, the SSRC will not transmit, but
-          be kept alive using RTCP. The SSRC and thus RTP stream for the
-          mixer's media source is expected to be long term stable. Only to be
-          changed by signalling or other disruptive events. </t>
+          <t>This will result in a single RTP stream being used for a
+          particular of the RTP mixer's media source. This RTP stream is at
+          any point in time a selection of one particular RTP stream arriving
+          to the mixer, where the RTP header field values are rewritten to
+          provide a consistent single RTP stream. If the RTP mixer doesn't
+          receive any incoming stream matched to this media source, the SSRC
+          will not transmit, but be kept alive using RTCP. The SSRC and thus
+          RTP stream for the mixer's media source is expected to be long term
+          stable. Only to be changed by signalling or other disruptive events.
+          Note, although the above talks about a single RTP stream, there can
+          be multiple RTP streams, in some cases to carry the selected
+          simulcast stream for the originating media source and in addition
+          repair or other auxillary RTP streams.</t>
 
-          <t>The underlying media source may be communicated to the receiver
+          <t>The originating media source may be communicated to the receiver
           by the mixer, by including the CSRC field and the originating media
           sources SSRC value. Note, that due to the possibility that the RTP
           mixer switches between simulcast versions of the media source, the
-          CSRC value may change, even if the same media source is provided.
-          </t>
+          CSRC value may change, even if the same media source is
+          provided.</t>
 
           <t>It is important to note that any MID SDES item from the
           originating media source needs to be removed and not associated with
@@ -1104,7 +1132,7 @@ a=simulcast:send 5;~6;~7
           simulcast stream selected for switching. These RID identifiers will
           be local to this legs signalling context. And the defined RID and
           their parameters needs to cover all the media sources and simulcast
-          streams that can be switched into this media source. </t>
+          streams that can be switched into this media source.</t>
         </section>
 
         <section title="Selective Forwarding Middlebox">
@@ -1140,13 +1168,26 @@ a=simulcast:send 5;~6;~7
           sources and their simulcast streams, and then on any media source
           that is to be provided forwards one selected simulcast stream.
           However, this is not recommended as it would unnecessary increase
-          the number of RTP stream, require the receiver to timely detect the
-          switching between simulcast streams. Where the above usage requires
-          the same SFM functionality for switching, while avoiding the
-          uncertainties of timely detecting that a RTP streams ends. The only
-          gain would be that the RID value would be implicitly provided, but
-          given the possibility to indicate that explicitly exists appear
-          unnecessary. </t>
+          the number of RTP stream, and require the receiver to timely detect
+          the switching between simulcast streams. Where the above usage
+          requires the same SFM functionality for switching, while avoiding
+          the uncertainties of timely detecting that a RTP streams ends. The
+          only gain would be that the RID value would be implicitly provided,
+          but given the possibility to indicate that explicitly exists appear
+          unnecessary. The issue with timely detecting end of streams,
+          independent if they are temporarily or long term is that there are
+          no explicit indication that the transmission has intentionally been
+          stopped. The RTCP based <xref target="RFC7728">Pause and Resume
+          mechanism</xref> do include an PAUSED indication that provides the
+          last RTP sequence number transmitted prior to the pause. Due to
+          usage, this solutions timeliness depends on when deliveyr using RTCP
+          can occur in relation to the transmission of the last RTP packet. If
+          no explicit information is provided at all, then detection based on
+          non increasing RTCP SR field values and timers needs to be used to
+          determine pause in RTP packet delivery. This results in that one can
+          usually not determine when the last RTP packet arrives (if it
+          arrives) that this will be the last. That it was the last is
+          something that one learns later. </t>
         </section>
       </section>
 
@@ -1163,13 +1204,13 @@ a=simulcast:send 5;~6;~7
         limiation in network bandwidth. In this case a subset of not only the
         simulcast streams, but also media source can be selected. Thus
         resulting in that individual RTP streams can be become paused at any
-        point, and later being resumed based on various criterias. </t>
+        point, and later being resumed based on various criterias.</t>
 
         <t>The MIDs used between A and B are the ones agreed between these two
         identities in signalling. The RID values will also be provided to
         ensure explcit information about which simulcast stream they are. The
-        RTP stream to MID and RID association should here be long term stable.
-        </t>
+        RTP stream to MID and RID association should here be long term
+        stable.</t>
       </section>
     </section>
 
@@ -1302,7 +1343,8 @@ a=simulcast:send 5;~6;~7
     </section>
 
     <section anchor="sec-ack" title="Acknowledgements">
-      <t/>
+      <t>The authors like to thank Bernard Aboba, Roni Even, Adam Roach for
+      provided feedback in the develeopment of this document.</t>
     </section>
   </middle>
 
@@ -1342,6 +1384,8 @@ a=simulcast:send 5;~6;~7
 
       <?rfc include='reference.RFC.4733'?>
 
+      <?rfc include='reference.RFC.5104'?>
+
       <?rfc include='reference.RFC.5285'?>
 
       <?rfc include='reference.RFC.5576'?>
@@ -1353,6 +1397,8 @@ a=simulcast:send 5;~6;~7
       <?rfc include='reference.RFC.6190'?>
 
       <?rfc include='reference.RFC.6236'?>
+
+      <?rfc include='reference.RFC.6464'?>
 
       <?rfc include='reference.RFC.7656'?>
 
