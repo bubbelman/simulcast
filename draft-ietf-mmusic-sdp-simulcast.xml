@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-06"
+<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-07"
      ipr="trust200902" submissionType="IETF">
   <front>
     <title abbrev="Simulcast">Using Simulcast in SDP and RTP Sessions</title>
@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="31" month="October" year="2016"/>
+    <date day="5" month="December" year="2016"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -449,9 +449,10 @@
           but not totally unambiguous indication of those RTP streams being
           part of a simulcast.</t>
 
-          <t>It is possible, but not required to use <xref
-          target="RFC5576">source-specific signaling</xref> with the proposed
-          solution.</t>
+          <t>It is possible to use <xref target="RFC5576">source-specific
+          signaling</xref> with the proposed solution, but it is only in
+          certain cases possible to learn from that signaling which SSRC will
+          belong to a particular simulcast stream.</t>
         </list></t>
     </section>
 
@@ -552,7 +553,7 @@ a=simulcast:recv 1;4,5 send 6;7
         session level usage. The meaning of including multiple "a=simulcast"
         lines in a single SDP media description is undefined, MUST NOT be used
         by implementations of this specification and any additional
-        "a=simulcast" lines beyond the first under an "m=" line MUST be
+        "a=simulcast" lines beyond the first in a media description MUST be
         ignored if received.</t>
 
         <t>There are separate and independent sets of simulcast streams in
@@ -570,10 +571,10 @@ a=simulcast:recv 1;4,5 send 6;7
         a proposed order of preference, in decreasing order: the SCID listed
         first is the most preferred and subsequent streams have progressively
         lower preference. The order of the listed SCID in the "recv" direction
-        expresses a preference which simulcast streams that are preferred,
-        with the leftmost being most preferred. This can be of importance if
-        the number of actually sent simulcast streams have to be reduced for
-        some reason.</t>
+        expresses which simulcast streams that are preferred, with the
+        leftmost being most preferred. This can be of importance if the number
+        of actually sent simulcast streams have to be reduced for some
+        reason.</t>
 
         <t>SCID that have explicit <xref target="RFC5583">dependencies</xref>
         <xref target="I-D.ietf-mmusic-rid"/> to other SCID (even in the same
@@ -651,7 +652,12 @@ a=simulcast:recv 1;4,5 send 6;7
         as differently defined RTP payload format restrictions, or both. If
         this difference is not required, <xref target="RFC7104">RTP
         duplication</xref> procedures SHOULD be considered instead of
-        simulcast.</t>
+        simulcast. To limit the possibility to use simulcast for RTP
+        duplication purposes, a single SCID MUST NOT occur more than once per
+        "a=simulcast" line. Note that this does not completely eliminate use
+        of simulcast as RTP duplication, since it is possible to define
+        different SCID that are effectively equivalent, but it is expected to
+        increase the probability that this usage is a conscious decision.</t>
       </section>
 
       <section anchor="sec-offer-answer" title="Offer/Answer Use">
@@ -676,8 +682,9 @@ a=simulcast:recv 1;4,5 send 6;7
           Offer/Answer</xref> procedures. Similarly, an answerer that receives
           an offer with the "a=simulcast" attribute on session level SHALL
           remove it in the answer. An answerer that understands the attribute
-          but receives multiple "a=simulcast" attributes under the same "m="
-          line SHALL ignore and remove all but the first in the answer. </t>
+          but receives multiple "a=simulcast" attributes in the same media
+          description and that desires to use simulcast SHALL ignore and
+          remove all but the first in the answer.</t>
 
           <t>An answerer that does understand the attribute and that wants to
           support simulcast in an indicated direction SHALL reverse
@@ -763,12 +770,7 @@ a=simulcast:recv 1;4,5 send 6;7
         target="I-D.ietf-mmusic-rid">simulcast format identification</xref>
         not being defined for use in declarative SDP. If concrete use cases
         for simulcast in declarative SDP are identified in the future, we
-        expect that additional specifications will address such use.<list
-            style="empty">
-            <t>Note: It may not be beneficial for declarative use to be
-            limited to a single media source per "m=" line, as elaborated
-            further in <xref target="sec-limitation"/>.</t>
-          </list></t>
+        expect that additional specifications will address such use.</t>
       </section>
 
       <section anchor="sec-relating" title="Relating Simulcast Streams">
@@ -790,10 +792,11 @@ a=simulcast:recv 1;4,5 send 6;7
         extension method to signal RtpStreamId on RTP level.</t>
 
         <t>RTP streams MUST only use a single alternative SCID at a time
-        (based on RTP timestamps), but MAY change format on a per-RTP packet
-        basis. This corresponds to the existing (non-simulcast) SDP
-        offer/answer case when multiple formats are included on the "m=" line
-        in the SDP answer.</t>
+        (based on RTP timestamps), but MAY change format (and SCID) on a
+        per-RTP packet basis. This corresponds to the existing (non-simulcast)
+        SDP offer/answer case when multiple formats are included on the "m="
+        line in the SDP answer, enabling per-RTP packet change of RTP payload
+        type.</t>
       </section>
 
       <section anchor="sec-ex" title="Signaling Examples">
@@ -991,7 +994,7 @@ a=simulcast:send 1;~2;~3
       <t>This section discusses what the different entities in a simulcast
       media path can expect to happen on RTP level. This is explored from
       source to sink by starting in an endpoint with a media source that is
-      simulcasted to a RTP middlebox. That RTP middlebox sends media sources
+      simulcasted to an RTP middlebox. That RTP middlebox sends media sources
       both to other RTP middleboxes (cascaded middleboxes), as well as
       selecting some simulcast format of the media source and sending it to
       receiving endpoints. Different types of RTP middleboxes and their usage
@@ -1211,7 +1214,7 @@ a=simulcast:send 1;~2;~3
         originating to middlebox case on a media source basis. However, in
         this case there is usually multiple media sources, originating from
         multiple endpoints. This can create situations where limitations in
-        the number of simultaneous received media streams can arise, for
+        the number of simultaneously received media streams can arise, for
         example due to limitation in network bandwidth. In this case, a subset
         of not only the simulcast streams, but also media sources can be
         selected. This results in that individual RTP streams can be become
@@ -1264,7 +1267,8 @@ a=simulcast:send 1;~2;~3
         may have to be reduced dynamically. What simulcast streams to
         prioritize when allocating available bitrate among the simulcast
         streams in such adaptation SHOULD be taken from the simulcast stream
-        order on the "a=simulcast" line. Simulcast streams that have
+        order on the "a=simulcast" line and ordering of alternative simulcast
+        formats <xref target="sec-cap"/>. Simulcast streams that have
         pause/resume capability and that would be given such low bitrate by
         the adaptation process that they are considered not really useful can
         be temporarily paused until the limiting condition clears.</t>
