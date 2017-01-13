@@ -71,17 +71,17 @@ Internet-Draft                  Simulcast                   October 2016
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
-   2.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   4
+   2.  Definitions . . . . . . . . . . . . . . . . . . . . . . . . .   3
      2.1.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   4
      2.2.  Requirements Language . . . . . . . . . . . . . . . . . .   4
-   3.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .   5
+   3.  Use Cases . . . . . . . . . . . . . . . . . . . . . . . . . .   4
      3.1.  Reaching a Diverse Set of Receivers . . . . . . . . . . .   5
      3.2.  Application Specific Media Source Handling  . . . . . . .   7
      3.3.  Receiver Media Source Preferences . . . . . . . . . . . .   7
    4.  Requirements  . . . . . . . . . . . . . . . . . . . . . . . .   7
    5.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   9
    6.  Detailed Description  . . . . . . . . . . . . . . . . . . . .   9
-     6.1.  Simulcast Attribute . . . . . . . . . . . . . . . . . . .  10
+     6.1.  Simulcast Attribute . . . . . . . . . . . . . . . . . . .   9
      6.2.  Simulcast Capability  . . . . . . . . . . . . . . . . . .  11
      6.3.  Offer/Answer Use  . . . . . . . . . . . . . . . . . . . .  13
        6.3.1.  Generating the Initial SDP Offer  . . . . . . . . . .  13
@@ -152,15 +152,15 @@ Internet-Draft                  Simulcast                   October 2016
    how the identification and grouping of the involved RTP streams are
    done.
 
-   The intended scope of the defined mechanism is to support negotiation
-   and usage of simulcast when using SDP offer/answer and media
-   transport over RTP.  The media transport topologies considered are
-   point to point RTP sessions as well as centralized multi-party RTP
-   sessions, where a media sender will provide the simulcasted streams
-   to an RTP middlebox or endpoint, and middleboxes may further
-   distribute the simulcast streams to other middleboxes or endpoints.
-   Usage of multicast or broadcast transport is out of scope and left
-   for future extension.
+   This document describes a few scenarios where it is motivated to use
+   simulcast, and also defines the needed RTP/RTCP and SDP signaling for
+   it.
+
+2.  Definitions
+
+
+
+
 
 
 
@@ -169,12 +169,6 @@ Burman, et al.             Expires May 4, 2017                  [Page 3]
 
 Internet-Draft                  Simulcast                   October 2016
 
-
-   This document describes a few scenarios where it is motivated to use
-   simulcast, and also defines the needed RTP/RTCP and SDP signaling for
-   it.
-
-2.  Definitions
 
 2.1.  Terminology
 
@@ -217,6 +211,12 @@ Internet-Draft                  Simulcast                   October 2016
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
    document are to be interpreted as described in RFC 2119 [RFC2119].
 
+3.  Use Cases
+
+   Many use cases of simulcast as described in this document relate to a
+   multi-party communication session where one or more central nodes are
+   used to adapt the view of the communication session towards
+   individual participants, and facilitate the media transport between
 
 
 
@@ -226,12 +226,6 @@ Burman, et al.             Expires May 4, 2017                  [Page 4]
 Internet-Draft                  Simulcast                   October 2016
 
 
-3.  Use Cases
-
-   Many use cases of simulcast as described in this document relate to a
-   multi-party communication session where one or more central nodes are
-   used to adapt the view of the communication session towards
-   individual participants, and facilitate the media transport between
    participants.  Thus, these cases target the RTP Mixer type of
    topology.
 
@@ -274,6 +268,12 @@ Internet-Draft                  Simulcast                   October 2016
    Codec:  This includes codec type (such as SDP MIME type) and can
       include codec configuration options (e.g.  SDP fmtp parameters).
       A couple of codec resources that differ only in codec
+      configuration will be "different" if they are somehow not
+      "compatible", like if they differ in video codec profile, or the
+      transport packetization configuration.
+
+   Sampling:  This relates to how the media source is sampled, in
+      spatial as well as in temporal domain.  For video streams, spatial
 
 
 
@@ -282,12 +282,6 @@ Burman, et al.             Expires May 4, 2017                  [Page 5]
 Internet-Draft                  Simulcast                   October 2016
 
 
-      configuration will be "different" if they are somehow not
-      "compatible", like if they differ in video codec profile, or the
-      transport packetization configuration.
-
-   Sampling:  This relates to how the media source is sampled, in
-      spatial as well as in temporal domain.  For video streams, spatial
       sampling affects image resolution and temporal sampling affects
       video frame rate.  For audio, spatial sampling relates to the
       number of audio channels and temporal sampling affects audio
@@ -329,6 +323,12 @@ Internet-Draft                  Simulcast                   October 2016
    available sampling and bitrate, and maybe also codec, and it is up to
    the RTP switch to find a good trade-off in which simulcasted stream
    to choose for each intended receiver.  It is also the responsibility
+   of the RTP switch to negotiate a good fit of simulcast streams with
+   the sending participant.
+
+   The maximum number of simulcasted RTP streams that can be sent is
+   mainly limited by the amount of processing and uplink network
+   resources available to the sending participant.
 
 
 
@@ -337,13 +337,6 @@ Burman, et al.             Expires May 4, 2017                  [Page 6]
 
 Internet-Draft                  Simulcast                   October 2016
 
-
-   of the RTP switch to negotiate a good fit of simulcast streams with
-   the sending participant.
-
-   The maximum number of simulcasted RTP streams that can be sent is
-   mainly limited by the amount of processing and uplink network
-   resources available to the sending participant.
 
 3.2.  Application Specific Media Source Handling
 
@@ -377,22 +370,13 @@ Internet-Draft                  Simulcast                   October 2016
    The following requirements need to be met to support the use cases in
    previous sections:
 
-   REQ-1:  Identification:
+   REQ-1:  Identification.  It must be possible to identify a set of
+      simulcasted RTP streams as originating from the same media source:
 
-      REQ-1.1:  It must be possible to identify a set of simulcasted RTP
-         streams as originating from the same media source in SDP
-         signaling.
+      REQ-1.1:  In SDP signaling.
 
-      REQ-1.2:  An RTP endpoint must be capable of identifying the
-         simulcast stream a received RTP stream is associated with.
-
-
-
-
-Burman, et al.             Expires May 4, 2017                  [Page 7]
-
-Internet-Draft                  Simulcast                   October 2016
-
+      REQ-1.2:  On RTP/RTCP level, at least with prior knowledge of SDP
+         (or similar) signaling.
 
    REQ-2:  Transport usage.  The solution must work when using:
 
@@ -401,6 +385,14 @@ Internet-Draft                  Simulcast                   October 2016
 
       REQ-2.2:  Bundled [I-D.ietf-mmusic-sdp-bundle-negotiation] SDP
          media descriptions.
+
+
+
+
+Burman, et al.             Expires May 4, 2017                  [Page 7]
+
+Internet-Draft                  Simulcast                   October 2016
+
 
    REQ-3:  Capability negotiation.  It must be possible that:
 
@@ -442,6 +434,14 @@ Internet-Draft                  Simulcast                   October 2016
 
    REQ-6:  Interoperability.  The solution must be possible to use in:
 
+      REQ-6.1:  Interworking with non-simulcast legacy clients using a
+         single media source per media type.
+
+      REQ-6.2:  WebRTC environment with a single media source per SDP
+         media description.
+
+
+
 
 
 
@@ -449,12 +449,6 @@ Burman, et al.             Expires May 4, 2017                  [Page 8]
 
 Internet-Draft                  Simulcast                   October 2016
 
-
-      REQ-6.1:  Interworking with non-simulcast legacy clients using a
-         single media source per media type.
-
-      REQ-6.2:  WebRTC environment with a single media source per SDP
-         media description.
 
 5.  Overview
 
@@ -498,6 +492,12 @@ Internet-Draft                  Simulcast                   October 2016
    (Section 6.5) provides the definition of the RTP/RTCP mechanisms
    used.  The section is concluded with a number of examples.
 
+6.1.  Simulcast Attribute
+
+   This document defines a new SDP media-level "a=simulcast" attribute
+   with the following ABNF [RFC5234] syntax:
+
+
 
 
 
@@ -505,11 +505,6 @@ Burman, et al.             Expires May 4, 2017                  [Page 9]
 
 Internet-Draft                  Simulcast                   October 2016
 
-
-6.1.  Simulcast Attribute
-
-   This document defines a new SDP media-level "a=simulcast" attribute
-   with the following ABNF [RFC5234] syntax:
 
    sc-attr      = "a=simulcast:" sc-value
    sc-value     = sc-str-list [SP sc-str-list]
@@ -529,7 +524,7 @@ Internet-Draft                  Simulcast                   October 2016
    or "recv"), followed by a list of one or more simulcast streams.
    Each simulcast stream consists of one or more alternative simulcast
    formats.  Each simulcast format is identified by a simulcast stream
-   identifier (SCID).  The SCID MUST have the form of an RTP stream
+   identification (SCID).  The SCID MUST have the form of an RTP stream
    identifier, as described by RTP Payload Format Restrictions
    [I-D.ietf-mmusic-rid].
 
@@ -554,6 +549,11 @@ Internet-Draft                  Simulcast                   October 2016
 
                        Figure 2: Simulcast Examples
 
+   Above are two examples of different "a=simulcast" lines.
+
+   The first line is an example offer to send two simulcast streams and
+   to receive two simulcast streams.  The first simulcast stream in send
+   direction can be sent in three different alternative formats (SCID 1,
 
 
 
@@ -562,11 +562,6 @@ Burman, et al.             Expires May 4, 2017                 [Page 10]
 Internet-Draft                  Simulcast                   October 2016
 
 
-   Above are two examples of different "a=simulcast" lines.
-
-   The first line is an example offer to send two simulcast streams and
-   to receive two simulcast streams.  The first simulcast stream in send
-   direction can be sent in three different alternative formats (SCID 1,
    2, 3), and the second simulcast stream in send direction can be sent
    in two different alternative formats (SCID 4, 5).  Both of the second
    simulcast stream alternative formats in send direction are offered as
@@ -610,6 +605,11 @@ Internet-Draft                  Simulcast                   October 2016
    SCID MUST be aligned with the direction specified for the
    corresponding RTP stream identifier on the "a=rid" line.
 
+   The listed number of simulcast streams for a direction sets a limit
+   to the number of supported simulcast streams in that direction.  The
+   order of the listed simulcast streams in the "send" direction
+   suggests a proposed order of preference, in decreasing order: the
+   SCID listed first is the most preferred and subsequent streams have
 
 
 
@@ -618,11 +618,6 @@ Burman, et al.             Expires May 4, 2017                 [Page 11]
 Internet-Draft                  Simulcast                   October 2016
 
 
-   The listed number of simulcast streams for a direction sets a limit
-   to the number of supported simulcast streams in that direction.  The
-   order of the listed simulcast streams in the "send" direction
-   suggests a proposed order of preference, in decreasing order: the
-   SCID listed first is the most preferred and subsequent streams have
    progressively lower preference.  The order of the listed SCID in the
    "recv" direction expresses a preference which simulcast streams that
    are preferred, with the leftmost being most preferred.  This can be
@@ -665,7 +660,12 @@ Internet-Draft                  Simulcast                   October 2016
    stream MUST be listed in the SDP as pause/resume capable as specified
    by [RFC7728], e.g. by using the "*" wildcard format for "a=rtcp-fb".
 
-
+   An initially paused simulcast stream in "send" direction MUST be
+   considered equivalent to an unsolicited locally paused stream, and be
+   handled accordingly.  Initially paused simulcast streams are resumed
+   as described by the RTP pause/resume specification.  An RTP stream
+   receiver that wishes to resume an unsolicited locally paused stream
+   needs to know the SSRC of that stream.  The SSRC of an initially
 
 
 
@@ -674,12 +674,6 @@ Burman, et al.             Expires May 4, 2017                 [Page 12]
 Internet-Draft                  Simulcast                   October 2016
 
 
-   An initially paused simulcast stream in "send" direction MUST be
-   considered equivalent to an unsolicited locally paused stream, and be
-   handled accordingly.  Initially paused simulcast streams are resumed
-   as described by the RTP pause/resume specification.  An RTP stream
-   receiver that wishes to resume an unsolicited locally paused stream
-   needs to know the SSRC of that stream.  The SSRC of an initially
    paused simulcast stream can be obtained from an RTP stream sender
    RTCP Sender Report (SR) including both the desired SSRC as "SSRC of
    sender", and the SCID value in an RtpStreamId RTCP SDES item
@@ -722,6 +716,12 @@ Internet-Draft                  Simulcast                   October 2016
    An offerer wanting to use simulcast SHALL include the "a=simulcast"
    attribute in the offer.  An offerer listing a set of receive
    simulcast streams and/or alternative formats as SCID in the offer
+   MUST be prepared to receive RTP streams for any of those simulcast
+   streams and/or alternative formats from the answerer.
+
+
+
+
 
 
 
@@ -729,9 +729,6 @@ Burman, et al.             Expires May 4, 2017                 [Page 13]
 
 Internet-Draft                  Simulcast                   October 2016
 
-
-   MUST be prepared to receive RTP streams for any of those simulcast
-   streams and/or alternative formats from the answerer.
 
 6.3.2.  Creating the SDP Answer
 
@@ -777,6 +774,9 @@ Internet-Draft                  Simulcast                   October 2016
    the SCID not being initially paused.  One such reason could, for
    example, be that the answerer would otherwise initially not receive
    any media of that type at all.
+
+
+
 
 
 
