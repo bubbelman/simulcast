@@ -151,6 +151,15 @@
       specifically how the identification and grouping of the involved RTP
       streams are done.</t>
 
+      <t>The intended scope of the defined mechanism is to support negotiation
+      and usage of simulcast when using SDP offer/answer and media transport
+      over RTP. The media transport topologies considered are point to point
+      RTP sessions as well as centralized multi-party RTP sessions, where a
+      media sender will provide the simulcasted streams to an RTP middlebox or
+      endpoint, and middleboxes may further distribute the simulcast streams
+      to other middleboxes or endpoints. Usage of multicast or broadcast
+      transport is out of scope and left for future extension.</t>
+
       <t>This document describes a few scenarios where it is motivated to use
       simulcast, and also defines the needed RTP/RTCP and SDP signaling for
       it.</t>
@@ -341,13 +350,15 @@
     <section anchor="sec-requirements" title="Requirements">
       <t>The following requirements need to be met to support the use cases in
       previous sections:<list style="hanging">
-          <t anchor="req-1" hangText="REQ-1:">Identification. It must be
-          possible to identify a set of simulcasted RTP streams as originating
-          from the same media source:<list style="hanging">
-              <t anchor="req-1.1" hangText="REQ-1.1:">In SDP signaling.</t>
+          <t anchor="req-1" hangText="REQ-1:">Identification:<list
+              style="hanging">
+              <t anchor="req-1.1" hangText="REQ-1.1:">It must be possible to
+              identify a set of simulcasted RTP streams as originating from
+              the same media source in SDP signaling.</t>
 
-              <t anchor="req-1.2" hangText="REQ-1.2:">On RTP/RTCP level, at
-              least with prior knowledge of SDP (or similar) signaling.</t>
+              <t anchor="req-1.2" hangText="REQ-1.2:">An RTP endpoint must be
+              capable of identifying the simulcast stream a received RTP
+              stream is associated with.</t>
             </list></t>
 
           <t anchor="req-2" hangText="REQ-2:">Transport usage. The solution
@@ -489,10 +500,9 @@ sc-id        = [sc-id-paused] rid-identifier
         ("send" or "recv"), followed by a list of one or more simulcast
         streams. Each simulcast stream consists of one or more alternative
         simulcast formats. Each simulcast format is identified by a simulcast
-        stream identification (SCID). The SCID MUST have the form of an RTP
-        stream identifier, as described by <xref
-        target="I-D.ietf-mmusic-rid">RTP Payload Format
-        Restrictions</xref>.</t>
+        stream identifier (SCID). The SCID MUST have the form of an RTP stream
+        identifier, as described by <xref target="I-D.ietf-mmusic-rid">RTP
+        Payload Format Restrictions</xref>.</t>
 
         <t>In the list of simulcast streams, each simulcast stream is
         separated by a semicolon (";"). Each simulcast stream can in turn be
