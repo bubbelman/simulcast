@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="5" month="December" year="2016"/>
+    <date day="31" month="January" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -358,7 +358,8 @@
 
               <t anchor="req-1.2" hangText="REQ-1.2:">An RTP endpoint must be
               capable of identifying the simulcast stream a received RTP
-              stream is associated with.</t>
+              stream is associated with, knowing the content of the SDP
+              signalling.</t>
             </list></t>
 
           <t anchor="req-2" hangText="REQ-2:">Transport usage. The solution
@@ -562,7 +563,7 @@ a=simulcast:recv 1;4,5 send 6;7
         on session level. Extensions to this specification MAY define such
         session level usage. The meaning of including multiple "a=simulcast"
         lines in a single SDP media description is undefined, MUST NOT be used
-        by implementations of this specification and any additional
+        by implementations of this specification, and any additional
         "a=simulcast" lines beyond the first in a media description MUST be
         ignored if received.</t>
 
@@ -657,17 +658,16 @@ a=simulcast:recv 1;4,5 send 6;7
         line.</t>
 
         <t>The media formats and corresponding characteristics of simulcast
-        streams SHOULD be chosen such that they are different, either as
+        streams SHOULD be chosen such that they are different, e.g. as
         different SDP formats with differing "a=rtpmap" and/or "a=fmtp" lines,
-        as differently defined RTP payload format restrictions, or both. If
-        this difference is not required, <xref target="RFC7104">RTP
+        or as differently defined RTP payload format restrictions. If this
+        difference is not required, <xref target="RFC7104">RTP
         duplication</xref> procedures SHOULD be considered instead of
-        simulcast. To limit the possibility to use simulcast for RTP
-        duplication purposes, a single SCID MUST NOT occur more than once per
-        "a=simulcast" line. Note that this does not completely eliminate use
-        of simulcast as RTP duplication, since it is possible to define
-        different SCID that are effectively equivalent, but it is expected to
-        increase the probability that this usage is a conscious decision.</t>
+        simulcast. To avoid complications in implementations, a single SCID
+        MUST NOT occur more than once per "a=simulcast" line. Note that this
+        does not eliminate use of simulcast as an RTP duplication mechanism,
+        since it is possible to define multiple different SCID that are
+        effectively equivalent.</t>
       </section>
 
       <section anchor="sec-offer-answer" title="Offer/Answer Use">
