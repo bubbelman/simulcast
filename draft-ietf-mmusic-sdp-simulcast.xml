@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-07"
+<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-08"
      ipr="trust200902" submissionType="IETF">
   <front>
     <title abbrev="Simulcast">Using Simulcast in SDP and RTP Sessions</title>
@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="31" month="January" year="2017"/>
+    <date day="13" month="March" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -478,20 +478,22 @@
       with a number of examples.</t>
 
       <section anchor="sec-attr" title="Simulcast Attribute">
-        <t>This document defines a new SDP media-level "a=simulcast" attribute
-        with the following <xref target="RFC5234">ABNF </xref> syntax:</t>
+        <t>This document defines a new SDP media-level "a=simulcast"
+        attribute, with value according to the following <xref
+        target="RFC5234">ABNF</xref> syntax:</t>
 
-        <figure align="center" anchor="fig-abnf" title="ABNF for Simulcast">
-          <artwork align="left"><![CDATA[
-sc-attr      = "a=simulcast:" sc-value
-sc-value     = sc-str-list [SP sc-str-list]
-sc-str-list  = sc-dir SP sc-alt-list *( ";" sc-alt-list )
-sc-dir       = "send" / "recv"
+        <figure align="center" anchor="fig-abnf"
+                title="ABNF for Simulcast Value">
+          <artwork align="center"><![CDATA[
+sc-value     = ( sc-send [SP sc-recv] ) / ( sc-recv [SP sc-send] )
+sc-send      = "send" SP sc-str-list
+sc-recv      = "recv" SP sc-str-list
+sc-str-list  = sc-alt-list *( ";" sc-alt-list )
 sc-alt-list  = sc-id *( "," sc-id )
 sc-id-paused = "~"
-sc-id        = [sc-id-paused] rid-identifier
+sc-id        = [sc-id-paused] rid-id
 ; SP defined in [RFC5234]
-; rid-identifier defined in [I-D.ietf-mmusic-rid]
+; rid-id defined in [I-D.ietf-mmusic-rid]
 
 ]]></artwork>
         </figure>
@@ -520,9 +522,8 @@ sc-id        = [sc-id-paused] rid-identifier
 
         <t>Examples:</t>
 
-        <figure align="center" anchor="fig-abnf-examples"
-                title="Simulcast Examples">
-          <artwork align="left"><![CDATA[a=simulcast:send 1,2,3;~4,~5 recv 6;~7,~8
+        <figure align="center" anchor="fig-abnf-ex" title="Simulcast Examples">
+          <artwork align="center"><![CDATA[a=simulcast:send 1,2,3;~4,~5 recv 6;~7,~8
 a=simulcast:recv 1;4,5 send 6;7
 
 ]]></artwork>
@@ -852,9 +853,9 @@ a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
 a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
-a=rid:1 pt=97 send
-a=rid:2 pt=98 send
-a=rid:3 pt=97 recv
+a=rid:1 send pt=97
+a=rid:2 send pt=98
+a=rid:3 recv pt=97
 a=simulcast:send 1;2 recv 3
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
@@ -893,9 +894,9 @@ a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
 a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
-a=rid:1 pt=97 recv
-a=rid:2 pt=98 recv
-a=rid:3 pt=97 send
+a=rid:1 recv pt=97
+a=rid:2 recv pt=98
+a=rid:3 send pt=97
 a=simulcast:recv 1;2 send 3
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
@@ -1249,7 +1250,7 @@ a=simulcast:send 1;~2;~3
       target="I-D.ietf-avtcore-multiplex-guidelines">Guidelines for
       Multiplexing in RTP</xref>. Discussion and clarification on how to
       handle multiple streams in an RTP session can be found in <xref
-      target="I-D.ietf-avtcore-rtp-multi-stream"/>.</t>
+      target="RFC8108"/>.</t>
 
       <t>The network aspects that are relevant for simulcast are:<list
           style="hanging">
@@ -1323,8 +1324,8 @@ a=simulcast:send 1;~2;~3
 
           <t hangText="Charset dependent:">No</t>
 
-          <t hangText="Attribute value:">See <xref target="sec-attr"/> of RFC
-          XXXX.</t>
+          <t hangText="Attribute value:">sc-value; see <xref
+          target="sec-attr"/> of RFC XXXX.</t>
 
           <t hangText="Purpose:">Signals simulcast capability for a set of RTP
           streams</t>
@@ -1371,8 +1372,8 @@ a=simulcast:send 1;~2;~3
 
     <section anchor="sec-ack" title="Acknowledgements">
       <t>The authors would like to thank Bernard Aboba, Thomas Belling, Roni
-      Even, and Adam Roach for the feedback they provided during the
-      development of this document.</t>
+      Even, Adam Roach, Inaki Baz Castillo, and Paul Kyzivat for the feedback
+      they provided during the development of this document.</t>
     </section>
   </middle>
 
@@ -1434,16 +1435,53 @@ a=simulcast:send 1;~2;~3
 
       <?rfc include='reference.RFC.7741'?>
 
-      <?rfc include='reference.I-D.ietf-avtcore-multiplex-guidelines'?>
+      <?rfc include='reference.RFC.8108'?>
 
-      <?rfc include='reference.I-D.ietf-avtcore-rtp-multi-stream'?>
+      <?rfc include='reference.I-D.ietf-avtcore-multiplex-guidelines'?>
     </references>
 
     <section title="Changes From Earlier Versions">
       <t>NOTE TO RFC EDITOR: Please remove this section prior to
       publication.</t>
 
-      <section title="Modifications Between WG Version -05 and  -06">
+      <section title="Modifications Between WG Version -07 and -08">
+        <t><list style="symbols">
+            <t>Correcting syntax of SDP examples in section 6.6.1, as found by
+            Inaki Baz Castillo.</t>
+
+            <t>Changing ABNF to only define the sc-value, not the SDP
+            attribute itself, as suggested by Paul Kyzivat.</t>
+
+            <t>Changing I-D reference to newly published RFC 8108.</t>
+
+            <t>Adding list of modifications between -06 and -07.</t>
+          </list></t>
+      </section>
+
+      <section title="Modifications Between WG Version -06 and -07">
+        <t><list style="symbols">
+            <t>A scope clarification, as result of the discussion with Roni
+            Even.</t>
+
+            <t>A reformulation of the identification requirements for
+            simulcast stream.</t>
+
+            <t>Correcting the statement related to source specific signalling
+            (RFC 5576) to address Roni Even's comment.</t>
+
+            <t>Update of the last paragraph in Section 6.2 regarding simulcast
+            stream differences as well as forbidding multiple instances of the
+            same SCID within a single a=simulcast line.</t>
+
+            <t>Removal of note in Section 6.4 as result of issue raised by
+            Roni Even.</t>
+
+            <t>Use of "m=" has been changed to media description and a few
+            other editorial improvements and clarifications.</t>
+          </list></t>
+      </section>
+
+      <section title="Modifications Between WG Version -05 and -06">
         <t><list style="symbols">
             <t>Added section on RTP Aspects</t>
 
@@ -1463,7 +1501,7 @@ a=simulcast:send 1;~2;~3
           </list></t>
       </section>
 
-      <section title="Modifications Between WG Version -04 and  -05">
+      <section title="Modifications Between WG Version -04 and -05">
         <t><list style="symbols">
             <t>Aligned with recent changes in draft-ietf-mmusic-rid and
             draft-ietf-avtext-rid.</t>
@@ -1488,7 +1526,7 @@ a=simulcast:send 1;~2;~3
           </list></t>
       </section>
 
-      <section title="Modifications Between WG Version -03 and  -04">
+      <section title="Modifications Between WG Version -03 and -04">
         <t><list style="symbols">
             <t>Changed to only use RID identification, as was consensus during
             IETF 94.</t>
@@ -1512,7 +1550,7 @@ a=simulcast:send 1;~2;~3
           </list></t>
       </section>
 
-      <section title="Modifications Between WG Version -02 and  -03">
+      <section title="Modifications Between WG Version -02 and -03">
         <t><list style="symbols">
             <t>Removed text on multicast / broadcast from use cases, since it
             is not supported by the solution.</t>
@@ -1533,7 +1571,7 @@ a=simulcast:send 1;~2;~3
           </list></t>
       </section>
 
-      <section title="Modifications Between WG Version -01 and  -02">
+      <section title="Modifications Between WG Version -01 and -02">
         <t><list style="symbols">
             <t>Relying on the new RID solution for codec constraints and
             configuration identification. This has resulted in changes in
@@ -1553,7 +1591,7 @@ a=simulcast:send 1;~2;~3
           </list></t>
       </section>
 
-      <section title="Modifications Between WG Version -00 and  -01">
+      <section title="Modifications Between WG Version -00 and -01">
         <t><list style="symbols">
             <t>No changes. Only preventing expiry.</t>
           </list></t>

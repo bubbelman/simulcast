@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-07"
+<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-08"
      ipr="trust200902" submissionType="IETF">
   <front>
     <title abbrev="Simulcast">Using Simulcast in SDP and RTP Sessions</title>
@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="5" month="December" year="2016"/>
+    <date day="13" month="March" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -150,6 +150,15 @@
       stream(s) to forward to other participants in the session, and more
       specifically how the identification and grouping of the involved RTP
       streams are done.</t>
+
+      <t>The intended scope of the defined mechanism is to support negotiation
+      and usage of simulcast when using SDP offer/answer and media transport
+      over RTP. The media transport topologies considered are point to point
+      RTP sessions as well as centralized multi-party RTP sessions, where a
+      media sender will provide the simulcasted streams to an RTP middlebox or
+      endpoint, and middleboxes may further distribute the simulcast streams
+      to other middleboxes or endpoints. Usage of multicast or broadcast
+      transport is out of scope and left for future extension.</t>
 
       <t>This document describes a few scenarios where it is motivated to use
       simulcast, and also defines the needed RTP/RTCP and SDP signaling for
@@ -341,13 +350,16 @@
     <section anchor="sec-requirements" title="Requirements">
       <t>The following requirements need to be met to support the use cases in
       previous sections:<list style="hanging">
-          <t anchor="req-1" hangText="REQ-1:">Identification. It must be
-          possible to identify a set of simulcasted RTP streams as originating
-          from the same media source:<list style="hanging">
-              <t anchor="req-1.1" hangText="REQ-1.1:">In SDP signaling.</t>
+          <t anchor="req-1" hangText="REQ-1:">Identification:<list
+              style="hanging">
+              <t anchor="req-1.1" hangText="REQ-1.1:">It must be possible to
+              identify a set of simulcasted RTP streams as originating from
+              the same media source in SDP signaling.</t>
 
-              <t anchor="req-1.2" hangText="REQ-1.2:">On RTP/RTCP level, at
-              least with prior knowledge of SDP (or similar) signaling.</t>
+              <t anchor="req-1.2" hangText="REQ-1.2:">An RTP endpoint must be
+              capable of identifying the simulcast stream a received RTP
+              stream is associated with, knowing the content of the SDP
+              signalling.</t>
             </list></t>
 
           <t anchor="req-2" hangText="REQ-2:">Transport usage. The solution
@@ -466,20 +478,22 @@
       with a number of examples.</t>
 
       <section anchor="sec-attr" title="Simulcast Attribute">
-        <t>This document defines a new SDP media-level "a=simulcast" attribute
-        with the following <xref target="RFC5234">ABNF </xref> syntax:</t>
+        <t>This document defines a new SDP media-level "a=simulcast"
+        attribute, with value according to the following <xref
+        target="RFC5234">ABNF</xref> syntax:</t>
 
-        <figure align="center" anchor="fig-abnf" title="ABNF for Simulcast">
-          <artwork align="left"><![CDATA[
-sc-attr      = "a=simulcast:" sc-value
-sc-value     = sc-str-list [SP sc-str-list]
-sc-str-list  = sc-dir SP sc-alt-list *( ";" sc-alt-list )
-sc-dir       = "send" / "recv"
+        <figure align="center" anchor="fig-abnf"
+                title="ABNF for Simulcast Value">
+          <artwork align="center"><![CDATA[
+sc-value     = ( sc-send [SP sc-recv] ) / ( sc-recv [SP sc-send] )
+sc-send      = "send" SP sc-str-list
+sc-recv      = "recv" SP sc-str-list
+sc-str-list  = sc-alt-list *( ";" sc-alt-list )
 sc-alt-list  = sc-id *( "," sc-id )
 sc-id-paused = "~"
-sc-id        = [sc-id-paused] rid-identifier
+sc-id        = [sc-id-paused] rid-id
 ; SP defined in [RFC5234]
-; rid-identifier defined in [I-D.ietf-mmusic-rid]
+; rid-id defined in [I-D.ietf-mmusic-rid]
 
 ]]></artwork>
         </figure>
@@ -489,10 +503,9 @@ sc-id        = [sc-id-paused] rid-identifier
         ("send" or "recv"), followed by a list of one or more simulcast
         streams. Each simulcast stream consists of one or more alternative
         simulcast formats. Each simulcast format is identified by a simulcast
-        stream identification (SCID). The SCID MUST have the form of an RTP
-        stream identifier, as described by <xref
-        target="I-D.ietf-mmusic-rid">RTP Payload Format
-        Restrictions</xref>.</t>
+        stream identifier (SCID). The SCID MUST have the form of an RTP stream
+        identifier, as described by <xref target="I-D.ietf-mmusic-rid">RTP
+        Payload Format Restrictions</xref>.</t>
 
         <t>In the list of simulcast streams, each simulcast stream is
         separated by a semicolon (";"). Each simulcast stream can in turn be
@@ -509,9 +522,8 @@ sc-id        = [sc-id-paused] rid-identifier
 
         <t>Examples:</t>
 
-        <figure align="center" anchor="fig-abnf-examples"
-                title="Simulcast Examples">
-          <artwork align="left"><![CDATA[a=simulcast:send 1,2,3;~4,~5 recv 6;~7,~8
+        <figure align="center" anchor="fig-abnf-ex" title="Simulcast Examples">
+          <artwork align="center"><![CDATA[a=simulcast:send 1,2,3;~4,~5 recv 6;~7,~8
 a=simulcast:recv 1;4,5 send 6;7
 
 ]]></artwork>
@@ -552,7 +564,7 @@ a=simulcast:recv 1;4,5 send 6;7
         on session level. Extensions to this specification MAY define such
         session level usage. The meaning of including multiple "a=simulcast"
         lines in a single SDP media description is undefined, MUST NOT be used
-        by implementations of this specification and any additional
+        by implementations of this specification, and any additional
         "a=simulcast" lines beyond the first in a media description MUST be
         ignored if received.</t>
 
@@ -647,14 +659,16 @@ a=simulcast:recv 1;4,5 send 6;7
         line.</t>
 
         <t>The media formats and corresponding characteristics of simulcast
-        streams SHOULD be chosen such that they are different, either as
+        streams SHOULD be chosen such that they are different, e.g. as
         different SDP formats with differing "a=rtpmap" and/or "a=fmtp" lines,
-        as differently defined RTP payload format restrictions, or both. If
-        this difference is not required, <xref target="RFC7104">RTP
+        or as differently defined RTP payload format restrictions. If this
+        difference is not required, <xref target="RFC7104">RTP
         duplication</xref> procedures SHOULD be considered instead of
-        simulcast. To limit the possibility to use simulcast for RTP
-        duplication purposes, a single SCID MUST NOT occur more than once per
-        "a=simulcast" line.</t>
+        simulcast. To avoid complications in implementations, a single SCID
+        MUST NOT occur more than once per "a=simulcast" line. Note that this
+        does not eliminate use of simulcast as an RTP duplication mechanism,
+        since it is possible to define multiple different SCID that are
+        effectively equivalent.</t>
       </section>
 
       <section anchor="sec-offer-answer" title="Offer/Answer Use">
@@ -839,9 +853,9 @@ a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
 a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
-a=rid:1 pt=97 send
-a=rid:2 pt=98 send
-a=rid:3 pt=97 recv
+a=rid:1 send pt=97
+a=rid:2 send pt=98
+a=rid:3 recv pt=97
 a=simulcast:send 1;2 recv 3
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
@@ -880,9 +894,9 @@ a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
 a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
-a=rid:1 pt=97 recv
-a=rid:2 pt=98 recv
-a=rid:3 pt=97 send
+a=rid:1 recv pt=97
+a=rid:2 recv pt=98
+a=rid:3 send pt=97
 a=simulcast:recv 1;2 send 3
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
@@ -1236,7 +1250,7 @@ a=simulcast:send 1;~2;~3
       target="I-D.ietf-avtcore-multiplex-guidelines">Guidelines for
       Multiplexing in RTP</xref>. Discussion and clarification on how to
       handle multiple streams in an RTP session can be found in <xref
-      target="I-D.ietf-avtcore-rtp-multi-stream"/>.</t>
+      target="RFC8108"/>.</t>
 
       <t>The network aspects that are relevant for simulcast are:<list
           style="hanging">
@@ -1310,8 +1324,8 @@ a=simulcast:send 1;~2;~3
 
           <t hangText="Charset dependent:">No</t>
 
-          <t hangText="Attribute value:">See <xref target="sec-attr"/> of RFC
-          XXXX.</t>
+          <t hangText="Attribute value:">sc-value; see <xref
+          target="sec-attr"/> of RFC XXXX.</t>
 
           <t hangText="Purpose:">Signals simulcast capability for a set of RTP
           streams</t>
@@ -1358,8 +1372,8 @@ a=simulcast:send 1;~2;~3
 
     <section anchor="sec-ack" title="Acknowledgements">
       <t>The authors would like to thank Bernard Aboba, Thomas Belling, Roni
-      Even, and Adam Roach for the feedback they provided during the
-      development of this document.</t>
+      Even, Adam Roach, Inaki Baz Castillo, and Paul Kyzivat for the feedback
+      they provided during the development of this document.</t>
     </section>
   </middle>
 
@@ -1421,14 +1435,51 @@ a=simulcast:send 1;~2;~3
 
       <?rfc include='reference.RFC.7741'?>
 
-      <?rfc include='reference.I-D.ietf-avtcore-multiplex-guidelines'?>
+      <?rfc include='reference.RFC.8108'?>
 
-      <?rfc include='reference.I-D.ietf-avtcore-rtp-multi-stream'?>
+      <?rfc include='reference.I-D.ietf-avtcore-multiplex-guidelines'?>
     </references>
 
     <section title="Changes From Earlier Versions">
       <t>NOTE TO RFC EDITOR: Please remove this section prior to
       publication.</t>
+
+      <section title="Modifications Between WG Version -07 and -08">
+        <t><list style="symbols">
+            <t>Correcting syntax of SDP examples in section 6.6.1, as found by
+            Inaki Baz Castillo.</t>
+
+            <t>Changing ABNF to only define the sc-value, not the SDP
+            attribute itself, as suggested by Paul Kyzivat.</t>
+
+            <t>Changing I-D reference to newly published RFC 8108.</t>
+
+            <t>Adding list of modifications between -06 and -07.</t>
+          </list></t>
+      </section>
+
+      <section title="Modifications Between WG Version -06 and -07">
+        <t><list style="symbols">
+            <t>A scope clarification, as result of the discussion with Roni
+            Even.</t>
+
+            <t>A reformulation of the identification requirements for
+            simulcast stream.</t>
+
+            <t>Correcting the statement related to source specific signalling
+            (RFC 5576) to address Roni Even's comment.</t>
+
+            <t>Update of the last paragraph in Section 6.2 regarding simulcast
+            stream differences as well as forbidding multiple instances of the
+            same SCID within a single a=simulcast line.</t>
+
+            <t>Removal of note in Section 6.4 as result of issue raised by
+            Roni Even.</t>
+
+            <t>Use of "m=" has been changed to media description and a few
+            other editorial improvements and clarifications.</t>
+          </list></t>
+      </section>
 
       <section title="Modifications Between WG Version -05 and  -06">
         <t><list style="symbols">
