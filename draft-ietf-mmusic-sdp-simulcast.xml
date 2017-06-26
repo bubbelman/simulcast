@@ -736,7 +736,7 @@ a=simulcast:recv 1;4,5 send 6;7
           example, be that the answerer doesn't have the ability to process
           any initially unpaused simulcast streams offered for a given media
           source. It then chooses one of the initially paused simulcast
-          streams in the offer and marks it as not paused in the answer.</t>
+          streams in the offer and marks it as not paused in the answer.<!--BoB: The last two sentences are strange and have to be re-formulated!--></t>
         </section>
 
         <section title="Offerer Processing the SDP Answer">
@@ -783,9 +783,9 @@ a=simulcast:recv 1;4,5 send 6;7
               direction SHALL (as in an initial offer) reflect the offerer's
               desired SCID pause state, rather than the offerer's opinion of
               the SCID actual pause state at the time of creating the offer.
-              To be clear, as for an initial offer and as described in <xref
-              target="sec-cap"/>, this SHOULD trigger the answerer to set the
-              corresponding RTP stream to unsolicited locally paused.</t>
+              Except for the case where the corresponding RTP stream is
+              already paused, this is the exact same case as for an initial
+              offer.</t>
             </list></t>
 
           <t>Creation of SDP answers and processing of SDP answers inside an
