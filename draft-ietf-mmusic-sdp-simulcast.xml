@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="13" month="June" year="2017"/>
+    <date day="3" month="July" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -354,89 +354,6 @@
       </section>
     </section>
 
-    <section anchor="sec-requirements" title="Requirements">
-      <t>The following requirements need to be met to support the use cases in
-      previous sections:<list style="hanging">
-          <t anchor="req-1" hangText="REQ-1:">Identification:<list
-              style="hanging">
-              <t anchor="req-1.1" hangText="REQ-1.1:">It must be possible to
-              identify a set of simulcasted RTP streams as originating from
-              the same media source in SDP signaling.</t>
-
-              <t anchor="req-1.2" hangText="REQ-1.2:">An RTP endpoint must be
-              capable of identifying the simulcast stream a received RTP
-              stream is associated with, knowing the content of the SDP
-              signalling.</t>
-            </list></t>
-
-          <t anchor="req-2" hangText="REQ-2:">Transport usage. The solution
-          must work when using:<list style="hanging">
-              <t anchor="req-2.1" hangText="REQ-2.1:">Legacy SDP with separate
-              media transports per SDP media description.</t>
-
-              <t anchor="req-2.2" hangText="REQ-2.2:"><xref
-              target="I-D.ietf-mmusic-sdp-bundle-negotiation">Bundled</xref>
-              SDP media descriptions.</t>
-            </list></t>
-
-          <t anchor="req-3" hangText="REQ-3:">Capability negotiation. It must
-          be possible that:<list style="hanging">
-              <t anchor="req-3.1" hangText="REQ-3.1:">Sender can express
-              capability of sending simulcast.</t>
-
-              <t anchor="req-3.2" hangText="REQ-3.2:">Receiver can express
-              capability of receiving simulcast.</t>
-
-              <t anchor="req-3.3" hangText="REQ-3.3:">Sender can express
-              maximum number of simulcast streams that can be provided.</t>
-
-              <t anchor="req-3.4" hangText="REQ-3.4:">Receiver can express
-              maximum number of simulcast streams that can be received.</t>
-
-              <t anchor="req-3.5" hangText="REQ-3.5:">Sender can detail the
-              characteristics of the simulcast streams that can be
-              provided.</t>
-
-              <t anchor="req-3.6" hangText="REQ-3.6:">Receiver can detail the
-              characteristics of the simulcast streams that it prefers to
-              receive.</t>
-            </list></t>
-
-          <t anchor="req-4" hangText="REQ-4:">Distinguishing features. It must
-          be possible to have different simulcast streams use different codec
-          parameters, as can be expressed by SDP format values and RTP payload
-          types.</t>
-
-          <t anchor="req-5" hangText="REQ-5:">Compatibility. It must be
-          possible to use simulcast in combination with other RTP mechanisms
-          that generate additional RTP streams:<list style="hanging">
-              <t anchor="req-5.1" hangText="REQ-5.1:"><xref
-              target="RFC4588">RTP Retransmission</xref>.</t>
-
-              <t anchor="req-5.2" hangText="REQ-5.2:"><xref
-              target="RFC5109">RTP Forward Error Correction</xref>.</t>
-
-              <t anchor="req-5.3" hangText="REQ-5.3:">Related payload types
-              such as audio Comfort Noise and/or DTMF.</t>
-
-              <t hangText="REQ-5.4:">A single simulcast stream can consist of
-              multiple RTP streams, to support codecs where a dependent stream
-              is dependent on a set of encoded and dependent streams, each
-              potentially carried in their own RTP stream.</t>
-            </list></t>
-
-          <t anchor="req-6" hangText="REQ-6:">Interoperability. The solution
-          must be possible to use in:<list style="hanging">
-              <t anchor="req-6.1" hangText="REQ-6.1:">Interworking with
-              non-simulcast legacy clients using a single media source per
-              media type.</t>
-
-              <t anchor="req-6.2" hangText="REQ-6.2:">WebRTC environment with
-              a single media source per SDP media description.</t>
-            </list></t>
-        </list></t>
-    </section>
-
     <section anchor="sec-solution-overview" title="Overview">
       <t>As an overview, the above requirements are met by signaling simulcast
       capability and configurations in <xref target="RFC4566">SDP</xref>:<list
@@ -631,16 +548,17 @@ a=simulcast:recv 1;4,5 send 6;7
         pause/resume capable as specified by <xref target="RFC7728"/>, e.g. by
         using the "*" wildcard format for "a=rtcp-fb".</t>
 
-        <t>An initially paused simulcast stream in "send" direction MUST be
-        considered equivalent to an unsolicited locally paused stream, and be
-        handled accordingly. Initially paused simulcast streams are resumed as
-        described by the RTP pause/resume specification. An RTP stream
-        receiver that wishes to resume an unsolicited locally paused stream
-        needs to know the SSRC of that stream. The SSRC of an initially paused
-        simulcast stream can be obtained from an RTP stream sender RTCP Sender
-        Report (SR) including both the desired SSRC as "SSRC of sender", and
-        the SCID value in an <xref target="I-D.ietf-avtext-rid">RtpStreamId
-        RTCP SDES item</xref>.</t>
+        <t>An initially paused simulcast stream in "send" direction for the
+        part sending the SDP offer MUST be considered equivalent to an
+        unsolicited locally paused stream, and be handled accordingly.
+        Initially paused simulcast streams are resumed as described by the RTP
+        pause/resume specification. An RTP stream receiver that wishes to
+        resume an unsolicited locally paused stream needs to know the SSRC of
+        that stream. The SSRC of an initially paused simulcast stream can be
+        obtained from an RTP stream sender RTCP Sender Report (SR) including
+        both the desired SSRC as "SSRC of sender", and the SCID value in an
+        <xref target="I-D.ietf-avtext-rid">RtpStreamId RTCP SDES
+        item</xref>.</t>
 
         <t>Including an initially paused simulcast stream in "recv" direction
         in an SDP towards an RTP sender, SHOULD cause the remote RTP sender to
@@ -683,23 +601,25 @@ a=simulcast:recv 1;4,5 send 6;7
           </list></t>
 
         <section title="Generating the Initial SDP Offer">
-          <t>An offerer wanting to use simulcast SHALL include the
-          "a=simulcast" attribute in the offer. An offerer listing a set of
-          receive simulcast streams and/or alternative formats as SCID in the
-          offer MUST be prepared to receive RTP streams for any of those
-          simulcast streams and/or alternative formats from the answerer.</t>
+          <t>An offerer wanting to use simulcast for a media description SHALL
+          include one "a=simulcast" attribute in that media description in the
+          offer. An offerer listing a set of receive simulcast streams and/or
+          alternative formats as SCID in the offer MUST be prepared to receive
+          RTP streams for any of those simulcast streams and/or alternative
+          formats from the answerer.</t>
         </section>
 
         <section title="Creating the SDP Answer">
           <t>An answerer that does not understand the concept of simulcast
           will also not know the attribute and will remove it in the SDP
           answer, as defined in existing <xref target="RFC3264">SDP
-          Offer/Answer</xref> procedures. Similarly, an answerer that receives
-          an offer with the "a=simulcast" attribute on session level SHALL
-          remove it in the answer. An answerer that understands the attribute
-          but receives multiple "a=simulcast" attributes in the same media
-          description and that desires to use simulcast SHALL ignore and
-          remove all but the first in the answer.</t>
+          Offer/Answer</xref> procedures. Since SDP session level simulcast is
+          undefined in this memo, an answerer that receives an offer with the
+          "a=simulcast" attribute on SDP session level SHALL remove it in the
+          answer. An answerer that understands the attribute but receives
+          multiple "a=simulcast" attributes in the same media description
+          SHALL disable use of simulcast by removing all "a=simulcast" lines
+          for that media description in the answer.</t>
 
           <t>An answerer that does understand the attribute and that wants to
           support simulcast in an indicated direction SHALL reverse
@@ -732,11 +652,10 @@ a=simulcast:recv 1;4,5 send 6;7
           <t>An answerer that receives indication in an offer of an SCID being
           initially paused SHOULD mark that SCID as initially paused also in
           the answer, regardless of direction, unless it has good reason for
-          the SCID not being initially paused. One such reason could, for
-          example, be that the answerer doesn't have the ability to process
-          any initially unpaused simulcast streams offered for a given media
-          source. It then chooses one of the initially paused simulcast
-          streams in the offer and marks it as not paused in the answer.<!--BoB: The last two sentences are strange and have to be re-formulated!--></t>
+          the SCID not being initially paused. One reason to remove an initial
+          pause in the answer compared to the offer could, for example, be
+          that all receive direction simulcast streams for a media source the
+          answerer accepts in the answer would otherwise be paused.</t>
         </section>
 
         <section title="Offerer Processing the SDP Answer">
@@ -773,19 +692,18 @@ a=simulcast:recv 1;4,5 send 6;7
           <t>Offers inside an existing session follow the same rules as for
           initial SDP offer, with these additions:<list style="numbers">
               <t>SCID marked as initially paused in the offerer's send
-              direction SHOULD reflect the offerer's opinion of the current
-              pause state at the time of creating the offer, but this is to be
-              seen as purely informational and SHALL NOT replace or update
-              <xref target="RFC7728">RTP stream pause/resume</xref> signaling
-              in the ongoing session.</t>
+              direction SHALL reflect the offerer's opinion of the current
+              pause state at the time of creating the offer. This is purely
+              informational, and <xref target="RFC7728">RTP stream
+              pause/resume</xref> signaling in the ongoing session SHALL take
+              precedence in case of any conflict or ambiguity.</t>
 
               <t>SCID marked as initally paused in the offerer's receive
               direction SHALL (as in an initial offer) reflect the offerer's
-              desired SCID pause state, rather than the offerer's opinion of
-              the SCID actual pause state at the time of creating the offer.
-              Except for the case where the corresponding RTP stream is
-              already paused, this is the exact same case as for an initial
-              offer.</t>
+              desired SCID pause state. Except for the case where the offerer
+              already paused the corresponding RTP stream through <xref
+              target="RFC7728">RTP stream pause/resume</xref> signaling , this
+              is identical to the conditions at an initial offer.</t>
             </list></t>
 
           <t>Creation of SDP answers and processing of SDP answers inside an
@@ -803,8 +721,9 @@ a=simulcast:recv 1;4,5 send 6;7
         declarative SDP, partly motivated by use of the <xref
         target="I-D.ietf-mmusic-rid">simulcast format identification</xref>
         not being defined for use in declarative SDP. If concrete use cases
-        for simulcast in declarative SDP are identified in the future, we
-        expect that additional specifications will address such use.</t>
+        for simulcast in declarative SDP are identified in the future, the
+        authors of this memo expect that additional specifications will
+        address such use.</t>
       </section>
 
       <section anchor="sec-relating" title="Relating Simulcast Streams">
@@ -1194,13 +1113,14 @@ a=simulcast:send 1;~2;~3
           3.7) in <xref target="RFC7667">RTP Topologies</xref>. Applications
           for this type of RTP middlebox results in that each originating
           media source will have a corresponding media source on the leg
-          between the middlebox and the receiver. A SFM could go as far as
-          exposing all the simulcast streams for an media source, however this
-          section will focus on having a single simulcast stream that can
-          contain any of the simulcast formats. This section will assume that
-          the SFM projection mechanism works on media source level, and maps
-          one of the media source's simulcast streams onto one RTP stream from
-          the SFM to the receiver.</t>
+          between the middlebox and the receiver. A Selective Forwarding
+          Middlebox (SFM) could go as far as exposing all the simulcast
+          streams for an media source, however this section will focus on
+          having a single simulcast stream that can contain any of the
+          simulcast formats. This section will assume that the SFM projection
+          mechanism works on media source level, and maps one of the media
+          source's simulcast streams onto one RTP stream from the SFM to the
+          receiver.</t>
 
           <t>This usage will result in that the individual RTP stream(s) for
           one media source can switch between being active to paused, based on
@@ -1472,6 +1392,89 @@ a=simulcast:send 1;~2;~3
       <?rfc include='reference.I-D.ietf-avtcore-multiplex-guidelines'?>
     </references>
 
+    <section anchor="sec-requirements" title="Requirements">
+      <t>The following requirements have to be met to support the <xref
+      target="sec-use-cases">use cases</xref>:<list style="hanging">
+          <t anchor="req-1" hangText="REQ-1:">Identification:<list
+              style="hanging">
+              <t anchor="req-1.1" hangText="REQ-1.1:">It must be possible to
+              identify a set of simulcasted RTP streams as originating from
+              the same media source in SDP signaling.</t>
+
+              <t anchor="req-1.2" hangText="REQ-1.2:">An RTP endpoint must be
+              capable of identifying the simulcast stream a received RTP
+              stream is associated with, knowing the content of the SDP
+              signalling.</t>
+            </list></t>
+
+          <t anchor="req-2" hangText="REQ-2:">Transport usage. The solution
+          must work when using:<list style="hanging">
+              <t anchor="req-2.1" hangText="REQ-2.1:">Legacy SDP with separate
+              media transports per SDP media description.</t>
+
+              <t anchor="req-2.2" hangText="REQ-2.2:"><xref
+              target="I-D.ietf-mmusic-sdp-bundle-negotiation">Bundled</xref>
+              SDP media descriptions.</t>
+            </list></t>
+
+          <t anchor="req-3" hangText="REQ-3:">Capability negotiation. It must
+          be possible that:<list style="hanging">
+              <t anchor="req-3.1" hangText="REQ-3.1:">Sender can express
+              capability of sending simulcast.</t>
+
+              <t anchor="req-3.2" hangText="REQ-3.2:">Receiver can express
+              capability of receiving simulcast.</t>
+
+              <t anchor="req-3.3" hangText="REQ-3.3:">Sender can express
+              maximum number of simulcast streams that can be provided.</t>
+
+              <t anchor="req-3.4" hangText="REQ-3.4:">Receiver can express
+              maximum number of simulcast streams that can be received.</t>
+
+              <t anchor="req-3.5" hangText="REQ-3.5:">Sender can detail the
+              characteristics of the simulcast streams that can be
+              provided.</t>
+
+              <t anchor="req-3.6" hangText="REQ-3.6:">Receiver can detail the
+              characteristics of the simulcast streams that it prefers to
+              receive.</t>
+            </list></t>
+
+          <t anchor="req-4" hangText="REQ-4:">Distinguishing features. It must
+          be possible to have different simulcast streams use different codec
+          parameters, as can be expressed by SDP format values and RTP payload
+          types.</t>
+
+          <t anchor="req-5" hangText="REQ-5:">Compatibility. It must be
+          possible to use simulcast in combination with other RTP mechanisms
+          that generate additional RTP streams:<list style="hanging">
+              <t anchor="req-5.1" hangText="REQ-5.1:"><xref
+              target="RFC4588">RTP Retransmission</xref>.</t>
+
+              <t anchor="req-5.2" hangText="REQ-5.2:"><xref
+              target="RFC5109">RTP Forward Error Correction</xref>.</t>
+
+              <t anchor="req-5.3" hangText="REQ-5.3:">Related payload types
+              such as audio Comfort Noise and/or DTMF.</t>
+
+              <t hangText="REQ-5.4:">A single simulcast stream can consist of
+              multiple RTP streams, to support codecs where a dependent stream
+              is dependent on a set of encoded and dependent streams, each
+              potentially carried in their own RTP stream.</t>
+            </list></t>
+
+          <t anchor="req-6" hangText="REQ-6:">Interoperability. The solution
+          must be possible to use in:<list style="hanging">
+              <t anchor="req-6.1" hangText="REQ-6.1:">Interworking with
+              non-simulcast legacy clients using a single media source per
+              media type.</t>
+
+              <t anchor="req-6.2" hangText="REQ-6.2:">WebRTC environment with
+              a single media source per SDP media description.</t>
+            </list></t>
+        </list></t>
+    </section>
+
     <section title="Changes From Earlier Versions">
       <t>NOTE TO RFC EDITOR: Please remove this section prior to
       publication.</t>
@@ -1490,6 +1493,8 @@ a=simulcast:send 1;~2;~3
             <t>Clarified with a note that, for the case it is clear from the
             SDP that RTP PT uniquely maps to RtpStreamId, an RTP receiver can
             use RTP PT to relate simulcast streams.</t>
+
+            <t>Moved Section 4 Requirements to become Appendix A.</t>
 
             <t>Editorial corrections and clarifications.</t>
           </list></t>

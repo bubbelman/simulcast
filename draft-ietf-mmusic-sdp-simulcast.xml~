@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="8" month="May" year="2017"/>
+    <date day="3" month="July" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -569,11 +569,8 @@ a=simulcast:recv 1;4,5 send 6;7
         the attribute on SDP session level is undefined, MUST NOT be used by
         implementations of this specification and MUST be ignored if received
         on session level. Extensions to this specification MAY define such
-        session level usage. The meaning of including multiple "a=simulcast"
-        lines in a single SDP media description is undefined, MUST NOT be used
-        by implementations of this specification, and any additional
-        "a=simulcast" lines beyond the first in a media description MUST be
-        ignored if received.</t>
+        session level usage. Each SDP media description MUST contain at most
+        one "a=simulcast" line.</t>
 
         <t>There are separate and independent sets of simulcast streams in
         send and receive directions. When listing multiple directions, each
@@ -739,7 +736,7 @@ a=simulcast:recv 1;4,5 send 6;7
           example, be that the answerer doesn't have the ability to process
           any initially unpaused simulcast streams offered for a given media
           source. It then chooses one of the initially paused simulcast
-          streams in the offer and marks it as not paused in the answer.</t>
+          streams in the offer and marks it as not paused in the answer.<!--BoB: The last two sentences are strange and have to be re-formulated!--></t>
         </section>
 
         <section title="Offerer Processing the SDP Answer">
@@ -773,12 +770,30 @@ a=simulcast:recv 1;4,5 send 6;7
         </section>
 
         <section title="Modifying the Session">
-          <t>Offers and answers inside an existing session follow the rules
-          for initial session negotiation, with the additional restriction
-          that any SCID marked as initially paused in such offer or answer
-          MUST already be paused, thus a new offer/answer MUST NOT replace use
-          of <xref target="RFC7728">RTP stream pause/resume</xref> in the
-          session. Session modification restrictions in section 6.5 of <xref
+          <t>Offers inside an existing session follow the same rules as for
+          initial SDP offer, with these additions:<list style="numbers">
+              <t>SCID marked as initially paused in the offerer's send
+              direction SHALL reflect the offerer's opinion of the current
+              pause state at the time of creating the offer.</t>
+
+              <t>SCID marked as initally paused in the offerer's receive
+              direction SHALL (as in an initial offer) reflect the offerer's
+              desired SCID pause state. Except for the case where the
+              corresponding RTP stream is already paused, this is identical to
+              the conditions at an initial offer.</t>
+            </list></t>
+
+          <t>Pause state indicated in SDP modifying an ongoing session
+          describes the offerer's opinion at a snapshot in time, is therefore
+          to be seen as purely informational, and SHALL NOT replace or update
+          <xref target="RFC7728">RTP stream pause/resume</xref> signaling in
+          the ongoing session.</t>
+
+          <t>Creation of SDP answers and processing of SDP answers inside an
+          existing session follow the same rules as described above for
+          initial SDP offer/answer.</t>
+
+          <t>Session modification restrictions in section 6.5 of <xref
           target="I-D.ietf-mmusic-rid">RTP payload format restrictions</xref>
           also apply.</t>
         </section>
@@ -809,7 +824,14 @@ a=simulcast:recv 1;4,5 send 6;7
         reception, required to correctly interpret and process the RTP
         streams. Implementers of this specification MUST support the RTCP
         source description (SDES) item method and SHOULD support RTP header
-        extension method to signal RtpStreamId on RTP level.</t>
+        extension method to signal RtpStreamId on RTP level.<list
+            style="hanging">
+            <t hangText="NOTE:">For the case where it is clear from SDP that
+            RTP PT uniquely maps to corresponding RtpStreamId, an RTP receiver
+            can use RTP PT to relate simulcast streams. This can sometimes
+            enable decoding even in advance to receiving RtpStreamId
+            information in RTCP SDES and/or RTP header extensions.</t>
+          </list></t>
 
         <t>RTP streams MUST only use a single alternative SCID at a time
         (based on RTP timestamps), but MAY change format (and SCID) on a
@@ -1010,7 +1032,7 @@ a=simulcast:send 1;~2;~3
       </section>
     </section>
 
-    <section title="RTP Aspects">
+    <section anchor="sec-rtp-aspects" title="RTP Aspects">
       <t>This section discusses what the different entities in a simulcast
       media path can expect to happen on RTP level. This is explored from
       source to sink by starting in an endpoint with a media source that is
@@ -1372,7 +1394,7 @@ a=simulcast:send 1;~2;~3
       <!--Open issue: Review this! Are there security issues that arise specifically from this draft's use of RtpStreamId?-->
     </section>
 
-    <section title="Contributors">
+    <section anchor="sec-contributors" title="Contributors">
       <t>Morgan Lindqvist and Fredrik Jansson, both from Ericsson, have
       contributed with important material to the first versions of this
       document. Robert Hansen and Cullen Jennings, from Cisco, Peter Thatcher,
@@ -1454,6 +1476,25 @@ a=simulcast:send 1;~2;~3
     <section title="Changes From Earlier Versions">
       <t>NOTE TO RFC EDITOR: Please remove this section prior to
       publication.</t>
+
+      <section title="Modifications Between WG Version -08 and -09">
+        <t><list style="symbols">
+            <t>Changed semantics of initially paused SCID in modified SDP
+            offers from requiring it to follow actual RFC 7728 pause state to
+            an informational offerer's opinion at the time of offer creation,
+            not in any way overriding or amending RFC 7728 signaling.</t>
+
+            <t>Replaced text on ignoring all but the first of multiple
+            "a=simulcast" lines in a media description with mandating that at
+            most one "a=simulcast" line is included.</t>
+
+            <t>Clarified with a note that, for the case it is clear from the
+            SDP that RTP PT uniquely maps to RtpStreamId, an RTP receiver can
+            use RTP PT to relate simulcast streams.</t>
+
+            <t>Editorial corrections and clarifications.</t>
+          </list></t>
+      </section>
 
       <section title="Modifications Between WG Version -07 and -08">
         <t><list style="symbols">
