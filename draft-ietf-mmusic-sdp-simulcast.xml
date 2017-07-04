@@ -24,20 +24,20 @@
 
           <city>SE-164 60 Stockholm</city>
 
-          <region></region>
+          <region/>
 
-          <code></code>
+          <code/>
 
           <country>Sweden</country>
         </postal>
 
-        <phone></phone>
+        <phone/>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>bo.burman@ericsson.com</email>
 
-        <uri></uri>
+        <uri/>
       </address>
     </author>
 
@@ -75,13 +75,13 @@
           <country>USA</country>
         </postal>
 
-        <phone></phone>
+        <phone/>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>snandaku@cisco.com</email>
 
-        <uri></uri>
+        <uri/>
       </address>
     </author>
 
@@ -101,17 +101,17 @@
           <country>USA</country>
         </postal>
 
-        <phone></phone>
+        <phone/>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>mzanaty@cisco.com</email>
 
-        <uri></uri>
+        <uri/>
       </address>
     </author>
 
-    <date day="3" month="July" year="2017" />
+    <date day="3" month="July" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -166,7 +166,7 @@
     </section>
 
     <section anchor="sec-definitions" title="Definitions">
-      <t></t>
+      <t/>
 
       <section title="Terminology">
         <t>This document makes use of the terminology defined in <xref
@@ -174,25 +174,24 @@
         Topologies</xref>. The following terms are especially noted or here
         defined:<list style="hanging">
             <t hangText="RTP Mixer:">An RTP middle node, defined in <xref
-            target="RFC7667"></xref> (Section 3.6 to 3.9).</t>
+            target="RFC7667"/> (Section 3.6 to 3.9).</t>
 
             <t hangText="RTP Session:">An association among a group of
             participants communicating with RTP, as defined in <xref
-            target="RFC3550"></xref> and amended by <xref
-            target="RFC7656"></xref>.</t>
+            target="RFC3550"/> and amended by <xref target="RFC7656"/>.</t>
 
             <t hangText="RTP Stream:">A stream of RTP packets containing media
-            data, as defined in <xref target="RFC7656"></xref>.</t>
+            data, as defined in <xref target="RFC7656"/>.</t>
 
             <t hangText="RTP Switch:">A common short term for the terms
             "switching RTP mixer", "source projecting middlebox", and "video
-            switching MCU" as discussed in <xref target="RFC7667"></xref>.</t>
+            switching MCU" as discussed in <xref target="RFC7667"/>.</t>
 
             <t hangText="Simulcast Stream:">One encoded stream or dependent
             stream from a set of concurrently transmitted encoded streams and
             optional dependent streams, all sharing a common media source, as
-            defined in <xref target="RFC7656"></xref>. For example, HD and
-            thumbnail video simulcast versions of a single media source sent
+            defined in <xref target="RFC7656"/>. For example, HD and thumbnail
+            video simulcast versions of a single media source sent
             concurrently as separate RTP Streams.</t>
 
             <t hangText="Simulcast Format:">Different formats of a simulcast
@@ -315,9 +314,9 @@
         <t>It is also common that a currently active speaker participant is
         shown in larger size or higher quality than other participants (the
         sampling or bitrate aspects of <xref
-        target="sec-diverse-receivers"></xref>). Not sending the active
-        speaker media back to itself means there is some other participant's
-        media that instead has to receive special handling towards the active
+        target="sec-diverse-receivers"/>). Not sending the active speaker
+        media back to itself means there is some other participant's media
+        that instead has to receive special handling towards the active
         speaker; typically the previous active speaker. This way, the
         previously active speaker is needed both in larger size (to current
         active speaker) and in small size (to the rest of the participants),
@@ -330,56 +329,86 @@
         <t>The application logic that controls the communication session may
         allow receiving participants to apply preferences to the
         characteristics of the RTP stream they receive, for example in terms
-        of the aspects listed in <xref target="sec-diverse-receivers"></xref>.
+        of the aspects listed in <xref target="sec-diverse-receivers"/>.
         Sending a simulcast of RTP streams is one way of accommodating
         receivers with conflicting or otherwise incompatible preferences.</t>
       </section>
     </section>
 
-    <section anchor="sec-solution-overview" title="Overview">
-      <t>As an overview, the above requirements are met by signaling simulcast
-      capability and configurations in <xref target="RFC4566">SDP</xref>:<list
-          style="symbols">
-          <t>An offer or answer can contain a number of simulcast streams,
-          separate for send and receive directions.</t>
+    <section anchor="sec-overview" title="Overview">
+      <t>This memo defines <xref target="RFC4566">SDP</xref> signaling that
+      covers the above described simulcast use cases and functionalities. A
+      number of requirements for such signaling are elaborated in <xref
+      target="sec-requirements"/>.</t>
 
-          <t>An offer or answer can contain multiple, alternative simulcast
-          stream formats in the same fashion as multiple, alternative formats
-          can be offered in a media description.</t>
+      <t>A new SDP media level attribute "a=simulcast" is defined:</t>
 
-          <t>A single media source per SDP media description is assumed, which
-          is aligned with the concepts defined in <xref
-          target="RFC7656"></xref> and will specifically work in a WebRTC
-          context, both with and without <xref
-          target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref>
-          grouping.</t>
+      <figure align="center" anchor="fig-md-offer"
+              title="Example Simulcast Media Description in Offer">
+        <artwork align="left"><![CDATA[
+m=video 49300 RTP/AVP 97 98
+a=rtpmap:97 H264/90000
+a=rtpmap:98 H264/90000
+a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
+a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
+a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
+a=rid:1 send pt=97
+a=rid:2 send pt=98
+a=rid:3 recv pt=97
+a=simulcast:send 1;2 recv 3
+a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
-          <t>The codec configuration for a simulcast stream is expressed
-          through use of separately specified <xref
-          target="I-D.ietf-mmusic-rid">RTP payload format restrictions</xref>
-          with an associated <xref target="I-D.ietf-avtext-rid">RTP-level
-          identification mechanism</xref> to identify which RTP payload format
-          restrictions an RTP stream adheres to. This complements and
-          effectively extends simulcast stream identification and
-          configuration possibilities that could be provided by using only SDP
-          formats as identifier. Use of multiple RTP streams with the same
-          (non-redundancy) media type in the context of a single media source,
-          where those RTP streams are using different RtpStreamId, is a strong
-          but not totally unambiguous indication of those RTP streams being
-          part of a simulcast.</t>
+]]></artwork>
+      </figure>
 
-          <t>It is possible to use <xref target="RFC5576">source-specific
-          signaling</xref> with the proposed solution, but it is only in
-          certain cases possible to learn from that signaling which SSRC will
-          belong to a particular simulcast stream.</t>
-        </list></t>
+      <t>The corresponding SDP answer media description example extract could
+      look like:</t>
+
+      <figure align="center" anchor="fig-md-answer"
+              title="Example Simulcast Media Description in Answer">
+        <artwork align="left"><![CDATA[
+m=video 49674 RTP/AVP 97 98
+a=rtpmap:97 H264/90000
+a=rtpmap:98 H264/90000
+a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
+a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
+a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
+a=rid:1 recv pt=97
+a=rid:2 recv pt=98
+a=rid:3 send pt=97
+a=simulcast:recv 1;2 send 3
+a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+
+]]></artwork>
+      </figure>
+
+      <t>The above are only SDP media description extracts, not a complete
+      SDP. The only difference to non-simulcast SDP media descriptions is the
+      added "a=simulcast" line. It is assumed that a single SDP media
+      description is used to describe a single media source. This is aligned
+      with the concepts defined in <xref target="RFC7656"/> and will work in a
+      WebRTC context, both with and without <xref
+      target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref> grouping
+      of media descriptions.</t>
+
+      <t>The "a=simulcast" line describes send and receive direction simulcast
+      streams separately. Each direction can in turn describe one or more
+      simulcast streams, separated by semicolon. The identifiers describing
+      simulcast streams on the "a=simulcast" line are rid-id, as defined by
+      "a=rid" lines in <xref target="I-D.ietf-mmusic-rid"/>. Each simulcast
+      stream can be offered as a list of alternative rid-id, with each
+      alternative separated by comma (not in the examples above). A detailed
+      specification can be found in <xref target="sec-details"/> and more
+      detailed examples are outlined in <xref target="sec-ex"/>.</t>
     </section>
 
-    <section anchor="sec-solution" title="Detailed Description">
+    <section anchor="sec-details" title="Detailed Description">
       <t>This section further details the overview <xref
-      target="sec-solution-overview">above</xref>. First, formal syntax is
-      <xref target="sec-attr">provided</xref>, followed by the rest of the SDP
-      attribute definition in <xref target="sec-cap"></xref>. <xref
+      target="sec-overview">above</xref>. First, formal syntax is <xref
+      target="sec-attr">provided</xref>, followed by the rest of the SDP
+      attribute definition in <xref target="sec-cap"/>. <xref
       target="sec-relating">Relating Simulcast Streams </xref> provides the
       definition of the RTP/RTCP mechanisms used. The section is concluded
       with a number of examples.</t>
@@ -410,57 +439,28 @@ sc-id        = [sc-id-paused] rid-id
         ("send" or "recv"), followed by a list of one or more simulcast
         streams. Each simulcast stream consists of one or more alternative
         simulcast formats. Each simulcast format is identified by a simulcast
-        stream identifier (SCID). The SCID MUST have the form of an RTP stream
-        identifier, as described by <xref target="I-D.ietf-mmusic-rid">RTP
-        Payload Format Restrictions</xref>.</t>
+        stream identifier (rid-id). The rid-id MUST have the form of an RTP
+        stream identifier, as described by <xref
+        target="I-D.ietf-mmusic-rid">RTP Payload Format
+        Restrictions</xref>.</t>
 
         <t>In the list of simulcast streams, each simulcast stream is
         separated by a semicolon (";"). Each simulcast stream can in turn be
-        offered in one or more alternative formats, represented by SCIDs,
-        separated by a comma (","). Each SCID can also be specified as
+        offered in one or more alternative formats, represented by rid-ids,
+        separated by a comma (","). Each rid-id can also be specified as
         initially <xref target="RFC7728">paused</xref>, indicated by
-        prepending a "~" to the SCID. The reason to allow separate initial
-        pause states for each SCID is that pause capability can be specified
-        individually for each RTP payload type referenced by an SCID. Since
-        pause capability specified via the "a=rtcp-fb" attribute and SCID
+        prepending a "~" to the rid-id. The reason to allow separate initial
+        pause states for each rid-id is that pause capability can be specified
+        individually for each RTP payload type referenced by an rid-id. Since
+        pause capability specified via the "a=rtcp-fb" attribute and rid-id
         specified by "a=rid" can refer to common payload types, it is
-        unfeasible to pause streams with SCID where any of the related RTP
+        unfeasible to pause streams with rid-id where any of the related RTP
         payload type(s) do not have pause capability.</t>
 
-        <t>Examples:</t>
-
-        <figure align="center" anchor="fig-abnf-ex" title="Simulcast Examples">
-          <artwork align="center"><![CDATA[a=simulcast:send 1,2,3;~4,~5 recv 6;~7,~8
-a=simulcast:recv 1;4,5 send 6;7
-
-]]></artwork>
-        </figure>
-
-        <t>Above are two examples of different "a=simulcast" lines.</t>
-
-        <t>The first line is an example offer to send two simulcast streams
-        and to receive two simulcast streams. The first simulcast stream in
-        send direction can be sent in three different alternative formats
-        (SCID 1, 2, 3), and the second simulcast stream in send direction can
-        be sent in two different alternative formats (SCID 4, 5). Both of the
-        second simulcast stream alternative formats in send direction are
-        offered as initially paused. The first simulcast stream in receive
-        direction has no alternative formats (SCID 6). The second simulcast
-        stream in receive direction has two alternative formats (SCID 7, 8)
-        that are both offered as initially paused.</t>
-
-        <t>The second line is an example answer to the first line, accepting
-        to send and receive the two offered simulcast streams, however send
-        and receive directions are specified in opposite order compared to the
-        first line, which lets the answer keep the same order of simulcast
-        streams in the SDP as in the offer, for convenience, even though
-        directionality is reversed. This example answer has removed all
-        offered alternative formats for the first simulcast stream (keeping
-        only SCID 1), but kept alternative formats for the second simulcast
-        stream in receive direction (4, 5). The answer accepts to send two
-        simulcast streams, without alternatives. The answer does not accept
-        initial pause of any simulcast streams, in either direction. More
-        examples can be found in <xref target="sec-ex"></xref>.</t>
+        <t>It is possible to use <xref target="RFC5576">source-specific
+        signaling</xref> with "a=simulcast", but it is only in certain cases
+        possible to learn from that signaling which SSRC will belong to a
+        particular simulcast stream.</t>
       </section>
 
       <section anchor="sec-cap" title="Simulcast Capability">
@@ -476,84 +476,86 @@ a=simulcast:recv 1;4,5 send 6;7
         send and receive directions. When listing multiple directions, each
         direction MUST NOT occur more than once on the same line.</t>
 
-        <t>Simulcast streams using undefined SCID MUST NOT be used as valid
-        simulcast streams by an RTP stream receiver. The direction for an SCID
-        MUST be aligned with the direction specified for the corresponding RTP
-        stream identifier on the "a=rid" line.</t>
+        <t>Simulcast streams using undefined rid-id MUST NOT be used as valid
+        simulcast streams by an RTP stream receiver. The direction for an
+        rid-id MUST be aligned with the direction specified for the
+        corresponding RTP stream identifier on the "a=rid" line.</t>
 
         <t>The listed number of simulcast streams for a direction sets a limit
         to the number of supported simulcast streams in that direction. The
         order of the listed simulcast streams in the "send" direction suggests
-        a proposed order of preference, in decreasing order: the SCID listed
+        a proposed order of preference, in decreasing order: the rid-id listed
         first is the most preferred and subsequent streams have progressively
-        lower preference. The order of the listed SCID in the "recv" direction
-        expresses which simulcast streams that are preferred, with the
-        leftmost being most preferred. This can be of importance if the number
-        of actually sent simulcast streams have to be reduced for some
+        lower preference. The order of the listed rid-id in the "recv"
+        direction expresses which simulcast streams that are preferred, with
+        the leftmost being most preferred. This can be of importance if the
+        number of actually sent simulcast streams have to be reduced for some
         reason.</t>
 
-        <t>SCID that have explicit <xref target="RFC5583">dependencies</xref>
-        <xref target="I-D.ietf-mmusic-rid"></xref> to other SCID (even in the
-        same media description) MAY be used.</t>
+        <t>rid-id that have explicit <xref
+        target="RFC5583">dependencies</xref> <xref
+        target="I-D.ietf-mmusic-rid"/> to other rid-id (even in the same media
+        description) MAY be used.</t>
 
         <t>Use of more than a single, alternative simulcast format for a
         simulcast stream MAY be specified as part of the attribute parameters
         by expressing the simulcast stream as a comma-separated list of
-        alternative SCID. In this case, it is not possible to align what
-        alternative SCID that are used across different simulcast streams,
-        like requiring all simulcast streams to use SCID alternatives
-        referring to the same codec format. The order of the SCID alternatives
-        within a simulcast stream is significant; the SCID alternatives are
-        listed from (left) most preferred to (right) least preferred. For the
-        use of simulcast, this overrides the normal codec preference as
-        expressed by format type ordering on the "m=" line, using regular SDP
-        rules. This is to enable a separation of general codec preferences and
-        simulcast stream configuration preferences.</t>
+        alternative rid-id. In this case, it is not possible to align what
+        alternative rid-id that are used across different simulcast streams,
+        like requiring all simulcast streams to use rid-id alternatives
+        referring to the same codec format. The order of the rid-id
+        alternatives within a simulcast stream is significant; the rid-id
+        alternatives are listed from (left) most preferred to (right) least
+        preferred. For the use of simulcast, this overrides the normal codec
+        preference as expressed by format type ordering on the "m=" line,
+        using regular SDP rules. This is to enable a separation of general
+        codec preferences and simulcast stream configuration preferences.</t>
 
         <t>A simulcast stream can use a codec defined such that the same RTP
         SSRC can change RTP payload type multiple times during a session,
         possibly even on a per-packet basis. A typical example can be a speech
         codec that makes use of <xref target="RFC3389">Comfort Noise</xref>
         and/or <xref target="RFC4733">DTMF</xref> formats. In those cases,
-        such "related" formats MUST NOT be defined as having their own SCID
+        such "related" formats MUST NOT be defined as having their own rid-id
         listed explicitly in the attribute parameters, since they are not
         strictly simulcast streams of the media source, but rather a specific
         way of generating the RTP stream of a single simulcast stream with
         varying RTP payload type.</t>
 
         <t>If <xref target="RFC7728">RTP stream pause/resume</xref> is
-        supported, any SCID MAY be prefixed by a "~" character to indicate
+        supported, any rid-id MAY be prefixed by a "~" character to indicate
         that the corresponding simulcast stream is initially paused already
         from start of the RTP session. In this case, support for RTP stream
         pause/resume MUST also be included under the same "m=" line where
         "a=simulcast" is included. All RTP payload types related to such
         initially paused simulcast stream MUST be listed in the SDP as
-        pause/resume capable as specified by <xref target="RFC7728"></xref>,
-        e.g. by using the "*" wildcard format for "a=rtcp-fb".</t>
+        pause/resume capable as specified by <xref target="RFC7728"/>, e.g. by
+        using the "*" wildcard format for "a=rtcp-fb".</t>
 
         <t>An initially paused simulcast stream in "send" direction for the
-        part sending the SDP offer MUST be considered equivalent to an
-        unsolicited locally paused stream, and be handled accordingly.
-        Initially paused simulcast streams are resumed as described by the RTP
-        pause/resume specification. An RTP stream receiver that wishes to
-        resume an unsolicited locally paused stream needs to know the SSRC of
-        that stream. The SSRC of an initially paused simulcast stream can be
+        part sending the SDP MUST be considered equivalent to an unsolicited
+        locally paused stream, and be handled accordingly. Initially paused
+        simulcast streams are resumed as described by the RTP pause/resume
+        specification. An RTP stream receiver that wishes to resume an
+        unsolicited locally paused stream needs to know the SSRC of that
+        stream. The SSRC of an initially paused simulcast stream can be
         obtained from an RTP stream sender RTCP Sender Report (SR) including
-        both the desired SSRC as "SSRC of sender", and the SCID value in an
+        both the desired SSRC as "SSRC of sender", and the rid-id value in an
         <xref target="I-D.ietf-avtext-rid">RtpStreamId RTCP SDES
         item</xref>.</t>
 
         <t>Including an initially paused simulcast stream in "recv" direction
-        in an SDP towards an RTP sender, SHOULD cause the remote RTP sender to
-        put the stream as unsolicited locally paused, unless there are other
-        RTP stream receivers that do not mark the simulcast stream as
-        initially paused. The reason to require an initially paused "recv"
-        stream to be considered locally paused by the remote RTP sender,
-        instead of making it equivalent to implicitly sending a pause request,
-        is because the pausing RTP sender cannot know which receiving SSRC
-        owns the restriction when TMMBR/TMMBN are used for pause/resume
-        signaling (<xref target="RFC7728">Section 5.6 of </xref>) since the
-        RTP receiver's SSRC in send direction is sometimes not yet known.</t>
+        for the part sending the SDP, sent towards an RTP sender, SHOULD cause
+        the remote RTP sender to put the stream as unsolicited locally paused,
+        unless there are other RTP stream receivers that do not mark the
+        simulcast stream as initially paused. The reason to require an
+        initially paused "recv" stream to be considered locally paused by the
+        remote RTP sender, instead of making it equivalent to implicitly
+        sending a pause request, is because the pausing RTP sender cannot know
+        which receiving SSRC owns the restriction when TMMBR/TMMBN are used
+        for pause/resume signaling (<xref target="RFC7728">Section 5.6 of
+        </xref>) since the RTP receiver's SSRC in send direction is sometimes
+        not yet known.</t>
 
         <t>Use of the <xref target="RFC2198">redundant audio data</xref>
         format could be seen as a form of simulcast for loss protection
@@ -569,10 +571,10 @@ a=simulcast:recv 1;4,5 send 6;7
         or as differently defined RTP payload format restrictions. If this
         difference is not required, <xref target="RFC7104">RTP
         duplication</xref> procedures SHOULD be considered instead of
-        simulcast. To avoid complications in implementations, a single SCID
+        simulcast. To avoid complications in implementations, a single rid-id
         MUST NOT occur more than once per "a=simulcast" line. Note that this
         does not eliminate use of simulcast as an RTP duplication mechanism,
-        since it is possible to define multiple different SCID that are
+        since it is possible to define multiple different rid-id that are
         effectively equivalent.</t>
       </section>
 
@@ -587,9 +589,9 @@ a=simulcast:recv 1;4,5 send 6;7
           <t>An offerer wanting to use simulcast for a media description SHALL
           include one "a=simulcast" attribute in that media description in the
           offer. An offerer listing a set of receive simulcast streams and/or
-          alternative formats as SCID in the offer MUST be prepared to receive
-          RTP streams for any of those simulcast streams and/or alternative
-          formats from the answerer.</t>
+          alternative formats as rid-id in the offer MUST be prepared to
+          receive RTP streams for any of those simulcast streams and/or
+          alternative formats from the answerer.</t>
         </section>
 
         <section title="Creating the SDP Answer">
@@ -610,14 +612,14 @@ a=simulcast:recv 1;4,5 send 6;7
           becomes "recv" and vice versa, and include it in the answer.</t>
 
           <t>An answerer that receives an offer with simulcast containing an
-          "a=simulcast" attribute listing alternative SCID MAY keep all the
-          alternative SCID in the answer, but it MAY also choose to remove any
-          non-desirable alternative SCID in the answer. The answerer MUST NOT
-          add any alternative SCID in send direction in the answer that were
-          not present in the offer receive direction. The answerer MUST be
-          prepared to receive any of the receive direction SCID alternatives,
-          and MAY send any of the send direction alternatives that are kept in
-          the answer.</t>
+          "a=simulcast" attribute listing alternative rid-id MAY keep all the
+          alternative rid-id in the answer, but it MAY also choose to remove
+          any non-desirable alternative rid-id in the answer. The answerer
+          MUST NOT add any alternative rid-id in send direction in the answer
+          that were not present in the offer receive direction. The answerer
+          MUST be prepared to receive any of the receive direction rid-id
+          alternatives, and MAY send any of the send direction alternatives
+          that are kept in the answer.</t>
 
           <t>An answerer that receives an offer with simulcast that lists a
           number of simulcast streams, MAY reduce the number of simulcast
@@ -628,42 +630,43 @@ a=simulcast:recv 1;4,5 send 6;7
           initially paused in the answer.</t>
 
           <t>An RTP stream pause/resume capable answerer that receives an
-          offer with RTP stream pause/resume capability MAY mark any SCID that
-          refer to pause/resume capable formats as initially paused in the
-          answer.</t>
+          offer with RTP stream pause/resume capability MAY mark any rid-id
+          that refer to pause/resume capable formats as initially paused in
+          the answer.</t>
 
-          <t>An answerer that receives indication in an offer of an SCID being
-          initially paused SHOULD mark that SCID as initially paused also in
-          the answer, regardless of direction, unless it has good reason for
-          the SCID not being initially paused. One reason to remove an initial
-          pause in the answer compared to the offer could, for example, be
-          that all receive direction simulcast streams for a media source the
-          answerer accepts in the answer would otherwise be paused.</t>
+          <t>An answerer that receives indication in an offer of an rid-id
+          being initially paused SHOULD mark that rid-id as initially paused
+          also in the answer, regardless of direction, unless it has good
+          reason for the rid-id not being initially paused. One reason to
+          remove an initial pause in the answer compared to the offer could,
+          for example, be that all receive direction simulcast streams for a
+          media source the answerer accepts in the answer would otherwise be
+          paused.</t>
         </section>
 
         <section title="Offerer Processing the SDP Answer">
           <t>An offerer that receives an answer without "a=simulcast" MUST NOT
           use simulcast towards the answerer. An offerer that receives an
-          answer with "a=simulcast" without any SCID in a specified direction
-          MUST NOT use simulcast in that direction.</t>
+          answer with "a=simulcast" without any rid-id in a specified
+          direction MUST NOT use simulcast in that direction.</t>
 
-          <t>An offerer that receives an answer where some SCID alternatives
+          <t>An offerer that receives an answer where some rid-id alternatives
           are kept MUST be prepared to receive any of the kept send direction
-          SCID alternatives, and MAY send any of the kept receive direction
-          SCID alternatives.</t>
+          rid-id alternatives, and MAY send any of the kept receive direction
+          rid-id alternatives.</t>
 
-          <t>An offerer that receives an answer where some of the SCID are
+          <t>An offerer that receives an answer where some of the rid-id are
           removed compared to the offer MAY release the corresponding
           resources (codec, transport, etc) in its receive direction and MUST
-          NOT send any RTP packets corresponding to the removed SCID.</t>
+          NOT send any RTP packets corresponding to the removed rid-id.</t>
 
-          <t>An offerer that offered some of its SCID as initially paused and
-          that receives an answer that does not indicate RTP stream
+          <t>An offerer that offered some of its rid-id as initially paused
+          and that receives an answer that does not indicate RTP stream
           pause/resume capability, MUST NOT initially pause any simulcast
           streams.</t>
 
           <t>An offerer with RTP stream pause/resume capability that receives
-          an answer where some SCID are marked as initially paused, SHOULD
+          an answer where some rid-id are marked as initially paused, SHOULD
           initially pause those RTP streams regardless if they were marked as
           initially paused also in the offer, unless it has good reason for
           those RTP streams not being initially paused. One such reason could,
@@ -674,19 +677,19 @@ a=simulcast:recv 1;4,5 send 6;7
         <section title="Modifying the Session">
           <t>Offers inside an existing session follow the same rules as for
           initial SDP offer, with these additions:<list style="numbers">
-              <t>SCID marked as initially paused in the offerer's send
+              <t>rid-id marked as initially paused in the offerer's send
               direction SHALL reflect the offerer's opinion of the current
               pause state at the time of creating the offer. This is purely
               informational, and <xref target="RFC7728">RTP stream
               pause/resume</xref> signaling in the ongoing session SHALL take
               precedence in case of any conflict or ambiguity.</t>
 
-              <t>SCID marked as initally paused in the offerer's receive
+              <t>rid-id marked as initally paused in the offerer's receive
               direction SHALL (as in an initial offer) reflect the offerer's
-              desired SCID pause state. Except for the case where the offerer
-              already paused the corresponding RTP stream through <xref
-              target="RFC7728">RTP stream pause/resume</xref> signaling , this
-              is identical to the conditions at an initial offer.</t>
+              desired rid-id pause state. Except for the case where the
+              offerer already paused the corresponding RTP stream through
+              <xref target="RFC7728">RTP stream pause/resume</xref> signaling
+              , this is identical to the conditions at an initial offer.</t>
             </list></t>
 
           <t>Creation of SDP answers and processing of SDP answers inside an
@@ -734,8 +737,8 @@ a=simulcast:recv 1;4,5 send 6;7
             information in RTCP SDES and/or RTP header extensions.</t>
           </list></t>
 
-        <t>RTP streams MUST only use a single alternative SCID at a time
-        (based on RTP timestamps), but MAY change format (and SCID) on a
+        <t>RTP streams MUST only use a single alternative rid-id at a time
+        (based on RTP timestamps), but MAY change format (and rid-id) on a
         per-RTP packet basis. This corresponds to the existing (non-simulcast)
         SDP offer/answer case when multiple formats are included on the "m="
         line in the SDP answer, enabling per-RTP packet change of RTP payload
@@ -983,7 +986,7 @@ a=simulcast:send 1;~2;~3
         receiver at any instant in time, even if the selected simulcast stream
         may vary. For cases where this does not hold due to application needs,
         then the RTP stream aspects will fall under the middlebox to middlebox
-        case <xref target="sec-rtp-box-box"></xref>.</t>
+        case <xref target="sec-rtp-box-box"/>.</t>
 
         <t>The selection of which simulcast streams to forward towards the
         receiver, is application specific. However, in conferencing
@@ -1184,7 +1187,7 @@ a=simulcast:send 1;~2;~3
       target="I-D.ietf-avtcore-multiplex-guidelines">Guidelines for
       Multiplexing in RTP</xref>. Discussion and clarification on how to
       handle multiple streams in an RTP session can be found in <xref
-      target="RFC8108"></xref>.</t>
+      target="RFC8108"/>.</t>
 
       <t>The network aspects that are relevant for simulcast are:<list
           style="hanging">
@@ -1202,7 +1205,7 @@ a=simulcast:send 1;~2;~3
           Negotiation Using SDP Port Numbers</xref>.</t>
         </list></t>
 
-      <t></t>
+      <t/>
 
       <section title="Bitrate Adaptation">
         <t>Use of multiple simulcast streams can require a significant amount
@@ -1213,7 +1216,7 @@ a=simulcast:send 1;~2;~3
         prioritize when allocating available bitrate among the simulcast
         streams in such adaptation SHOULD be taken from the simulcast stream
         order on the "a=simulcast" line and ordering of alternative simulcast
-        formats <xref target="sec-cap"></xref>. Simulcast streams that have
+        formats <xref target="sec-cap"/>. Simulcast streams that have
         pause/resume capability and that would be given such low bitrate by
         the adaptation process that they are considered not really useful can
         be temporarily paused until the limiting condition clears.</t>
@@ -1246,9 +1249,8 @@ a=simulcast:send 1;~2;~3
       <t>This document requests to register a new media-level SDP attribute,
       "simulcast", in the "att-field (media level only)" registry within the
       SDP parameters registry, according to the procedures of <xref
-      target="RFC4566"></xref> and <xref
-      target="I-D.ietf-mmusic-sdp-mux-attributes"></xref>.<list
-          style="hanging">
+      target="RFC4566"/> and <xref
+      target="I-D.ietf-mmusic-sdp-mux-attributes"/>.<list style="hanging">
           <t hangText="Contact name, email:">IETF, contacted via
           mmusic@ietf.org, or a successor address designated by IESG</t>
 
@@ -1260,7 +1262,7 @@ a=simulcast:send 1;~2;~3
           <t hangText="Charset dependent:">No</t>
 
           <t hangText="Attribute value:">sc-value; see <xref
-          target="sec-attr"></xref> of RFC XXXX.</t>
+          target="sec-attr"/> of RFC XXXX.</t>
 
           <t hangText="Purpose:">Signals simulcast capability for a set of RTP
           streams</t>
@@ -1290,10 +1292,9 @@ a=simulcast:send 1;~2;~3
       authenticated to prevent an attacker to change it.</t>
 
       <t>Security considerations related to the use of "a=rid" and the
-      RtpStreamId SDES item is covered in <xref
-      target="I-D.ietf-mmusic-rid"></xref> and <xref
-      target="I-D.ietf-avtext-rid"></xref>. There are no additional security
-      concerns related to their use in this specification.</t>
+      RtpStreamId SDES item is covered in <xref target="I-D.ietf-mmusic-rid"/>
+      and <xref target="I-D.ietf-avtext-rid"/>. There are no additional
+      security concerns related to their use in this specification.</t>
 
       <!--Open issue: Review this! Are there security issues that arise specifically from this draft's use of RtpStreamId?-->
     </section>
@@ -1466,7 +1467,12 @@ a=simulcast:send 1;~2;~3
 
       <section title="Modifications Between WG Version -08 and -09">
         <t><list style="symbols">
-            <t>Changed semantics of initially paused SCID in modified SDP
+            <t>Changed SCID to rid-id, to align with ietf-draft-mmusic-rid
+            naming.</t>
+
+            <t>Changed Overview to be based on examples and shortened it.</t>
+
+            <t>Changed semantics of initially paused rid-id in modified SDP
             offers from requiring it to follow actual RFC 7728 pause state to
             an informational offerer's opinion at the time of offer creation,
             not in any way overriding or amending RFC 7728 signaling.</t>
