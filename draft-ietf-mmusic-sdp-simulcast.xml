@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-09"
+<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-10"
      ipr="trust200902" submissionType="IETF">
   <front>
     <title abbrev="Simulcast">Using Simulcast in SDP and RTP Sessions</title>
@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="3" month="July" year="2017"/>
+    <date day="18" month="July" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -341,29 +341,90 @@
       number of requirements for such signaling are elaborated in <xref
       target="sec-requirements"/>.</t>
 
-      <t>A new SDP media level attribute "a=simulcast" is defined:</t>
+      <t>A new SDP media level attribute "a=simulcast" is defined. The
+      attribute describes, independently for send and receive directions, the
+      number of simulcast RTP streams as well as potential alternative formats
+      for each simulcast RTP stream. Each simulcast RTP stream, including
+      alternatives, is identified using the RID identifier (rid-id), defined
+      in <xref target="I-D.ietf-mmusic-rid"/>.</t>
+
+      <figure align="left">
+        <artwork align="left"><![CDATA[a=simulcast:send 1;2,3 recv 4
+]]></artwork>
+      </figure>
+
+      <t>If the above line is included in an SDP offer, the "send" part
+      indicates the offerer's capability and proposal to send two simulcast
+      RTP streams. Each simulcast RTP stream identifier (rid-id) is separated
+      by a semicolon (";"). When rid-ids are separated by a comma (","), they
+      describe alternative representations for that particular simulcast RTP
+      stream. Thus, the above "send" part is interpreted as an intention to
+      send two simulcast RTP streams. The first simulcast RTP stream is
+      identified and restricted according to rid-id 1. The second simulcast
+      RTP stream can be sent as two alternatives, identified and restricted
+      according to rid-ids 2 and 3. The "recv" part of the above line
+      indicates that the offerer desires to receive a single RTP stream (no
+      simulcast) according to rid-id 4.</t>
+
+      <t>The RID mechanism, as defined in <xref
+      target="I-D.ietf-mmusic-rid"/>, enables an SDP offerer or answerer to
+      specify a number of different RTP stream restrictions for a rid-id by
+      using the "a=rid" line. Examples of such restrictions are maximum
+      bitrate, maximum spatial video resolution (width and height), maximum
+      video framerate, etc. Each rid-id may also be restricted to use only a
+      subset of the RTP payload types in the associated SDP media description.
+      Those RTP payload types can have their own configurations and parameters
+      affecting what can be sent or received, using the "a=fmtp" line as well
+      as other SDP attributes.</t>
+
+      <t>A more complete example SDP offer media description is provided
+      below:</t>
 
       <figure align="center" anchor="fig-md-offer"
               title="Example Simulcast Media Description in Offer">
         <artwork align="left"><![CDATA[
-m=video 49300 RTP/AVP 97 98
+m=video 49300 RTP/AVP 97 98 99
 a=rtpmap:97 H264/90000
 a=rtpmap:98 H264/90000
-a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
-a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+a=rtpmap:99 VP8/90000
+a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
+a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
+a=fmtp:99 max-fs=240; max-fr=30
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
 a=rid:1 send pt=97
 a=rid:2 send pt=98
-a=rid:3 recv pt=97
-a=simulcast:send 1;2 recv 3
+a=rid:3 send pt=99 max-width=320;max-height=180
+a=rid:4 recv pt=97
+a=simulcast:send 1;2,3 recv 4
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
-
 ]]></artwork>
       </figure>
 
-      <t>The corresponding SDP answer media description example extract could
-      look like:</t>
+      <t>The above SDP media description can be interpreted on a high level to
+      say that the offerer is capable of sending two simulcast RTP streams,
+      one H.264 encoded stream in up to 720p resolution, and one additional
+      stream encoded as either H.264 or VP8 with a maximum resolution of
+      320x180 pixels. The offerer can receive one H.264 stream with maximum
+      720p resolution.</t>
+
+      <t>The receiver of this SDP offer can generate an SDP answer that
+      indicates what it accepts. It uses the "a=simulcast" attribute to
+      indicate simulcast capability and specify what simulcast RTP streams and
+      alternatives to receive and/or send. An example of such answering
+      "a=simulcast" attribute, corresponding to the above offer, is:</t>
+
+      <figure align="left">
+        <artwork align="left"><![CDATA[a=simulcast:recv 1;2 send 4
+]]></artwork>
+      </figure>
+
+      <t>With this SDP answer, the answerer indicates in the "recv" part that
+      it wants to receive the two simulcast RTP streams. It has removed an
+      alternative that it doesn't support (rid-id 3). The send part confirms
+      to the offerer that it will receive one stream for this media source
+      according to rid-id 4. The corresponding, more complete example SDP
+      answer media description could look like:</t>
 
       <figure align="center" anchor="fig-md-answer"
               title="Example Simulcast Media Description in Answer">
@@ -371,25 +432,22 @@ a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 m=video 49674 RTP/AVP 97 98
 a=rtpmap:97 H264/90000
 a=rtpmap:98 H264/90000
-a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
-a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
+a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
 a=rid:1 recv pt=97
 a=rid:2 recv pt=98
-a=rid:3 send pt=97
-a=simulcast:recv 1;2 send 3
+a=rid:4 send pt=97
+a=simulcast:recv 1;2 send 4
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
-
 ]]></artwork>
       </figure>
 
-      <t>The above are only SDP media description extracts, not a complete
-      SDP. The only difference to non-simulcast SDP media descriptions is the
-      added "a=simulcast" line. It is assumed that a single SDP media
-      description is used to describe a single media source. This is aligned
-      with the concepts defined in <xref target="RFC7656"/> and will work in a
-      WebRTC context, both with and without <xref
+      <t>It is assumed that a single SDP media description is used to describe
+      a single media source. This is aligned with the concepts defined in
+      <xref target="RFC7656"/> and will work in a WebRTC context, both with
+      and without <xref
       target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref> grouping
       of media descriptions.</t>
 
@@ -433,6 +491,12 @@ sc-id        = [sc-id-paused] rid-id
 
 ]]></artwork>
         </figure>
+
+        <t><list style="empty">
+            <t>Note to RFC Editor: Replace "I-D.ietf-mmusic-rid" in the above
+            figure with RFC number of draft-ietf-mmusic-rid before publication
+            of this document.</t>
+          </list></t>
 
         <t>The "a=simulcast" attribute has a parameter in the form of one or
         two simulcast stream descriptions, each consisting of a direction
@@ -684,7 +748,7 @@ sc-id        = [sc-id-paused] rid-id
               pause/resume</xref> signaling in the ongoing session SHALL take
               precedence in case of any conflict or ambiguity.</t>
 
-              <t>rid-id marked as initally paused in the offerer's receive
+              <t>rid-id marked as initially paused in the offerer's receive
               direction SHALL (as in an initial offer) reflect the offerer's
               desired rid-id pause state. Except for the case where the
               offerer already paused the corresponding RTP stream through
@@ -1464,6 +1528,14 @@ a=simulcast:send 1;~2;~3
     <section title="Changes From Earlier Versions">
       <t>NOTE TO RFC EDITOR: Please remove this section prior to
       publication.</t>
+
+      <section title="Modifications Between WG Version -09 and -10">
+        <t><list style="symbols">
+            <t>Amended overview section with a bit more explanation on the
+            examples, and added an rid-id alternative for one of the
+            streams.</t>
+          </list></t>
+      </section>
 
       <section title="Modifications Between WG Version -08 and -09">
         <t><list style="symbols">
