@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="17" month="July" year="2017"/>
+    <date day="20" month="July" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -389,12 +389,13 @@ a=rtpmap:98 H264/90000
 a=rtpmap:99 VP8/90000
 a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
 a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
-a=fmtp:99 max-fs=240; max-fr=30
+a=fmtp:99 max-fs=240;max-fr=30
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
+a=imageattr:99 send [x=320,y=180] recv [x=320,y=180]
 a=rid:1 send pt=97
 a=rid:2 send pt=98
-a=rid:3 send pt=99 max-width=320;max-height=180
+a=rid:3 send pt=99
 a=rid:4 recv pt=97
 a=simulcast:send 1;2,3 recv 4
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
@@ -1531,7 +1532,9 @@ a=simulcast:send 1;~2;~3
 
       <section title="Modifications Between WG Version -09 and -10">
         <t><list style="symbols">
-            <t/>
+            <t>Amended overview section with a bit more explanation on the
+            examples, and added an rid-id alternative for one of the
+            streams.</t>
           </list></t>
       </section>
 
