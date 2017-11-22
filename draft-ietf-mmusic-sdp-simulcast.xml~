@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="17" month="July" year="2017"/>
+    <date day="18" month="July" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -1531,7 +1531,9 @@ a=simulcast:send 1;~2;~3
 
       <section title="Modifications Between WG Version -09 and -10">
         <t><list style="symbols">
-            <t/>
+            <t>Amended overview section with a bit more explanation on the
+            examples, and added an rid-id alternative for one of the
+            streams.</t>
           </list></t>
       </section>
 
