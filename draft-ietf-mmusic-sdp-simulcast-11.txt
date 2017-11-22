@@ -79,7 +79,7 @@ Table of Contents
      3.2.  Application Specific Media Source Handling  . . . . . . .   7
      3.3.  Receiver Media Source Preferences . . . . . . . . . . . .   7
    4.  Overview  . . . . . . . . . . . . . . . . . . . . . . . . . .   7
-   5.  Detailed Description  . . . . . . . . . . . . . . . . . . . .  10
+   5.  Detailed Description  . . . . . . . . . . . . . . . . . . . .   9
      5.1.  Simulcast Attribute . . . . . . . . . . . . . . . . . . .  10
      5.2.  Simulcast Capability  . . . . . . . . . . . . . . . . . .  11
      5.3.  Offer/Answer Use  . . . . . . . . . . . . . . . . . . . .  13
@@ -422,10 +422,8 @@ Internet-Draft                  Simulcast                      July 2017
    a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
    a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
    a=fmtp:99 max-fs=240; max-fr=30
-   a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
-   a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
-   a=rid:1 send pt=97
-   a=rid:2 send pt=98
+   a=rid:1 send pt=97 max-width=1280;max-height=720
+   a=rid:2 send pt=98 max-width=320;max-height=180
    a=rid:3 send pt=99 max-width=320;max-height=180
    a=rid:4 recv pt=97
    a=simulcast:send 1;2,3 recv 4
@@ -442,6 +440,8 @@ Internet-Draft                  Simulcast                      July 2017
 
    The receiver of this SDP offer can generate an SDP answer that
    indicates what it accepts.  It uses the "a=simulcast" attribute to
+   indicate simulcast capability and specify what simulcast RTP streams
+   and alternatives to receive and/or send.  An example of such
 
 
 
@@ -450,8 +450,6 @@ Burman, et al.          Expires January 19, 2018                [Page 8]
 Internet-Draft                  Simulcast                      July 2017
 
 
-   indicate simulcast capability and specify what simulcast RTP streams
-   and alternatives to receive and/or send.  An example of such
    answering "a=simulcast" attribute, corresponding to the above offer,
    is:
 
@@ -469,10 +467,8 @@ Internet-Draft                  Simulcast                      July 2017
    a=rtpmap:98 H264/90000
    a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
    a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
-   a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
-   a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
-   a=rid:1 recv pt=97
-   a=rid:2 recv pt=98
+   a=rid:1 send pt=97 max-width=1280;max-height=720
+   a=rid:2 send pt=98 max-width=320;max-height=180
    a=rid:4 send pt=97
    a=simulcast:recv 1;2 send 4
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
@@ -495,17 +491,6 @@ Internet-Draft                  Simulcast                      July 2017
    detailed specification can be found in Section 5 and more detailed
    examples are outlined in Section 5.6.
 
-
-
-
-
-
-
-Burman, et al.          Expires January 19, 2018                [Page 9]
-
-Internet-Draft                  Simulcast                      July 2017
-
-
 5.  Detailed Description
 
    This section further details the overview above (Section 4).  First,
@@ -513,6 +498,13 @@ Internet-Draft                  Simulcast                      July 2017
    SDP attribute definition in Section 5.2.  Relating Simulcast Streams
    (Section 5.5) provides the definition of the RTP/RTCP mechanisms
    used.  The section is concluded with a number of examples.
+
+
+
+Burman, et al.          Expires January 19, 2018                [Page 9]
+
+Internet-Draft                  Simulcast                      July 2017
+
 
 5.1.  Simulcast Attribute
 
@@ -554,6 +546,14 @@ Internet-Draft                  Simulcast                      July 2017
    pause capability can be specified individually for each RTP payload
    type referenced by an rid-id.  Since pause capability specified via
    the "a=rtcp-fb" attribute and rid-id specified by "a=rid" can refer
+   to common payload types, it is unfeasible to pause streams with rid-
+   id where any of the related RTP payload type(s) do not have pause
+   capability.
+
+
+
+
+
 
 
 
@@ -561,10 +561,6 @@ Burman, et al.          Expires January 19, 2018               [Page 10]
 
 Internet-Draft                  Simulcast                      July 2017
 
-
-   to common payload types, it is unfeasible to pause streams with rid-
-   id where any of the related RTP payload type(s) do not have pause
-   capability.
 
 5.2.  Simulcast Capability
 
@@ -610,6 +606,10 @@ Internet-Draft                  Simulcast                      July 2017
    alternatives within a simulcast stream is significant; the rid-id
    alternatives are listed from (left) most preferred to (right) least
    preferred.  For the use of simulcast, this overrides the normal codec
+   preference as expressed by format type ordering on the "m=" line,
+   using regular SDP rules.  This is to enable a separation of general
+   codec preferences and simulcast stream configuration preferences.
+
 
 
 
@@ -617,10 +617,6 @@ Burman, et al.          Expires January 19, 2018               [Page 11]
 
 Internet-Draft                  Simulcast                      July 2017
 
-
-   preference as expressed by format type ordering on the "m=" line,
-   using regular SDP rules.  This is to enable a separation of general
-   codec preferences and simulcast stream configuration preferences.
 
    A simulcast stream can use a codec defined such that the same RTP
    SSRC can change RTP payload type multiple times during a session,
@@ -667,6 +663,10 @@ Internet-Draft                  Simulcast                      July 2017
    format, rather than the carried formats, SHOULD be the one to list as
    a simulcast stream on the "a=simulcast" line.
 
+   The media formats and corresponding characteristics of simulcast
+   streams SHOULD be chosen such that they are different, e.g. as
+   different SDP formats with differing "a=rtpmap" and/or "a=fmtp"
+
 
 
 Burman, et al.          Expires January 19, 2018               [Page 12]
@@ -674,9 +674,6 @@ Burman, et al.          Expires January 19, 2018               [Page 12]
 Internet-Draft                  Simulcast                      July 2017
 
 
-   The media formats and corresponding characteristics of simulcast
-   streams SHOULD be chosen such that they are different, e.g. as
-   different SDP formats with differing "a=rtpmap" and/or "a=fmtp"
    lines, or as differently defined RTP payload format restrictions.  If
    this difference is not required, RTP duplication [RFC7104] procedures
    SHOULD be considered instead of simulcast.  To avoid complications in
@@ -722,6 +719,9 @@ Internet-Draft                  Simulcast                      July 2017
    alternative rid-id in the answer, but it MAY also choose to remove
    any non-desirable alternative rid-id in the answer.  The answerer
    MUST NOT add any alternative rid-id in send direction in the answer
+   that were not present in the offer receive direction.  The answerer
+   MUST be prepared to receive any of the receive direction rid-id
+
 
 
 
@@ -730,8 +730,6 @@ Burman, et al.          Expires January 19, 2018               [Page 13]
 Internet-Draft                  Simulcast                      July 2017
 
 
-   that were not present in the offer receive direction.  The answerer
-   MUST be prepared to receive any of the receive direction rid-id
    alternatives, and MAY send any of the send direction alternatives
    that are kept in the answer.
 
@@ -777,7 +775,9 @@ Internet-Draft                  Simulcast                      July 2017
    that receives an answer that does not indicate RTP stream pause/
    resume capability, MUST NOT initially pause any simulcast streams.
 
-
+   An offerer with RTP stream pause/resume capability that receives an
+   answer where some rid-id are marked as initially paused, SHOULD
+   initially pause those RTP streams regardless if they were marked as
 
 
 
@@ -786,9 +786,6 @@ Burman, et al.          Expires January 19, 2018               [Page 14]
 Internet-Draft                  Simulcast                      July 2017
 
 
-   An offerer with RTP stream pause/resume capability that receives an
-   answer where some rid-id are marked as initially paused, SHOULD
-   initially pause those RTP streams regardless if they were marked as
    initially paused also in the offer, unless it has good reason for
    those RTP streams not being initially paused.  One such reason could,
    for example, be that the answerer would otherwise initially not
@@ -834,6 +831,9 @@ Internet-Draft                  Simulcast                      July 2017
    Simulcast RTP streams MUST be related on RTP level through
    RtpStreamId [I-D.ietf-avtext-rid], as specified in the SDP
    "a=simulcast" attribute (Section 5.2) parameters.  This is sufficient
+   as long as there is only a single media source per SDP media
+   description.  When using BUNDLE
+   [I-D.ietf-mmusic-sdp-bundle-negotiation], where multiple SDP media
 
 
 
@@ -842,9 +842,6 @@ Burman, et al.          Expires January 19, 2018               [Page 15]
 Internet-Draft                  Simulcast                      July 2017
 
 
-   as long as there is only a single media source per SDP media
-   description.  When using BUNDLE
-   [I-D.ietf-mmusic-sdp-bundle-negotiation], where multiple SDP media
    descriptions jointly specify a single RTP session, the SDES MID
    identification mechanism in BUNDLE allows relating RTP streams back
    to individual media descriptions, after which the above described
@@ -890,6 +887,9 @@ Internet-Draft                  Simulcast                      July 2017
    capable of a single media source per media type.  The client can send
    a simulcast of 2 video resolutions and frame rates: HD 1280x720p
    30fps and thumbnail 320x180p 15fps.  This is defined below using the
+   "imageattr" [RFC6236].  In this example, only the "pt" "a=rid"
+   parameter is used, effectively achieving a 1:1 mapping between
+
 
 
 
@@ -898,8 +898,6 @@ Burman, et al.          Expires January 19, 2018               [Page 16]
 Internet-Draft                  Simulcast                      July 2017
 
 
-   "imageattr" [RFC6236].  In this example, only the "pt" "a=rid"
-   parameter is used, effectively achieving a 1:1 mapping between
    RtpStreamId and media formats (RTP payload types), to describe
    simulcast stream formats.  Alice's Offer:
 
@@ -939,6 +937,8 @@ Internet-Draft                  Simulcast                      July 2017
    "a=simulcast" line would not have been present and communication
    would have started with the media negotiated in the SDP.  Also the
    usage of the RtpStreamId RTP header extension is accepted.
+
+
 
 
 
