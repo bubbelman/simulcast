@@ -939,11 +939,9 @@ s=Offer from Simulcast Enabled Multi-Source Client
 t=0 0
 c=IN IP6 2001:db8::c000:27d
 a=group:BUNDLE foo bar zen
-
 m=audio 49200 RTP/AVP 99
 a=mid:foo
 a=rtpmap:99 G722/8000
-
 m=video 49600 RTP/AVPF 100 101 103
 a=mid:bar
 a=rtpmap:100 H264-SVC/90000
@@ -962,7 +960,6 @@ a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
 a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 a=rtcp-fb:* ccm pause nowait
 a=simulcast:send 1;2;~4,3
-
 m=video 49602 RTP/AVPF 96 104
 a=mid:zen
 a=rtpmap:96 VP8/90000
@@ -985,12 +982,83 @@ a=simulcast:send 1;~2;~3
               readability and would not be present in an actual SDP.</t>
             </list></t>
         </section>
+
+        <section title="Audio and Video Simulcast and Redundancy">
+          <t>This examples look at applying simulcast to audio for codec and
+          bit-rat restrictions and combined with using <xref
+          target="RFC2198">RTP Payload for Redundant Audio Data</xref> to
+          provide redundancy for packet loss resiliance. The video applies
+          both resolution and bit-rate limitations combined with application
+          of FEC in the form of <xref
+          target="I-D.ietf-payload-flexible-fec-scheme">Flexible FEC</xref>
+          and also offering <xref target="RFC4588">RTP Retransmission</xref>.
+          </t>
+
+          <t>The audio stream is offered to be simulcasted as either as Opus
+          encoded (RID=5), or as G.711 (RID=7) or G.711 combined with LPC for
+          redundancy (RID=6). As LPC has insufficiient quality to be used as
+          stand alone, that encoding is not offered as an alternative for the
+          second simulcast stream. RID=5 is also restricted to 50 kbps.</t>
+
+          <t>The video source is offered to be sent as two simulcast streams,
+          both have two alternative simulcast formats. Redundancy and repair
+          is offered in the form of Flexible FEC as well as RTP
+          Retransmission. The Flexible FEC is not bound to any particular RTP
+          streams, is instead flexibile to be used across those RTP Streams
+          that are being sent part of this media description. </t>
+
+          <figure>
+            <artwork><![CDATA[v=0
+o=fred 238947129 823479223 IN IP6 2001:db8::c000:27d
+s=Offer from Simulcast Enabled Client using Redundancy
+t=0 0
+c=IN IP6 2001:db8::c000:27d
+a=group:BUNDLE foo bar
+m=audio 49200 RTP/AVP 97 98 99 105
+a=mid:foo
+a=rtpmap:97 G711/8000
+a=rtpmap:98 LPC/8000
+a=rtpmap:99 OPUS/48000/1
+a=rtpmap:105 RED/8000/1
+a=fmtp:99 useinbandfec=1; usedtx=0
+a=fmtp:105 97/98
+a=ptime:20
+a=maxptime:40
+a=rid:5 send pt=99;max-br=50000
+a=rid:6 send pt=105
+a=rid:7 send pt=97
+a=simulcast:send 5;6,7
+m=video 49600 RTP/AVPF 100 101 102 103 104
+a=mid:bar
+a=rtpmap:100 H264/90000
+a=rtpmap:101 VP8/90000
+a=rtpmap:102 rtx/90000
+a=rtpmap:103 rtx/90000
+a=rtpmap:104 flexfec/90000
+a=fmtp:100 profile-level-id=42c00d; max-fs=3600; max-mbps=54000
+a=fmtp:101 max-fs=3600; max-fr=30
+a=fmtp:102 apt=100;rtx-time=200
+a=fmtp:103 apt=101;rtx-time=200
+a=fmtp:104 repair-window=2000
+a=rid:1 send pt=100;max-width=1280;max-height=720;max-fps=30
+a=rid:2 send pt=101;max-width=1280;max-height=720;max-fps=30
+a=rid:3 send pt=100;max-width=640;max-height=360;max-br=300000
+a=rid:4 send pt=101;max-width=640;max-height=360;max-br=300000
+a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
+a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+a=rtcp-fb:* ccm pause nowait
+a=simulcast:send 1,2;3,4
+]]></artwork>
+          </figure>
+
+          <t></t>
+        </section>
       </section>
     </section>
 
     <section anchor="sec-rtp-aspects" title="RTP Aspects">
       <t>This section discusses what the different entities in a simulcast
-      media path can expect to happen on RTP level. This is explored from
+      media path can1 expect to happen on RTP level. This is explored from
       source to sink by starting in an endpoint with a media source that is
       simulcasted to an RTP middlebox. That RTP middlebox sends media sources
       both to other RTP middleboxes (cascaded middleboxes), as well as
@@ -1428,6 +1496,8 @@ a=simulcast:send 1;~2;~3
       <?rfc include='reference.RFC.8108'?>
 
       <?rfc include='reference.I-D.ietf-avtcore-multiplex-guidelines'?>
+
+      <?rfc include='reference.I-D.ietf-payload-flexible-fec-scheme'?>
     </references>
 
     <section anchor="sec-requirements" title="Requirements">
