@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="18" month="July" year="2017" />
+    <date day="22" month="November" year="2017" />
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -204,14 +204,6 @@
             stream at a given point in time, but not more than one (based on
             RTP timestamp). What format is used can change dynamically from
             one RTP packet to another.</t>
-
-            <t hangText="Simulcast Stream Identifier (SCID):">The
-            identification value used to refer to an individual simulcast
-            format, identical to the "rid-id" identification value for an
-            <xref target="I-D.ietf-mmusic-rid">RTP Payload Format
-            Restriction</xref> and the corresponding content of <xref
-            target="I-D.ietf-avtext-rid">"RtpStreamId" RTCP SDES
-            Item</xref>.</t>
           </list></t>
       </section>
 
@@ -486,7 +478,6 @@ sc-id-paused = "~"
 sc-id        = [sc-id-paused] rid-id
 ; SP defined in [RFC5234]
 ; rid-id defined in [I-D.ietf-mmusic-rid]
-
 ]]></artwork>
         </figure>
 
@@ -845,7 +836,6 @@ a=rid:2 send pt=98
 a=rid:3 recv pt=97
 a=simulcast:send 1;2 recv 3
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
-
 ]]></artwork>
           </figure>
 
@@ -886,7 +876,6 @@ a=rid:2 recv pt=98
 a=rid:3 send pt=97
 a=simulcast:recv 1;2 send 3
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
-
 ]]></artwork>
           </figure>
 
@@ -973,7 +962,6 @@ a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
 a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 a=rtcp-fb:* ccm pause nowait
 a=simulcast:send 1;~2;~3
-
 ]]></artwork>
           </figure>
 
@@ -991,8 +979,8 @@ a=simulcast:send 1;~2;~3
           both resolution and bit-rate limitations combined with application
           of FEC in the form of <xref
           target="I-D.ietf-payload-flexible-fec-scheme">Flexible FEC</xref>
-          and also offering <xref target="RFC4588">RTP Retransmission</xref>.
-          </t>
+          and also offering <xref target="RFC4588">RTP
+          Retransmission</xref>.</t>
 
           <t>The audio stream is offered to be simulcasted as either as Opus
           encoded (RID=5), or as G.711 (RID=7) or G.711 combined with LPC for
@@ -1005,7 +993,7 @@ a=simulcast:send 1;~2;~3
           is offered in the form of Flexible FEC as well as RTP
           Retransmission. The Flexible FEC is not bound to any particular RTP
           streams, is instead flexibile to be used across those RTP Streams
-          that are being sent part of this media description. </t>
+          that are being sent part of this media description.</t>
 
           <figure>
             <artwork><![CDATA[v=0
@@ -1417,8 +1405,6 @@ a=simulcast:send 1,2;3,4
       target="I-D.ietf-mmusic-rid"></xref> and <xref
       target="I-D.ietf-avtext-rid"></xref>. There are no additional security
       concerns related to their use in this specification.</t>
-
-      <!--Open issue: Review this! Are there security issues that arise specifically from this draft's use of RtpStreamId?-->
     </section>
 
     <section anchor="sec-contributors" title="Contributors">
@@ -1592,6 +1578,9 @@ a=simulcast:send 1,2;3,4
             <t>Amended overview section with a bit more explanation on the
             examples, and added an rid-id alternative for one of the
             streams.</t>
+
+            <t>Removed SCID also from the Terminology section, which was
+            forgotten in -09 when changing SCID to rid-id.</t>
           </list></t>
       </section>
 
