@@ -5,10 +5,10 @@
 Network Working Group                                          B. Burman
 Internet-Draft                                             M. Westerlund
 Intended status: Standards Track                                Ericsson
-Expires: May 26, 2018                                      S. Nandakumar
+Expires: June 2, 2018                                      S. Nandakumar
                                                                M. Zanaty
                                                                    Cisco
-                                                       November 22, 2017
+                                                       November 29, 2017
 
 
                 Using Simulcast in SDP and RTP Sessions
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 26, 2018.
+   This Internet-Draft will expire on June 2, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 1]
+Burman, et al.            Expires June 2, 2018                  [Page 1]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -92,7 +92,7 @@ Table of Contents
      5.6.  Signaling Examples  . . . . . . . . . . . . . . . . . . .  16
        5.6.1.  Single-Source Client  . . . . . . . . . . . . . . . .  16
        5.6.2.  Multi-Source Client . . . . . . . . . . . . . . . . .  18
-       5.6.3.  Audio and Video Simulcast and Redundancy  . . . . . .  21
+       5.6.3.  Simulcast and Redundancy  . . . . . . . . . . . . . .  20
    6.  RTP Aspects . . . . . . . . . . . . . . . . . . . . . . . . .  22
      6.1.  Outgoing from Endpoint with Media Source  . . . . . . . .  23
      6.2.  RTP Middlebox to Receiver . . . . . . . . . . . . . . . .  23
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 2]
+Burman, et al.            Expires June 2, 2018                  [Page 2]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -119,19 +119,20 @@ Internet-Draft                  Simulcast                  November 2017
      13.2.  Informative References . . . . . . . . . . . . . . . . .  31
    Appendix A.  Requirements . . . . . . . . . . . . . . . . . . . .  33
    Appendix B.  Changes From Earlier Versions  . . . . . . . . . . .  35
-     B.1.  Modifications Between WG Version -09 and -10  . . . . . .  35
-     B.2.  Modifications Between WG Version -08 and -09  . . . . . .  35
-     B.3.  Modifications Between WG Version -07 and -08  . . . . . .  36
-     B.4.  Modifications Between WG Version -06 and -07  . . . . . .  36
-     B.5.  Modifications Between WG Version -05 and -06  . . . . . .  36
-     B.6.  Modifications Between WG Version -04 and -05  . . . . . .  37
-     B.7.  Modifications Between WG Version -03 and -04  . . . . . .  37
-     B.8.  Modifications Between WG Version -02 and -03  . . . . . .  38
-     B.9.  Modifications Between WG Version -01 and -02  . . . . . .  38
-     B.10. Modifications Between WG Version -00 and -01  . . . . . .  38
-     B.11. Modifications Between Individual Version -00 and WG
-           Version -00 . . . . . . . . . . . . . . . . . . . . . . .  38
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  38
+     B.1.  Modifications Between WG Version -10 and -11  . . . . . .  35
+     B.2.  Modifications Between WG Version -09 and -10  . . . . . .  35
+     B.3.  Modifications Between WG Version -08 and -09  . . . . . .  35
+     B.4.  Modifications Between WG Version -07 and -08  . . . . . .  36
+     B.5.  Modifications Between WG Version -06 and -07  . . . . . .  36
+     B.6.  Modifications Between WG Version -05 and -06  . . . . . .  37
+     B.7.  Modifications Between WG Version -04 and -05  . . . . . .  37
+     B.8.  Modifications Between WG Version -03 and -04  . . . . . .  38
+     B.9.  Modifications Between WG Version -02 and -03  . . . . . .  38
+     B.10. Modifications Between WG Version -01 and -02  . . . . . .  38
+     B.11. Modifications Between WG Version -00 and -01  . . . . . .  39
+     B.12. Modifications Between Individual Version -00 and WG
+           Version -00 . . . . . . . . . . . . . . . . . . . . . . .  39
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  39
 
 1.  Introduction
 
@@ -161,15 +162,15 @@ Internet-Draft                  Simulcast                  November 2017
    and usage of simulcast when using SDP offer/answer and media
    transport over RTP.  The media transport topologies considered are
    point to point RTP sessions as well as centralized multi-party RTP
-   sessions, where a media sender will provide the simulcasted streams
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 3]
+Burman, et al.            Expires June 2, 2018                  [Page 3]
 
 Internet-Draft                  Simulcast                  November 2017
 
 
+   sessions, where a media sender will provide the simulcasted streams
    to an RTP middlebox or endpoint, and middleboxes may further
    distribute the simulcast streams to other middleboxes or endpoints.
    Usage of multicast or broadcast transport is out of scope and left
@@ -220,8 +221,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-
-Burman, et al.            Expires May 26, 2018                  [Page 4]
+Burman, et al.            Expires June 2, 2018                  [Page 4]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -277,7 +277,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 5]
+Burman, et al.            Expires June 2, 2018                  [Page 5]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -333,7 +333,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 6]
+Burman, et al.            Expires June 2, 2018                  [Page 6]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -389,7 +389,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 7]
+Burman, et al.            Expires June 2, 2018                  [Page 7]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -445,7 +445,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 8]
+Burman, et al.            Expires June 2, 2018                  [Page 8]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -501,7 +501,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                  [Page 9]
+Burman, et al.            Expires June 2, 2018                  [Page 9]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -557,7 +557,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 10]
+Burman, et al.            Expires June 2, 2018                 [Page 10]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -613,7 +613,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 11]
+Burman, et al.            Expires June 2, 2018                 [Page 11]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -669,7 +669,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 12]
+Burman, et al.            Expires June 2, 2018                 [Page 12]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -725,7 +725,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 13]
+Burman, et al.            Expires June 2, 2018                 [Page 13]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -781,7 +781,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 14]
+Burman, et al.            Expires June 2, 2018                 [Page 14]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -833,11 +833,11 @@ Internet-Draft                  Simulcast                  November 2017
    identification mechanism in BUNDLE allows relating RTP streams back
    to individual media descriptions, after which the above described
    RtpStreamId relations can be used.  Use of the RTP header extension
-   [RFC5285] for both MID and RtpStreamId identifications can be
+   [RFC8285] for both MID and RtpStreamId identifications can be
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 15]
+Burman, et al.            Expires June 2, 2018                 [Page 15]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -893,7 +893,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 16]
+Burman, et al.            Expires June 2, 2018                 [Page 16]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -908,8 +908,8 @@ Internet-Draft                  Simulcast                  November 2017
    m=video 49300 RTP/AVP 97 98
    a=rtpmap:97 H264/90000
    a=rtpmap:98 H264/90000
-   a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
-   a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+   a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
+   a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
    a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
    a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
    a=rid:1 send pt=97
@@ -949,7 +949,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 17]
+Burman, et al.            Expires June 2, 2018                 [Page 17]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -964,8 +964,8 @@ Internet-Draft                  Simulcast                  November 2017
    m=video 49674 RTP/AVP 97 98
    a=rtpmap:97 H264/90000
    a=rtpmap:98 H264/90000
-   a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
-   a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+   a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
+   a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
    a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
    a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
    a=rid:1 recv pt=97
@@ -1005,7 +1005,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 18]
+Burman, et al.            Expires June 2, 2018                 [Page 18]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1015,7 +1015,7 @@ Internet-Draft                  Simulcast                  November 2017
    enables use of a low number of RTP payload types.  Note that the use
    of both BUNDLE [I-D.ietf-mmusic-sdp-bundle-negotiation] and "a=rid"
    [I-D.ietf-mmusic-rid] recommends using the RTP header extension
-   [RFC5285] for carrying these RTP stream identification fields, which
+   [RFC8285] for carrying these RTP stream identification fields, which
    is consequently also included in the SDP.  Note also that for
    "a=rid", the corresponding SDES attribute is named RtpStreamId
    [I-D.ietf-avtext-rid].
@@ -1061,7 +1061,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 19]
+Burman, et al.            Expires June 2, 2018                 [Page 19]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1080,9 +1080,9 @@ Internet-Draft                  Simulcast                  November 2017
    a=rtpmap:100 H264-SVC/90000
    a=rtpmap:101 H264/90000
    a=rtpmap:103 VP8/90000
-   a=fmtp:100 profile-level-id=42400d; max-fs=3600; max-mbps=108000; \
+   a=fmtp:100 profile-level-id=42400d;max-fs=3600;max-mbps=216000; \
        mst-mode=NI-TC
-   a=fmtp:101 profile-level-id=42c00d; max-fs=3600; max-mbps=54000
+   a=fmtp:101 profile-level-id=42c00d;max-fs=3600;max-mbps=108000
    a=fmtp:103 max-fs=900; max-fr=30
    a=rid:1 send pt=100;max-width=1280;max-height=720;max-fps=60;depend=2
    a=rid:2 send pt=101;max-width=1280;max-height=720;max-fps=30
@@ -1109,41 +1109,39 @@ Internet-Draft                  Simulcast                  November 2017
 
                Figure 7: Fred's Multi-Source Simulcast Offer
 
-      Note: Empty lines in the SDP above are added only for readability
-      and would not be present in an actual SDP.
+5.6.3.  Simulcast and Redundancy
+
+   The example in this section looks at applying simulcast with audio
+   and video redundancy formats.  The audio media description uses codec
+   and bitrate restrictions, combining it with RTP Payload for Redundant
 
 
 
-
-
-
-Burman, et al.            Expires May 26, 2018                 [Page 20]
+Burman, et al.            Expires June 2, 2018                 [Page 20]
 
 Internet-Draft                  Simulcast                  November 2017
 
 
-5.6.3.  Audio and Video Simulcast and Redundancy
+   Audio Data [RFC2198] for enhanced packet loss resilience.  The video
+   media description applies both resolution and bitrate restrictions,
+   combining it with FEC in the form of Flexible FEC
+   [I-D.ietf-payload-flexible-fec-scheme] and RTP Retransmission
+   [RFC4588].
 
-   This examples look at applying simulcast to audio for codec and bit-
-   rat restrictions and combined with using RTP Payload for Redundant
-   Audio Data [RFC2198] to provide redundancy for packet loss
-   resiliance.  The video applies both resolution and bit-rate
-   limitations combined with application of FEC in the form of Flexible
-   FEC [I-D.ietf-payload-flexible-fec-scheme] and also offering RTP
-   Retransmission [RFC4588].
-
-   The audio stream is offered to be simulcasted as either as Opus
-   encoded (RID=5), or as G.711 (RID=7) or G.711 combined with LPC for
-   redundancy (RID=6).  As LPC has insufficiient quality to be used as
-   stand alone, that encoding is not offered as an alternative for the
-   second simulcast stream.  RID=5 is also restricted to 50 kbps.
+   The audio source is offered to be sent as two simulcast streams.  The
+   first simulcast stream is encoded with Opus, restricted to 50 kbps
+   (rid-id=5), and the second simulcast stream is encoded either with
+   G.711 (rid-id=7) or with G.711 combined with LPC for redundancy (rid-
+   id=6).  In this example, stand-alone LPC is not offered as an
+   alternative for the second simulcast stream, which could e.g. be
+   motivated by not providing sufficient quality.
 
    The video source is offered to be sent as two simulcast streams, both
-   have two alternative simulcast formats.  Redundancy and repair is
-   offered in the form of Flexible FEC as well as RTP Retransmission.
-   The Flexible FEC is not bound to any particular RTP streams, is
-   instead flexibile to be used across those RTP Streams that are being
-   sent part of this media description.
+   with two alternative simulcast formats.  Redundancy and repair are
+   offered in the form of both Flexible FEC and RTP Retransmission.  The
+   Flexible FEC is not bound to any particular RTP streams and is
+   therefore possible to use across all RTP streams that are being sent
+   as part of this media description.
 
 
 
@@ -1173,7 +1171,9 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 21]
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 21]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1197,6 +1197,8 @@ Internet-Draft                  Simulcast                  November 2017
    a=rid:5 send pt=99;max-br=50000
    a=rid:6 send pt=105
    a=rid:7 send pt=97
+   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
+   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
    a=simulcast:send 5;6,7
    m=video 49600 RTP/AVPF 100 101 102 103 104
    a=mid:bar
@@ -1205,7 +1207,7 @@ Internet-Draft                  Simulcast                  November 2017
    a=rtpmap:102 rtx/90000
    a=rtpmap:103 rtx/90000
    a=rtpmap:104 flexfec/90000
-   a=fmtp:100 profile-level-id=42c00d; max-fs=3600; max-mbps=54000
+   a=fmtp:100 profile-level-id=42c00d;max-fs=3600;max-mbps=108000
    a=fmtp:101 max-fs=3600; max-fr=30
    a=fmtp:102 apt=100;rtx-time=200
    a=fmtp:103 apt=101;rtx-time=200
@@ -1222,18 +1224,18 @@ Internet-Draft                  Simulcast                  November 2017
 6.  RTP Aspects
 
    This section discusses what the different entities in a simulcast
-   media path can1 expect to happen on RTP level.  This is explored from
+   media path can expect to happen on RTP level.  This is explored from
    source to sink by starting in an endpoint with a media source that is
-   simulcasted to an RTP middlebox.  That RTP middlebox sends media
-   sources both to other RTP middleboxes (cascaded middleboxes), as well
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 22]
+Burman, et al.            Expires June 2, 2018                 [Page 22]
 
 Internet-Draft                  Simulcast                  November 2017
 
 
+   simulcasted to an RTP middlebox.  That RTP middlebox sends media
+   sources both to other RTP middleboxes (cascaded middleboxes), as well
    as selecting some simulcast format of the media source and sending it
    to receiving endpoints.  Different types of RTP middleboxes and their
    usage of the different simulcast formats results in several different
@@ -1283,9 +1285,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-
-
-Burman, et al.            Expires May 26, 2018                 [Page 23]
+Burman, et al.            Expires June 2, 2018                 [Page 23]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 24]
+Burman, et al.            Expires June 2, 2018                 [Page 24]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 25]
+Burman, et al.            Expires June 2, 2018                 [Page 25]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1453,7 +1453,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 26]
+Burman, et al.            Expires June 2, 2018                 [Page 26]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1509,7 +1509,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 27]
+Burman, et al.            Expires June 2, 2018                 [Page 27]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1523,10 +1523,10 @@ Internet-Draft                  Simulcast                  November 2017
 
    Quality of Service:  When using simulcast it might be of interest to
       prioritize a particular simulcast stream, rather than applying
-      equal treatment to all streams.  For example, lower bit-rate
-      streams may be prioritized over higher bit-rate streams to
-      minimize congestion or packet losses in the low bit-rate streams.
-      Thus, there is a benefit to use a simulcast solution with good QoS
+      equal treatment to all streams.  For example, lower bitrate
+      streams may be prioritized over higher bitrate streams to minimize
+      congestion or packet losses in the low bitrate streams.  Thus,
+      there is a benefit to use a simulcast solution with good QoS
       support.
 
    NAT/FW Traversal:  Using multiple RTP sessions incurs more cost for
@@ -1565,7 +1565,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 28]
+Burman, et al.            Expires June 2, 2018                 [Page 28]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1621,7 +1621,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 29]
+Burman, et al.            Expires June 2, 2018                 [Page 29]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1670,14 +1670,14 @@ Internet-Draft                  Simulcast                  November 2017
               Holmberg, C., Alvestrand, H., and C. Jennings,
               "Negotiating Media Multiplexing Using the Session
               Description Protocol (SDP)", draft-ietf-mmusic-sdp-bundle-
-              negotiation-40 (work in progress), November 2017.
+              negotiation-42 (work in progress), November 2017.
 
 
 
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 30]
+Burman, et al.            Expires June 2, 2018                 [Page 30]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1733,7 +1733,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 31]
+Burman, et al.            Expires June 2, 2018                 [Page 31]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1766,10 +1766,6 @@ Internet-Draft                  Simulcast                  November 2017
               Correction", RFC 5109, DOI 10.17487/RFC5109, December
               2007, <https://www.rfc-editor.org/info/rfc5109>.
 
-   [RFC5285]  Singer, D. and H. Desineni, "A General Mechanism for RTP
-              Header Extensions", RFC 5285, DOI 10.17487/RFC5285, July
-              2008, <https://www.rfc-editor.org/info/rfc5285>.
-
    [RFC5583]  Schierl, T. and S. Wenger, "Signaling Media Decoding
               Dependency in the Session Description Protocol (SDP)",
               RFC 5583, DOI 10.17487/RFC5583, July 2009,
@@ -1785,19 +1781,18 @@ Internet-Draft                  Simulcast                  November 2017
               DOI 10.17487/RFC6190, May 2011,
               <https://www.rfc-editor.org/info/rfc6190>.
 
-
-
-
-
-Burman, et al.            Expires May 26, 2018                 [Page 32]
-
-Internet-Draft                  Simulcast                  November 2017
-
-
    [RFC6236]  Johansson, I. and K. Jung, "Negotiation of Generic Image
               Attributes in the Session Description Protocol (SDP)",
               RFC 6236, DOI 10.17487/RFC6236, May 2011,
               <https://www.rfc-editor.org/info/rfc6236>.
+
+
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 32]
+
+Internet-Draft                  Simulcast                  November 2017
+
 
    [RFC6464]  Lennox, J., Ed., Ivov, E., and E. Marocco, "A Real-time
               Transport Protocol (RTP) Header Extension for Client-to-
@@ -1830,6 +1825,11 @@ Internet-Draft                  Simulcast                  November 2017
               RFC 8108, DOI 10.17487/RFC8108, March 2017,
               <https://www.rfc-editor.org/info/rfc8108>.
 
+   [RFC8285]  Singer, D., Desineni, H., and R. Even, Ed., "A General
+              Mechanism for RTP Header Extensions", RFC 8285,
+              DOI 10.17487/RFC8285, October 2017,
+              <https://www.rfc-editor.org/info/rfc8285>.
+
 Appendix A.  Requirements
 
    The following requirements have to be met to support the use cases
@@ -1845,7 +1845,7 @@ Appendix A.  Requirements
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 33]
+Burman, et al.            Expires June 2, 2018                 [Page 33]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1901,7 +1901,7 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 34]
+Burman, et al.            Expires June 2, 2018                 [Page 34]
 
 Internet-Draft                  Simulcast                  November 2017
 
@@ -1921,7 +1921,27 @@ Appendix B.  Changes From Earlier Versions
 
    NOTE TO RFC EDITOR: Please remove this section prior to publication.
 
-B.1.  Modifications Between WG Version -09 and -10
+B.1.  Modifications Between WG Version -10 and -11
+
+   o  Added new SDP example section on Simulcast and Redundancy,
+      including both RED (RFC2198), RTP RTX (RFC4588), and FEC (draft-
+      ietf-payload-flexible-fec-scheme).
+
+   o  Removed restriction that "related" payload formats in an RTP
+      stream (such as CN and DTMF) must not have their own rid-id, since
+      there is no reason to forbid this and corresponding clarification
+      is made in draft-ietf-mmusic-rid.
+
+   o  Removed any mention of source-specific signaling and the reference
+      to RFC5576, since draft-ietf-mmusic-rid is not defined for source-
+      specific signaling.
+
+   o  Changed some SDP examples to use a=rid restrictions instead of
+      a=imageattr.
+
+   o  Changed reference from the obsoleted RFC 5285 to RFC 8285.
+
+B.2.  Modifications Between WG Version -09 and -10
 
    o  Amended overview section with a bit more explanation on the
       examples, and added an rid-id alternative for one of the streams.
@@ -1929,10 +1949,18 @@ B.1.  Modifications Between WG Version -09 and -10
    o  Removed SCID also from the Terminology section, which was
       forgotten in -09 when changing SCID to rid-id.
 
-B.2.  Modifications Between WG Version -08 and -09
+B.3.  Modifications Between WG Version -08 and -09
 
    o  Changed SCID to rid-id, to align with ietf-draft-mmusic-rid
       naming.
+
+
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 35]
+
+Internet-Draft                  Simulcast                  November 2017
+
 
    o  Changed Overview to be based on examples and shortened it.
 
@@ -1953,16 +1981,7 @@ B.2.  Modifications Between WG Version -08 and -09
 
    o  Editorial corrections and clarifications.
 
-
-
-
-
-Burman, et al.            Expires May 26, 2018                 [Page 35]
-
-Internet-Draft                  Simulcast                  November 2017
-
-
-B.3.  Modifications Between WG Version -07 and -08
+B.4.  Modifications Between WG Version -07 and -08
 
    o  Correcting syntax of SDP examples in section 6.6.1, as found by
       Inaki Baz Castillo.
@@ -1974,7 +1993,7 @@ B.3.  Modifications Between WG Version -07 and -08
 
    o  Adding list of modifications between -06 and -07.
 
-B.4.  Modifications Between WG Version -06 and -07
+B.5.  Modifications Between WG Version -06 and -07
 
    o  A scope clarification, as result of the discussion with Roni Even.
 
@@ -1991,10 +2010,18 @@ B.4.  Modifications Between WG Version -06 and -07
    o  Removal of note in Section 6.4 as result of issue raised by Roni
       Even.
 
+
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 36]
+
+Internet-Draft                  Simulcast                  November 2017
+
+
    o  Use of "m=" has been changed to media description and a few other
       editorial improvements and clarifications.
 
-B.5.  Modifications Between WG Version -05 and -06
+B.6.  Modifications Between WG Version -05 and -06
 
    o  Added section on RTP Aspects
 
@@ -2010,17 +2037,9 @@ B.5.  Modifications Between WG Version -05 and -06
    o  Updated References list and moved around some references between
       informative and normative categories.
 
-
-
-
-Burman, et al.            Expires May 26, 2018                 [Page 36]
-
-Internet-Draft                  Simulcast                  November 2017
-
-
    o  Editorial improvements and corrections.
 
-B.6.  Modifications Between WG Version -04 and -05
+B.7.  Modifications Between WG Version -04 and -05
 
    o  Aligned with recent changes in draft-ietf-mmusic-rid and draft-
       ietf-avtext-rid.
@@ -2043,7 +2062,19 @@ B.6.  Modifications Between WG Version -04 and -05
 
    o  Editorial improvements and corrections.
 
-B.7.  Modifications Between WG Version -03 and -04
+
+
+
+
+
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 37]
+
+Internet-Draft                  Simulcast                  November 2017
+
+
+B.8.  Modifications Between WG Version -03 and -04
 
    o  Changed to only use RID identification, as was consensus during
       IETF 94.
@@ -2064,17 +2095,7 @@ B.7.  Modifications Between WG Version -03 and -04
 
    o  Editorial improvements.
 
-
-
-
-
-
-Burman, et al.            Expires May 26, 2018                 [Page 37]
-
-Internet-Draft                  Simulcast                  November 2017
-
-
-B.8.  Modifications Between WG Version -02 and -03
+B.9.  Modifications Between WG Version -02 and -03
 
    o  Removed text on multicast / broadcast from use cases, since it is
       not supported by the solution.
@@ -2091,7 +2112,7 @@ B.8.  Modifications Between WG Version -02 and -03
    o  Added a section on limitations of the current proposal, including
       identification method specific limitations.
 
-B.9.  Modifications Between WG Version -01 and -02
+B.10.  Modifications Between WG Version -01 and -02
 
    o  Relying on the new RID solution for codec constraints and
       configuration identification.  This has resulted in changes in
@@ -2102,6 +2123,13 @@ B.9.  Modifications Between WG Version -01 and -02
       simulcast stream and simulcast format respectively, and improved
       definitions for them.
 
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 38]
+
+Internet-Draft                  Simulcast                  November 2017
+
+
    o  Clarification that it is possible to switch between simulcast
       version alternatives, but that only a single one be used at any
       point in time.
@@ -2109,26 +2137,15 @@ B.9.  Modifications Between WG Version -01 and -02
    o  Changed the definition so that ordering of simulcast formats for a
       specific simulcast stream do have a preference order.
 
-B.10.  Modifications Between WG Version -00 and -01
+B.11.  Modifications Between WG Version -00 and -01
 
    o  No changes.  Only preventing expiry.
 
-B.11.  Modifications Between Individual Version -00 and WG Version -00
+B.12.  Modifications Between Individual Version -00 and WG Version -00
 
    o  Added this appendix.
 
 Authors' Addresses
-
-
-
-
-
-
-
-Burman, et al.            Expires May 26, 2018                 [Page 38]
-
-Internet-Draft                  Simulcast                  November 2017
-
 
    Bo Burman
    Ericsson
@@ -2158,6 +2175,17 @@ Internet-Draft                  Simulcast                  November 2017
    Email: snandaku@cisco.com
 
 
+
+
+
+
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 39]
+
+Internet-Draft                  Simulcast                  November 2017
+
+
    Mo Zanaty
    Cisco
    170 West Tasman Drive
@@ -2181,4 +2209,32 @@ Internet-Draft                  Simulcast                  November 2017
 
 
 
-Burman, et al.            Expires May 26, 2018                 [Page 39]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Burman, et al.            Expires June 2, 2018                 [Page 40]

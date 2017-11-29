@@ -24,20 +24,20 @@
 
           <city>SE-164 60 Stockholm</city>
 
-          <region></region>
+          <region/>
 
-          <code></code>
+          <code/>
 
           <country>Sweden</country>
         </postal>
 
-        <phone></phone>
+        <phone/>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>bo.burman@ericsson.com</email>
 
-        <uri></uri>
+        <uri/>
       </address>
     </author>
 
@@ -75,13 +75,13 @@
           <country>USA</country>
         </postal>
 
-        <phone></phone>
+        <phone/>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>snandaku@cisco.com</email>
 
-        <uri></uri>
+        <uri/>
       </address>
     </author>
 
@@ -101,17 +101,17 @@
           <country>USA</country>
         </postal>
 
-        <phone></phone>
+        <phone/>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>mzanaty@cisco.com</email>
 
-        <uri></uri>
+        <uri/>
       </address>
     </author>
 
-    <date day="ww" month="November" year="2017" />
+    <date day="27" month="November" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -166,7 +166,7 @@
     </section>
 
     <section anchor="sec-definitions" title="Definitions">
-      <t></t>
+      <t/>
 
       <section title="Terminology">
         <t>This document makes use of the terminology defined in <xref
@@ -174,25 +174,24 @@
         Topologies</xref>. The following terms are especially noted or here
         defined:<list style="hanging">
             <t hangText="RTP Mixer:">An RTP middle node, defined in <xref
-            target="RFC7667"></xref> (Section 3.6 to 3.9).</t>
+            target="RFC7667"/> (Section 3.6 to 3.9).</t>
 
             <t hangText="RTP Session:">An association among a group of
             participants communicating with RTP, as defined in <xref
-            target="RFC3550"></xref> and amended by <xref
-            target="RFC7656"></xref>.</t>
+            target="RFC3550"/> and amended by <xref target="RFC7656"/>.</t>
 
             <t hangText="RTP Stream:">A stream of RTP packets containing media
-            data, as defined in <xref target="RFC7656"></xref>.</t>
+            data, as defined in <xref target="RFC7656"/>.</t>
 
             <t hangText="RTP Switch:">A common short term for the terms
             "switching RTP mixer", "source projecting middlebox", and "video
-            switching MCU" as discussed in <xref target="RFC7667"></xref>.</t>
+            switching MCU" as discussed in <xref target="RFC7667"/>.</t>
 
             <t hangText="Simulcast Stream:">One encoded stream or dependent
             stream from a set of concurrently transmitted encoded streams and
             optional dependent streams, all sharing a common media source, as
-            defined in <xref target="RFC7656"></xref>. For example, HD and
-            thumbnail video simulcast versions of a single media source sent
+            defined in <xref target="RFC7656"/>. For example, HD and thumbnail
+            video simulcast versions of a single media source sent
             concurrently as separate RTP Streams.</t>
 
             <t hangText="Simulcast Format:">Different formats of a simulcast
@@ -307,9 +306,9 @@
         <t>It is also common that a currently active speaker participant is
         shown in larger size or higher quality than other participants (the
         sampling or bitrate aspects of <xref
-        target="sec-diverse-receivers"></xref>). Not sending the active
-        speaker media back to itself means there is some other participant's
-        media that instead has to receive special handling towards the active
+        target="sec-diverse-receivers"/>). Not sending the active speaker
+        media back to itself means there is some other participant's media
+        that instead has to receive special handling towards the active
         speaker; typically the previous active speaker. This way, the
         previously active speaker is needed both in larger size (to current
         active speaker) and in small size (to the rest of the participants),
@@ -322,7 +321,7 @@
         <t>The application logic that controls the communication session may
         allow receiving participants to apply preferences to the
         characteristics of the RTP stream they receive, for example in terms
-        of the aspects listed in <xref target="sec-diverse-receivers"></xref>.
+        of the aspects listed in <xref target="sec-diverse-receivers"/>.
         Sending a simulcast of RTP streams is one way of accommodating
         receivers with conflicting or otherwise incompatible preferences.</t>
       </section>
@@ -332,14 +331,14 @@
       <t>This memo defines <xref target="RFC4566">SDP</xref> signaling that
       covers the above described simulcast use cases and functionalities. A
       number of requirements for such signaling are elaborated in <xref
-      target="sec-requirements"></xref>.</t>
+      target="sec-requirements"/>.</t>
 
       <t>A new SDP media level attribute "a=simulcast" is defined. The
       attribute describes, independently for send and receive directions, the
       number of simulcast RTP streams as well as potential alternative formats
       for each simulcast RTP stream. Each simulcast RTP stream, including
       alternatives, is identified using the RID identifier (rid-id), defined
-      in <xref target="I-D.ietf-mmusic-rid"></xref>.</t>
+      in <xref target="I-D.ietf-mmusic-rid"/>.</t>
 
       <figure align="left">
         <artwork align="left"><![CDATA[a=simulcast:send 1;2,3 recv 4
@@ -360,8 +359,8 @@
       simulcast) according to rid-id 4.</t>
 
       <t>The RID mechanism, as defined in <xref
-      target="I-D.ietf-mmusic-rid"></xref>, enables an SDP offerer or answerer
-      to specify a number of different RTP stream restrictions for a rid-id by
+      target="I-D.ietf-mmusic-rid"/>, enables an SDP offerer or answerer to
+      specify a number of different RTP stream restrictions for a rid-id by
       using the "a=rid" line. Examples of such restrictions are maximum
       bitrate, maximum spatial video resolution (width and height), maximum
       video framerate, etc. Each rid-id may also be restricted to use only a
@@ -435,8 +434,8 @@ a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 
       <t>It is assumed that a single SDP media description is used to describe
       a single media source. This is aligned with the concepts defined in
-      <xref target="RFC7656"></xref> and will work in a WebRTC context, both
-      with and without <xref
+      <xref target="RFC7656"/> and will work in a WebRTC context, both with
+      and without <xref
       target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref> grouping
       of media descriptions.</t>
 
@@ -444,19 +443,18 @@ a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
       streams separately. Each direction can in turn describe one or more
       simulcast streams, separated by semicolon. The identifiers describing
       simulcast streams on the "a=simulcast" line are rid-id, as defined by
-      "a=rid" lines in <xref target="I-D.ietf-mmusic-rid"></xref>. Each
-      simulcast stream can be offered as a list of alternative rid-id, with
-      each alternative separated by comma (not in the examples above). A
-      detailed specification can be found in <xref
-      target="sec-details"></xref> and more detailed examples are outlined in
-      <xref target="sec-ex"></xref>.</t>
+      "a=rid" lines in <xref target="I-D.ietf-mmusic-rid"/>. Each simulcast
+      stream can be offered as a list of alternative rid-id, with each
+      alternative separated by comma (not in the examples above). A detailed
+      specification can be found in <xref target="sec-details"/> and more
+      detailed examples are outlined in <xref target="sec-ex"/>.</t>
     </section>
 
     <section anchor="sec-details" title="Detailed Description">
       <t>This section further details the overview <xref
       target="sec-overview">above</xref>. First, formal syntax is <xref
       target="sec-attr">provided</xref>, followed by the rest of the SDP
-      attribute definition in <xref target="sec-cap"></xref>. <xref
+      attribute definition in <xref target="sec-cap"/>. <xref
       target="sec-relating">Relating Simulcast Streams </xref> provides the
       definition of the RTP/RTCP mechanisms used. The section is concluded
       with a number of examples.</t>
@@ -542,8 +540,8 @@ sc-id        = [sc-id-paused] rid-id
 
         <t>rid-id that have explicit <xref
         target="RFC5583">dependencies</xref> <xref
-        target="I-D.ietf-mmusic-rid"></xref> to other rid-id (even in the same
-        media description) MAY be used.</t>
+        target="I-D.ietf-mmusic-rid"/> to other rid-id (even in the same media
+        description) MAY be used.</t>
 
         <t>Use of more than a single, alternative simulcast format for a
         simulcast stream MAY be specified as part of the attribute parameters
@@ -572,8 +570,8 @@ sc-id        = [sc-id-paused] rid-id
         pause/resume MUST also be included under the same "m=" line where
         "a=simulcast" is included. All RTP payload types related to such
         initially paused simulcast stream MUST be listed in the SDP as
-        pause/resume capable as specified by <xref target="RFC7728"></xref>,
-        e.g. by using the "*" wildcard format for "a=rtcp-fb".</t>
+        pause/resume capable as specified by <xref target="RFC7728"/>, e.g. by
+        using the "*" wildcard format for "a=rtcp-fb".</t>
 
         <t>An initially paused simulcast stream in "send" direction for the
         part sending the SDP MUST be considered equivalent to an unsolicited
@@ -827,8 +825,8 @@ a=rtpmap:0 PCMU/8000
 m=video 49300 RTP/AVP 97 98
 a=rtpmap:97 H264/90000
 a=rtpmap:98 H264/90000
-a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
-a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
+a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
 a=rid:1 send pt=97 
@@ -867,8 +865,8 @@ a=rtpmap:0 PCMU/8000
 m=video 49674 RTP/AVP 97 98
 a=rtpmap:97 H264/90000
 a=rtpmap:98 H264/90000
-a=fmtp:97 profile-level-id=42c01f; max-fs=3600; max-mbps=108000
-a=fmtp:98 profile-level-id=42c00b; max-fs=240; max-mbps=3600
+a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
+a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
 a=imageattr:97 send [x=1280,y=720] recv [x=1280,y=720]
 a=imageattr:98 send [x=320,y=180] recv [x=320,y=180]
 a=rid:1 recv pt=97
@@ -936,9 +934,9 @@ a=mid:bar
 a=rtpmap:100 H264-SVC/90000
 a=rtpmap:101 H264/90000
 a=rtpmap:103 VP8/90000
-a=fmtp:100 profile-level-id=42400d; max-fs=3600; max-mbps=108000; \
+a=fmtp:100 profile-level-id=424020;max-fs=3600;max-mbps=216000; \
     mst-mode=NI-TC
-a=fmtp:101 profile-level-id=42c00d; max-fs=3600; max-mbps=54000
+a=fmtp:101 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
 a=fmtp:103 max-fs=900; max-fr=30
 a=rid:1 send pt=100;max-width=1280;max-height=720;max-fps=60;depend=2
 a=rid:2 send pt=101;max-width=1280;max-height=720;max-fps=30
@@ -965,35 +963,34 @@ a=simulcast:send 1;~2;~3
 ]]></artwork>
           </figure>
 
-          <t><list style="empty">
-              <t>Note: Empty lines in the SDP above are added only for
-              readability and would not be present in an actual SDP.</t>
-            </list></t>
+          <t>TODO: Check profile-level-id and max-mbps for SVC streams</t>
         </section>
 
-        <section title="Audio and Video Simulcast and Redundancy">
-          <t>This examples look at applying simulcast to audio for codec and
-          bit-rat restrictions and combined with using <xref
-          target="RFC2198">RTP Payload for Redundant Audio Data</xref> to
-          provide redundancy for packet loss resiliance. The video applies
-          both resolution and bit-rate limitations combined with application
-          of FEC in the form of <xref
+        <section title="Simulcast and Redundancy">
+          <t>The example in this section looks at applying simulcast with
+          audio and video redundancy formats. The audio media description uses
+          codec and bitrate restrictions, combining it with <xref
+          target="RFC2198">RTP Payload for Redundant Audio Data</xref> for
+          enhanced packet loss resilience. The video media description applies
+          both resolution and bitrate restrictions, combining it with FEC in
+          the form of <xref
           target="I-D.ietf-payload-flexible-fec-scheme">Flexible FEC</xref>
-          and also offering <xref target="RFC4588">RTP Retransmission</xref>.
-          </t>
+          and <xref target="RFC4588">RTP Retransmission</xref>.</t>
 
-          <t>The audio stream is offered to be simulcasted as either as Opus
-          encoded (RID=5), or as G.711 (RID=7) or G.711 combined with LPC for
-          redundancy (RID=6). As LPC has insufficiient quality to be used as
-          stand alone, that encoding is not offered as an alternative for the
-          second simulcast stream. RID=5 is also restricted to 50 kbps.</t>
+          <t>The audio source is offered to be sent as two simulcast streams.
+          The first simulcast stream is encoded with Opus, restricted to 50
+          kbps (rid-id=5), and the second simulcast stream is encoded either
+          with G.711 (rid-id=7) or with G.711 combined with LPC for redundancy
+          (rid-id=6). In this example, stand-alone LPC is not offered as an
+          alternative for the second simulcast stream, e.g. motivated by not
+          providing sufficient quality.</t>
 
           <t>The video source is offered to be sent as two simulcast streams,
-          both have two alternative simulcast formats. Redundancy and repair
-          is offered in the form of Flexible FEC as well as RTP
-          Retransmission. The Flexible FEC is not bound to any particular RTP
-          streams, is instead flexibile to be used across those RTP Streams
-          that are being sent part of this media description. </t>
+          both with two alternative simulcast formats. Redundancy and repair
+          are offered in the form of both Flexible FEC and RTP Retransmission.
+          The Flexible FEC is not bound to any particular RTP streams and is
+          therefore possible to use across all RTP streams that are being sent
+          as part of this media description.</t>
 
           <figure>
             <artwork><![CDATA[v=0
@@ -1015,6 +1012,8 @@ a=maxptime:40
 a=rid:5 send pt=99;max-br=50000
 a=rid:6 send pt=105
 a=rid:7 send pt=97
+a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
+a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 a=simulcast:send 5;6,7
 m=video 49600 RTP/AVPF 100 101 102 103 104
 a=mid:bar
@@ -1023,7 +1022,7 @@ a=rtpmap:101 VP8/90000
 a=rtpmap:102 rtx/90000
 a=rtpmap:103 rtx/90000
 a=rtpmap:104 flexfec/90000
-a=fmtp:100 profile-level-id=42c00d; max-fs=3600; max-mbps=54000
+a=fmtp:100 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
 a=fmtp:101 max-fs=3600; max-fr=30
 a=fmtp:102 apt=100;rtx-time=200
 a=fmtp:103 apt=101;rtx-time=200
@@ -1039,14 +1038,14 @@ a=simulcast:send 1,2;3,4
 ]]></artwork>
           </figure>
 
-          <t></t>
+          <t/>
         </section>
       </section>
     </section>
 
     <section anchor="sec-rtp-aspects" title="RTP Aspects">
       <t>This section discusses what the different entities in a simulcast
-      media path can1 expect to happen on RTP level. This is explored from
+      media path can expect to happen on RTP level. This is explored from
       source to sink by starting in an endpoint with a media source that is
       simulcasted to an RTP middlebox. That RTP middlebox sends media sources
       both to other RTP middleboxes (cascaded middleboxes), as well as
@@ -1094,7 +1093,7 @@ a=simulcast:send 1,2;3,4
         receiver at any instant in time, even if the selected simulcast stream
         may vary. For cases where this does not hold due to application needs,
         then the RTP stream aspects will fall under the middlebox to middlebox
-        case <xref target="sec-rtp-box-box"></xref>.</t>
+        case <xref target="sec-rtp-box-box"/>.</t>
 
         <t>The selection of which simulcast streams to forward towards the
         receiver, is application specific. However, in conferencing
@@ -1295,15 +1294,15 @@ a=simulcast:send 1,2;3,4
       target="I-D.ietf-avtcore-multiplex-guidelines">Guidelines for
       Multiplexing in RTP</xref>. Discussion and clarification on how to
       handle multiple streams in an RTP session can be found in <xref
-      target="RFC8108"></xref>.</t>
+      target="RFC8108"/>.</t>
 
       <t>The network aspects that are relevant for simulcast are:<list
           style="hanging">
           <t hangText="Quality of Service:">When using simulcast it might be
           of interest to prioritize a particular simulcast stream, rather than
-          applying equal treatment to all streams. For example, lower bit-rate
-          streams may be prioritized over higher bit-rate streams to minimize
-          congestion or packet losses in the low bit-rate streams. Thus, there
+          applying equal treatment to all streams. For example, lower bitrate
+          streams may be prioritized over higher bitrate streams to minimize
+          congestion or packet losses in the low bitrate streams. Thus, there
           is a benefit to use a simulcast solution with good QoS support.</t>
 
           <t hangText="NAT/FW Traversal:">Using multiple RTP sessions incurs
@@ -1313,7 +1312,7 @@ a=simulcast:send 1,2;3,4
           Negotiation Using SDP Port Numbers</xref>.</t>
         </list></t>
 
-      <t></t>
+      <t/>
 
       <section title="Bitrate Adaptation">
         <t>Use of multiple simulcast streams can require a significant amount
@@ -1324,7 +1323,7 @@ a=simulcast:send 1,2;3,4
         prioritize when allocating available bitrate among the simulcast
         streams in such adaptation SHOULD be taken from the simulcast stream
         order on the "a=simulcast" line and ordering of alternative simulcast
-        formats <xref target="sec-cap"></xref>. Simulcast streams that have
+        formats <xref target="sec-cap"/>. Simulcast streams that have
         pause/resume capability and that would be given such low bitrate by
         the adaptation process that they are considered not really useful can
         be temporarily paused until the limiting condition clears.</t>
@@ -1357,9 +1356,8 @@ a=simulcast:send 1,2;3,4
       <t>This document requests to register a new media-level SDP attribute,
       "simulcast", in the "att-field (media level only)" registry within the
       SDP parameters registry, according to the procedures of <xref
-      target="RFC4566"></xref> and <xref
-      target="I-D.ietf-mmusic-sdp-mux-attributes"></xref>.<list
-          style="hanging">
+      target="RFC4566"/> and <xref
+      target="I-D.ietf-mmusic-sdp-mux-attributes"/>.<list style="hanging">
           <t hangText="Contact name, email:">IETF, contacted via
           mmusic@ietf.org, or a successor address designated by IESG</t>
 
@@ -1371,7 +1369,7 @@ a=simulcast:send 1,2;3,4
           <t hangText="Charset dependent:">No</t>
 
           <t hangText="Attribute value:">sc-value; see <xref
-          target="sec-attr"></xref> of RFC XXXX.</t>
+          target="sec-attr"/> of RFC XXXX.</t>
 
           <t hangText="Purpose:">Signals simulcast capability for a set of RTP
           streams</t>
