@@ -93,17 +93,17 @@ Table of Contents
        5.6.1.  Single-Source Client  . . . . . . . . . . . . . . . .  16
        5.6.2.  Multi-Source Client . . . . . . . . . . . . . . . . .  18
        5.6.3.  Simulcast and Redundancy  . . . . . . . . . . . . . .  20
-   6.  RTP Aspects . . . . . . . . . . . . . . . . . . . . . . . . .  22
+   6.  RTP Aspects . . . . . . . . . . . . . . . . . . . . . . . . .  23
      6.1.  Outgoing from Endpoint with Media Source  . . . . . . . .  23
      6.2.  RTP Middlebox to Receiver . . . . . . . . . . . . . . . .  23
        6.2.1.  Media-Switching Mixer . . . . . . . . . . . . . . . .  24
        6.2.2.  Selective Forwarding Middlebox  . . . . . . . . . . .  26
      6.3.  RTP Middlebox to RTP Middlebox  . . . . . . . . . . . . .  27
-   7.  Network Aspects . . . . . . . . . . . . . . . . . . . . . . .  27
+   7.  Network Aspects . . . . . . . . . . . . . . . . . . . . . . .  28
      7.1.  Bitrate Adaptation  . . . . . . . . . . . . . . . . . . .  28
    8.  Limitation  . . . . . . . . . . . . . . . . . . . . . . . . .  28
    9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  29
-   10. Security Considerations . . . . . . . . . . . . . . . . . . .  29
+   10. Security Considerations . . . . . . . . . . . . . . . . . . .  30
    11. Contributors  . . . . . . . . . . . . . . . . . . . . . . . .  30
    12. Acknowledgements  . . . . . . . . . . . . . . . . . . . . . .  30
 
@@ -117,18 +117,18 @@ Internet-Draft                  Simulcast                  December 2017
    13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  30
      13.1.  Normative References . . . . . . . . . . . . . . . . . .  30
      13.2.  Informative References . . . . . . . . . . . . . . . . .  31
-   Appendix A.  Requirements . . . . . . . . . . . . . . . . . . . .  33
+   Appendix A.  Requirements . . . . . . . . . . . . . . . . . . . .  34
    Appendix B.  Changes From Earlier Versions  . . . . . . . . . . .  35
      B.1.  Modifications Between WG Version -10 and -11  . . . . . .  35
-     B.2.  Modifications Between WG Version -09 and -10  . . . . . .  35
-     B.3.  Modifications Between WG Version -08 and -09  . . . . . .  35
+     B.2.  Modifications Between WG Version -09 and -10  . . . . . .  36
+     B.3.  Modifications Between WG Version -08 and -09  . . . . . .  36
      B.4.  Modifications Between WG Version -07 and -08  . . . . . .  36
-     B.5.  Modifications Between WG Version -06 and -07  . . . . . .  36
+     B.5.  Modifications Between WG Version -06 and -07  . . . . . .  37
      B.6.  Modifications Between WG Version -05 and -06  . . . . . .  37
      B.7.  Modifications Between WG Version -04 and -05  . . . . . .  37
      B.8.  Modifications Between WG Version -03 and -04  . . . . . .  38
      B.9.  Modifications Between WG Version -02 and -03  . . . . . .  38
-     B.10. Modifications Between WG Version -01 and -02  . . . . . .  38
+     B.10. Modifications Between WG Version -01 and -02  . . . . . .  39
      B.11. Modifications Between WG Version -00 and -01  . . . . . .  39
      B.12. Modifications Between Individual Version -00 and WG
            Version -00 . . . . . . . . . . . . . . . . . . . . . . .  39
@@ -1133,8 +1133,8 @@ Internet-Draft                  Simulcast                  December 2017
    (rid-id=5), and the second simulcast stream is encoded either with
    G.711 (rid-id=7) or with G.711 combined with LPC for redundancy (rid-
    id=6).  In this example, stand-alone LPC is not offered as an
-   alternative for the second simulcast stream, which could e.g. be
-   motivated by not providing sufficient quality.
+   possible payload type for the second simulcast stream's RID, which
+   could e.g. be motivated by not providing sufficient quality.
 
    The video source is offered to be sent as two simulcast streams, both
    with two alternative simulcast formats.  Redundancy and repair are
@@ -1184,48 +1184,48 @@ Internet-Draft                  Simulcast                  December 2017
    t=0 0
    c=IN IP6 2001:db8::c000:27d
    a=group:BUNDLE foo bar
-   m=audio 49200 RTP/AVP 97 98 99 105
+   m=audio 49200 RTP/AVP 97 98 99 100 101 102
    a=mid:foo
    a=rtpmap:97 G711/8000
    a=rtpmap:98 LPC/8000
    a=rtpmap:99 OPUS/48000/1
-   a=rtpmap:105 RED/8000/1
+   a=rtpmap:100 RED/8000/1
+   a=rtpmap:101 CN/8000
+   a=rtpmap:102 telephone-event/8000
    a=fmtp:99 useinbandfec=1; usedtx=0
-   a=fmtp:105 97/98
+   a=fmtp:100 97/98
+   a=fmtp:102 0-15
    a=ptime:20
    a=maxptime:40
-   a=rid:5 send pt=99;max-br=50000
-   a=rid:6 send pt=105
-   a=rid:7 send pt=97
+   a=rid:5 send pt=99,102;max-br=64000
+   a=rid:6 send pt=100,97,101,102
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
    a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
-   a=simulcast:send 5;6,7
-   m=video 49600 RTP/AVPF 100 101 102 103 104
+   a=simulcast:send 5;6
+   m=video 49600 RTP/AVPF 103 104 105 106 107
    a=mid:bar
-   a=rtpmap:100 H264/90000
-   a=rtpmap:101 VP8/90000
-   a=rtpmap:102 rtx/90000
-   a=rtpmap:103 rtx/90000
-   a=rtpmap:104 flexfec/90000
-   a=fmtp:100 profile-level-id=42c00d;max-fs=3600;max-mbps=108000
-   a=fmtp:101 max-fs=3600; max-fr=30
-   a=fmtp:102 apt=100;rtx-time=200
-   a=fmtp:103 apt=101;rtx-time=200
-   a=fmtp:104 repair-window=2000
-   a=rid:1 send pt=100;max-width=1280;max-height=720;max-fps=30
-   a=rid:2 send pt=101;max-width=1280;max-height=720;max-fps=30
-   a=rid:3 send pt=100;max-width=640;max-height=360;max-br=300000
-   a=rid:4 send pt=101;max-width=640;max-height=360;max-br=300000
+   a=rtpmap:103 H264/90000
+   a=rtpmap:104 VP8/90000
+   a=rtpmap:105 rtx/90000
+   a=rtpmap:106 rtx/90000
+   a=rtpmap:107 flexfec/90000
+   a=fmtp:103 profile-level-id=42c00d;max-fs=3600;max-mbps=108000
+   a=fmtp:104 max-fs=3600; max-fr=30
+   a=fmtp:105 apt=103;rtx-time=200
+   a=fmtp:106 apt=104;rtx-time=200
+   a=fmtp:107 repair-window=2000
+   a=rid:1 send pt=103;max-width=1280;max-height=720;max-fps=30
+   a=rid:2 send pt=104;max-width=1280;max-height=720;max-fps=30
+   a=rid:3 send pt=103;max-width=640;max-height=360;max-br=300000
+   a=rid:4 send pt=104;max-width=640;max-height=360;max-br=300000
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
    a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
    a=rtcp-fb:* ccm pause nowait
    a=simulcast:send 1,2;3,4
 
-6.  RTP Aspects
 
-   This section discusses what the different entities in a simulcast
-   media path can expect to happen on RTP level.  This is explored from
-   source to sink by starting in an endpoint with a media source that is
+
+
 
 
 
@@ -1234,6 +1234,11 @@ Burman, et al.            Expires June 4, 2018                 [Page 22]
 Internet-Draft                  Simulcast                  December 2017
 
 
+6.  RTP Aspects
+
+   This section discusses what the different entities in a simulcast
+   media path can expect to happen on RTP level.  This is explored from
+   source to sink by starting in an endpoint with a media source that is
    simulcasted to an RTP middlebox.  That RTP middlebox sends media
    sources both to other RTP middleboxes (cascaded middleboxes), as well
    as selecting some simulcast format of the media source and sending it
@@ -1277,11 +1282,6 @@ Internet-Draft                  Simulcast                  December 2017
    application.  This text assumes that the RTP middlebox will select a
    media source and choose which simulcast stream for that media source
    to deliver to a specific receiver.  In many cases, at most one
-   simulcast stream per media source will be forwarded to a particular
-   receiver at any instant in time, even if the selected simulcast
-   stream may vary.  For cases where this does not hold due to
-   application needs, then the RTP stream aspects will fall under the
-   middlebox to middlebox case Section 6.3.
 
 
 
@@ -1289,6 +1289,12 @@ Burman, et al.            Expires June 4, 2018                 [Page 23]
 
 Internet-Draft                  Simulcast                  December 2017
 
+
+   simulcast stream per media source will be forwarded to a particular
+   receiver at any instant in time, even if the selected simulcast
+   stream may vary.  For cases where this does not hold due to
+   application needs, then the RTP stream aspects will fall under the
+   middlebox to middlebox case Section 6.3.
 
    The selection of which simulcast streams to forward towards the
    receiver, is application specific.  However, in conferencing
@@ -1332,12 +1338,6 @@ Internet-Draft                  Simulcast                  December 2017
    This section discusses the behavior in cases where the RTP middlebox
    behaves like the Media-Switching Mixer (Section 3.6.2) in RTP
    Topologies [RFC7667].  The fundamental aspect here is that the media
-   sources delivered from the middlebox will be the mixer's conceptual
-   or functional ones.  For example, one media source may be the main
-   speaker in high resolution video, while a number of other media
-   sources are thumbnails of each participant.
-
-
 
 
 
@@ -1345,6 +1345,11 @@ Burman, et al.            Expires June 4, 2018                 [Page 24]
 
 Internet-Draft                  Simulcast                  December 2017
 
+
+   sources delivered from the middlebox will be the mixer's conceptual
+   or functional ones.  For example, one media source may be the main
+   speaker in high resolution video, while a number of other media
+   sources are thumbnails of each participant.
 
    The above results in that the RTP stream produced by the mixer is one
    that switches between a number of received incoming RTP streams for
@@ -1389,11 +1394,6 @@ Internet-Draft                  Simulcast                  December 2017
    there has been an SSRC collision, and that the RTP stream is spurious
    as it doesn't carry the identifiers used to relate it to the correct
    context.  However, this is not true for CSRC values, as long as they
-   are never used as SSRC.  In these cases one could provide CNAME and
-   MID as SDES items.  A receiver could use this to determine which CSRC
-   values that are associated with the same originating media source.
-
-
 
 
 
@@ -1401,6 +1401,10 @@ Burman, et al.            Expires June 4, 2018                 [Page 25]
 
 Internet-Draft                  Simulcast                  December 2017
 
+
+   are never used as SSRC.  In these cases one could provide CNAME and
+   MID as SDES items.  A receiver could use this to determine which CSRC
+   values that are associated with the same originating media source.
 
    If RtpStreamIds are used in the scenario described by this section,
    it should be noted that the RtpStreamId on a particular SSRC will
@@ -1446,10 +1450,6 @@ Internet-Draft                  Simulcast                  December 2017
    However, this is not recommended as it would unnecessarily increase
    the number of RTP streams and require the receiver to timely detect
    switching between simulcast streams.  The above usage requires the
-   same SFM functionality for switching, while avoiding the
-   uncertainties of timely detecting that a RTP stream ends.  The
-   benefit would be that the received simulcast stream would be
-   implicitly provided by which RTP stream would be active for a media
 
 
 
@@ -1458,6 +1458,10 @@ Burman, et al.            Expires June 4, 2018                 [Page 26]
 Internet-Draft                  Simulcast                  December 2017
 
 
+   same SFM functionality for switching, while avoiding the
+   uncertainties of timely detecting that a RTP stream ends.  The
+   benefit would be that the received simulcast stream would be
+   implicitly provided by which RTP stream would be active for a media
    source.  However, using RtpStreamId to make this explicit also
    exposes which alternative format is used.  The conclusion is that
    using one RTP stream per simulcast stream is unnecessary.  The issue
@@ -1498,14 +1502,10 @@ Internet-Draft                  Simulcast                  December 2017
    they are.  The RTP stream to MID and RtpStreamId associations should
    here be long term stable.
 
-7.  Network Aspects
 
-   Simulcast is in this memo defined as the act of sending multiple
-   alternative encoded streams of the same underlying media source.
-   When transmitting multiple independent streams that originate from
-   the same source, it could potentially be done in several different
-   ways using RTP.  A general discussion on considerations for use of
-   the different RTP multiplexing alternatives can be found in
+
+
+
 
 
 
@@ -1514,6 +1514,14 @@ Burman, et al.            Expires June 4, 2018                 [Page 27]
 Internet-Draft                  Simulcast                  December 2017
 
 
+7.  Network Aspects
+
+   Simulcast is in this memo defined as the act of sending multiple
+   alternative encoded streams of the same underlying media source.
+   When transmitting multiple independent streams that originate from
+   the same source, it could potentially be done in several different
+   ways using RTP.  A general discussion on considerations for use of
+   the different RTP multiplexing alternatives can be found in
    Guidelines for Multiplexing in RTP
    [I-D.ietf-avtcore-multiplex-guidelines].  Discussion and
    clarification on how to handle multiple streams in an RTP session can
@@ -1553,6 +1561,15 @@ Internet-Draft                  Simulcast                  December 2017
 
    The chosen approach has a limitation that relates to the use of a
    single RTP session for all simulcast formats of a media source, which
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 28]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    comes from sending all simulcast streams related to a media source
    under the same SDP media description.
 
@@ -1562,13 +1579,6 @@ Internet-Draft                  Simulcast                  December 2017
    based on individual packet marking are feasible, since they do not
    require separation of simulcast streams into different RTP sessions
    to apply different QoS.
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 28]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    It is also not possible to separate different simulcast streams into
    different multicast groups to allow a multicast receiver to pick the
@@ -1604,6 +1614,18 @@ Internet-Draft                  Simulcast                  December 2017
    Note to RFC Editor: Please replace "RFC XXXX" with the assigned
    number of this RFC.
 
+
+
+
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 29]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
 10.  Security Considerations
 
    The simulcast capability, configuration attributes, and parameters
@@ -1616,15 +1638,6 @@ Internet-Draft                  Simulcast                  December 2017
    irrespective of their number.  There may however be a large number of
    unwanted RTP streams that will impact the share of bandwidth
    allocated for the originally wanted RTP stream.
-
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 29]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    A hostile removal of the "a=simulcast" attribute will result in
    simulcast not being used.
@@ -1662,6 +1675,13 @@ Internet-Draft                  Simulcast                  December 2017
               Identifier Source Description (SDES)", draft-ietf-avtext-
               rid-09 (work in progress), October 2016.
 
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 30]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    [I-D.ietf-mmusic-rid]
               Roach, A., "RTP Payload Format Restrictions", draft-ietf-
               mmusic-rid-12 (work in progress), November 2017.
@@ -1671,16 +1691,6 @@ Internet-Draft                  Simulcast                  December 2017
               "Negotiating Media Multiplexing Using the Session
               Description Protocol (SDP)", draft-ietf-mmusic-sdp-bundle-
               negotiation-42 (work in progress), November 2017.
-
-
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 30]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    [I-D.ietf-mmusic-sdp-mux-attributes]
               Nandakumar, S., "A Framework for SDP Attributes when
@@ -1719,6 +1729,15 @@ Internet-Draft                  Simulcast                  December 2017
               Streams", draft-ietf-avtcore-multiplex-guidelines-05 (work
               in progress), October 2017.
 
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 31]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    [I-D.ietf-payload-flexible-fec-scheme]
               Singh, V., Begen, A., Zanaty, M., and G. Mandyam, "RTP
               Payload Format for Flexible Forward Error Correction
@@ -1730,13 +1749,6 @@ Internet-Draft                  Simulcast                  December 2017
               Parisis, "RTP Payload for Redundant Audio Data", RFC 2198,
               DOI 10.17487/RFC2198, September 1997,
               <https://www.rfc-editor.org/info/rfc2198>.
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 31]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    [RFC3264]  Rosenberg, J. and H. Schulzrinne, "An Offer/Answer Model
               with Session Description Protocol (SDP)", RFC 3264,
@@ -1771,6 +1783,17 @@ Internet-Draft                  Simulcast                  December 2017
               RFC 5583, DOI 10.17487/RFC5583, July 2009,
               <https://www.rfc-editor.org/info/rfc5583>.
 
+
+
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 32]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    [RFC6184]  Wang, Y., Even, R., Kristensen, T., and R. Jesup, "RTP
               Payload Format for H.264 Video", RFC 6184,
               DOI 10.17487/RFC6184, May 2011,
@@ -1785,14 +1808,6 @@ Internet-Draft                  Simulcast                  December 2017
               Attributes in the Session Description Protocol (SDP)",
               RFC 6236, DOI 10.17487/RFC6236, May 2011,
               <https://www.rfc-editor.org/info/rfc6236>.
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 32]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    [RFC6464]  Lennox, J., Ed., Ivov, E., and E. Marocco, "A Real-time
               Transport Protocol (RTP) Header Extension for Client-to-
@@ -1825,6 +1840,16 @@ Internet-Draft                  Simulcast                  December 2017
               RFC 8108, DOI 10.17487/RFC8108, March 2017,
               <https://www.rfc-editor.org/info/rfc8108>.
 
+
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 33]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    [RFC8285]  Singer, D., Desineni, H., and R. Even, Ed., "A General
               Mechanism for RTP Header Extensions", RFC 8285,
               DOI 10.17487/RFC8285, October 2017,
@@ -1840,15 +1865,6 @@ Appendix A.  Requirements
       REQ-1.1:  It must be possible to identify a set of simulcasted RTP
          streams as originating from the same media source in SDP
          signaling.
-
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 33]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
       REQ-1.2:  An RTP endpoint must be capable of identifying the
          simulcast stream a received RTP stream is associated with,
@@ -1880,6 +1896,16 @@ Internet-Draft                  Simulcast                  December 2017
       REQ-3.6:  Receiver can detail the characteristics of the simulcast
          streams that it prefers to receive.
 
+
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 34]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    REQ-4:  Distinguishing features.  It must be possible to have
       different simulcast streams use different codec parameters, as can
       be expressed by SDP format values and RTP payload types.
@@ -1897,15 +1923,6 @@ Internet-Draft                  Simulcast                  December 2017
 
       REQ-5.4:  A single simulcast stream can consist of multiple RTP
          streams, to support codecs where a dependent stream is
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 34]
-
-Internet-Draft                  Simulcast                  December 2017
-
-
          dependent on a set of encoded and dependent streams, each
          potentially carried in their own RTP stream.
 
@@ -1936,6 +1953,15 @@ B.1.  Modifications Between WG Version -10 and -11
       to RFC5576, since draft-ietf-mmusic-rid is not defined for source-
       specific signaling.
 
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 35]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    o  Changed some SDP examples to use a=rid restrictions instead of
       a=imageattr.
 
@@ -1953,14 +1979,6 @@ B.3.  Modifications Between WG Version -08 and -09
 
    o  Changed SCID to rid-id, to align with ietf-draft-mmusic-rid
       naming.
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 35]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    o  Changed Overview to be based on examples and shortened it.
 
@@ -1993,6 +2011,13 @@ B.4.  Modifications Between WG Version -07 and -08
 
    o  Adding list of modifications between -06 and -07.
 
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 36]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
 B.5.  Modifications Between WG Version -06 and -07
 
    o  A scope clarification, as result of the discussion with Roni Even.
@@ -2009,14 +2034,6 @@ B.5.  Modifications Between WG Version -06 and -07
 
    o  Removal of note in Section 6.4 as result of issue raised by Roni
       Even.
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 36]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    o  Use of "m=" has been changed to media description and a few other
       editorial improvements and clarifications.
@@ -2048,6 +2065,15 @@ B.7.  Modifications Between WG Version -04 and -05
       accepted structure, also adding a brief text on modifying the
       session that is aligned with draft-ietf-mmusic-rid.
 
+
+
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 37]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    o  Improved text around simulcast stream identification (as opposed
       to the simulcast stream itself) to consistently use the acronym
       SCID and defined that in the Terminology section.
@@ -2061,18 +2087,6 @@ B.7.  Modifications Between WG Version -04 and -05
       scheme.
 
    o  Editorial improvements and corrections.
-
-
-
-
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 37]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
 B.8.  Modifications Between WG Version -03 and -04
 
@@ -2109,6 +2123,13 @@ B.9.  Modifications Between WG Version -02 and -03
 
    o  Added a preference indication also in send direction offers.
 
+
+
+Burman, et al.            Expires June 4, 2018                 [Page 38]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    o  Added a section on limitations of the current proposal, including
       identification method specific limitations.
 
@@ -2122,13 +2143,6 @@ B.10.  Modifications Between WG Version -01 and -02
    o  Renamed simulcast version and simulcast version alternative to
       simulcast stream and simulcast format respectively, and improved
       definitions for them.
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 38]
-
-Internet-Draft                  Simulcast                  December 2017
-
 
    o  Clarification that it is possible to switch between simulcast
       version alternatives, but that only a single one be used at any
@@ -2166,6 +2180,12 @@ Authors' Addresses
    Email: magnus.westerlund@ericsson.com
 
 
+
+Burman, et al.            Expires June 4, 2018                 [Page 39]
+
+Internet-Draft                  Simulcast                  December 2017
+
+
    Suhas Nandakumar
    Cisco
    170 West Tasman Drive
@@ -2175,17 +2195,6 @@ Authors' Addresses
    Email: snandaku@cisco.com
 
 
-
-
-
-
-
-
-Burman, et al.            Expires June 4, 2018                 [Page 39]
-
-Internet-Draft                  Simulcast                  December 2017
-
-
    Mo Zanaty
    Cisco
    170 West Tasman Drive
@@ -2193,15 +2202,6 @@ Internet-Draft                  Simulcast                  December 2017
    USA
 
    Email: mzanaty@cisco.com
-
-
-
-
-
-
-
-
-
 
 
 
