@@ -980,7 +980,7 @@ a=simulcast:send 1;~2;~3
           kbps (rid-id=5), and the second simulcast stream is encoded either
           with G.711 (rid-id=7) or with G.711 combined with LPC for redundancy
           (rid-id=6). In this example, stand-alone LPC is not offered as an
-          alternative for the second simulcast stream, which could e.g. be
+          possible payload type for the second simulcast stream's RID, which could e.g. be
           motivated by not providing sufficient quality.</t>
 
           <t>The video source is offered to be sent as two simulcast streams,
@@ -997,38 +997,40 @@ s=Offer from Simulcast Enabled Client using Redundancy
 t=0 0
 c=IN IP6 2001:db8::c000:27d
 a=group:BUNDLE foo bar
-m=audio 49200 RTP/AVP 97 98 99 105
+m=audio 49200 RTP/AVP 97 98 99 100 101 102
 a=mid:foo
 a=rtpmap:97 G711/8000
 a=rtpmap:98 LPC/8000
 a=rtpmap:99 OPUS/48000/1
-a=rtpmap:105 RED/8000/1
+a=rtpmap:100 RED/8000/1
+a=rtpmap:101 CN/8000
+a=rtpmap:102 telephone-event/8000
 a=fmtp:99 useinbandfec=1; usedtx=0
-a=fmtp:105 97/98
+a=fmtp:100 97/98
+a=fmtp:102 0-15
 a=ptime:20
 a=maxptime:40
-a=rid:5 send pt=99;max-br=50000
-a=rid:6 send pt=105
-a=rid:7 send pt=97
+a=rid:5 send pt=99,102;max-br=64000
+a=rid:6 send pt=100,97,101,102
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
 a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
-a=simulcast:send 5;6,7
-m=video 49600 RTP/AVPF 100 101 102 103 104
+a=simulcast:send 5;6
+m=video 49600 RTP/AVPF 103 104 105 106 107
 a=mid:bar
-a=rtpmap:100 H264/90000
-a=rtpmap:101 VP8/90000
-a=rtpmap:102 rtx/90000
-a=rtpmap:103 rtx/90000
-a=rtpmap:104 flexfec/90000
-a=fmtp:100 profile-level-id=42c00d;max-fs=3600;max-mbps=108000
-a=fmtp:101 max-fs=3600; max-fr=30
-a=fmtp:102 apt=100;rtx-time=200
-a=fmtp:103 apt=101;rtx-time=200
-a=fmtp:104 repair-window=2000
-a=rid:1 send pt=100;max-width=1280;max-height=720;max-fps=30
-a=rid:2 send pt=101;max-width=1280;max-height=720;max-fps=30
-a=rid:3 send pt=100;max-width=640;max-height=360;max-br=300000
-a=rid:4 send pt=101;max-width=640;max-height=360;max-br=300000
+a=rtpmap:103 H264/90000
+a=rtpmap:104 VP8/90000
+a=rtpmap:105 rtx/90000
+a=rtpmap:106 rtx/90000
+a=rtpmap:107 flexfec/90000
+a=fmtp:103 profile-level-id=42c00d;max-fs=3600;max-mbps=108000
+a=fmtp:104 max-fs=3600; max-fr=30
+a=fmtp:105 apt=103;rtx-time=200
+a=fmtp:106 apt=104;rtx-time=200
+a=fmtp:107 repair-window=2000
+a=rid:1 send pt=103;max-width=1280;max-height=720;max-fps=30
+a=rid:2 send pt=104;max-width=1280;max-height=720;max-fps=30
+a=rid:3 send pt=103;max-width=640;max-height=360;max-br=300000
+a=rid:4 send pt=104;max-width=640;max-height=360;max-br=300000
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
 a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
 a=rtcp-fb:* ccm pause nowait
