@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="29" month="November" year="2017"/>
+    <date day="1" month="December" year="2017"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -424,8 +424,8 @@ a=rtpmap:97 H264/90000
 a=rtpmap:98 H264/90000
 a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
 a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
-a=rid:1 send pt=97 max-width=1280;max-height=720
-a=rid:2 send pt=98 max-width=320;max-height=180
+a=rid:1 recv pt=97 max-width=1280;max-height=720
+a=rid:2 recv pt=98 max-width=320;max-height=180
 a=rid:4 send pt=97
 a=simulcast:recv 1;2 send 4
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
