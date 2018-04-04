@@ -580,12 +580,12 @@ sc-id        = [sc-id-paused] rid-id
         e.g. by using the "*" wildcard format for "a=rtcp-fb".</t>
 
         <t>An initially paused simulcast stream in "send" direction for the
-        part sending the SDP MUST be considered equivalent to an unsolicited
-        locally paused stream, and be handled accordingly. Initially paused
-        simulcast streams are resumed as described by the RTP pause/resume
-        specification. An RTP stream receiver that wishes to resume an
-        unsolicited locally paused stream needs to know the SSRC of that
-        stream. The SSRC of an initially paused simulcast stream can be
+        endpoint sending the SDP MUST be considered equivalent to an
+        unsolicited locally paused stream, and be handled accordingly.
+        Initially paused simulcast streams are resumed as described by the RTP
+        pause/resume specification. An RTP stream receiver that wishes to
+        resume an unsolicited locally paused stream needs to know the SSRC of
+        that stream. The SSRC of an initially paused simulcast stream can be
         obtained from an RTP stream sender RTCP Sender Report (SR) including
         both the desired SSRC as "SSRC of sender", and the rid-id value in an
         <xref target="I-D.ietf-avtext-rid">RtpStreamId RTCP SDES
@@ -600,9 +600,11 @@ sc-id        = [sc-id-paused] rid-id
         considered locally paused by the remote RTP sender, instead of making
         it equivalent to implicitly sending a pause request, is because the
         pausing RTP sender cannot know which receiving SSRC owns the
-        restriction when TMMBR/TMMBN are used for pause/resume signaling
-        (<xref target="RFC7728">Section 5.6 of </xref>) since the RTP
-        receiver's SSRC in send direction is sometimes not yet known.</t>
+        restriction when Temporary Maximum Media Stream Bit Rate Request
+        (TMMBR) and Temporary Maximum Media Stream Bit Rate Notification
+        (TMMBN) are used for pause/resume signaling (<xref
+        target="RFC7728">Section 5.6 of </xref>) since the RTP receiver's SSRC
+        in send direction is sometimes not yet known.</t>
 
         <t>Use of the <xref target="RFC2198">redundant audio data</xref>
         format could be seen as a form of simulcast for loss protection
@@ -1073,7 +1075,7 @@ a=simulcast:send 1,2;3,4
         target="I-D.ietf-mmusic-sdp-bundle-negotiation">BUNDLE</xref> is used,
         also the MID SDES item will be sent similarly to the RtpStreamId.</t>
 
-        <t>Each RTP stream may not be continuously transmitted due to any of
+        <t>Each RTP stream might not be continuously transmitted due to any of
         the following reasons; temporarily paused using <xref
         target="RFC7728">Pause/Resume</xref>, sender side application logic
         temporarily pausing it, or lack of network resources to transmit this
