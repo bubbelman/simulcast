@@ -5,10 +5,10 @@
 Network Working Group                                          B. Burman
 Internet-Draft                                             M. Westerlund
 Intended status: Standards Track                                Ericsson
-Expires: October 6, 2018                                   S. Nandakumar
+Expires: October 7, 2018                                   S. Nandakumar
                                                                M. Zanaty
                                                                    Cisco
-                                                           April 4, 2018
+                                                           April 5, 2018
 
 
                 Using Simulcast in SDP and RTP Sessions
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 6, 2018.
+   This Internet-Draft will expire on October 7, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 1]
+Burman, et al.           Expires October 7, 2018                [Page 1]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -109,14 +109,14 @@ Table of Contents
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 2]
+Burman, et al.           Expires October 7, 2018                [Page 2]
 
 Internet-Draft                  Simulcast                     April 2018
 
 
    13. References  . . . . . . . . . . . . . . . . . . . . . . . . .  30
-     13.1.  Normative References . . . . . . . . . . . . . . . . . .  30
-     13.2.  Informative References . . . . . . . . . . . . . . . . .  31
+     13.1.  Normative References . . . . . . . . . . . . . . . . . .  31
+     13.2.  Informative References . . . . . . . . . . . . . . . . .  32
    Appendix A.  Requirements . . . . . . . . . . . . . . . . . . . .  34
    Appendix B.  Changes From Earlier Versions  . . . . . . . . . . .  35
      B.1.  Modifications Between WG Version -11 and -12  . . . . . .  35
@@ -165,7 +165,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 3]
+Burman, et al.           Expires October 7, 2018                [Page 3]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 4]
+Burman, et al.           Expires October 7, 2018                [Page 4]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 5]
+Burman, et al.           Expires October 7, 2018                [Page 5]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 6]
+Burman, et al.           Expires October 7, 2018                [Page 6]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 7]
+Burman, et al.           Expires October 7, 2018                [Page 7]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 8]
+Burman, et al.           Expires October 7, 2018                [Page 8]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018                [Page 9]
+Burman, et al.           Expires October 7, 2018                [Page 9]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 10]
+Burman, et al.           Expires October 7, 2018               [Page 10]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -606,14 +606,14 @@ Internet-Draft                  Simulcast                     April 2018
    by format type ordering on the "m=" line, using regular SDP rules.
    This is to enable a separation of general codec preferences and
    simulcast stream configuration preferences.  However, the choice of
-   which alternative to use per simulcast stream are independent, and
+   which alternative to use per simulcast stream is independent, and
    there is currently no mechanism for align the choice between
    alternative rid-ids between different simulcast streams.
 
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 11]
+Burman, et al.           Expires October 7, 2018               [Page 11]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -644,7 +644,7 @@ Internet-Draft                  Simulcast                     April 2018
    including both the desired SSRC as "SSRC of sender", and the rid-id
    value in an RtpStreamId RTCP SDES item [I-D.ietf-avtext-rid].
 
-   IIf the endpoint sending the SDP includes an "recv" direction
+   If the endpoint sending the SDP includes an "recv" direction
    simulcast stream that is initially paused, then the remote RTP sender
    receiving the SDP SHOULD put its RTP stream in a unsolicited locally
    paused state.  This unless there are there are other RTP stream
@@ -669,7 +669,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 12]
+Burman, et al.           Expires October 7, 2018               [Page 12]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -678,12 +678,13 @@ Internet-Draft                  Simulcast                     April 2018
    streams SHOULD be chosen such that they are different, e.g. as
    different SDP formats with differing "a=rtpmap" and/or "a=fmtp"
    lines, or as differently defined RTP payload format restrictions.  If
-   this difference is not required, RTP duplication [RFC7104] procedures
-   RECOMMENDED to be used instead of simulcast.  To avoid complications
-   in implementations, a single rid-id MUST NOT occur more than once per
-   "a=simulcast" line.  Note that this does not eliminate use of
-   simulcast as an RTP duplication mechanism, since it is possible to
-   define multiple different rid-id that are effectively equivalent.
+   this difference is not required, it is RECOMMENDED to use RTP
+   duplication [RFC7104] procedures instead of simulcast.  To avoid
+   complications in implementations, a single rid-id MUST NOT occur more
+   than once per "a=simulcast" line.  Note that this does not eliminate
+   use of simulcast as an RTP duplication mechanism, since it is
+   possible to define multiple different rid-id that are effectively
+   equivalent.
 
 5.3.  Offer/Answer Use
 
@@ -721,15 +722,15 @@ Internet-Draft                  Simulcast                     April 2018
    "a=simulcast" attribute listing alternative rid-id MAY keep all the
    alternative rid-id in the answer, but it MAY also choose to remove
    any non-desirable alternative rid-id in the answer.  The answerer
-   MUST NOT add any alternative rid-id in send direction in the answer
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 13]
+Burman, et al.           Expires October 7, 2018               [Page 13]
 
 Internet-Draft                  Simulcast                     April 2018
 
 
+   MUST NOT add any alternative rid-id in send direction in the answer
    that were not present in the offer receive direction.  The answerer
    MUST be prepared to receive any of the receive direction rid-id
    alternatives and MAY send any of the send direction alternatives that
@@ -780,8 +781,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-
-Burman, et al.           Expires October 6, 2018               [Page 14]
+Burman, et al.           Expires October 7, 2018               [Page 14]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -837,7 +837,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 15]
+Burman, et al.           Expires October 7, 2018               [Page 15]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -893,7 +893,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 16]
+Burman, et al.           Expires October 7, 2018               [Page 16]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -949,7 +949,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 17]
+Burman, et al.           Expires October 7, 2018               [Page 17]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 18]
+Burman, et al.           Expires October 7, 2018               [Page 18]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 19]
+Burman, et al.           Expires October 7, 2018               [Page 19]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 20]
+Burman, et al.           Expires October 7, 2018               [Page 20]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 21]
+Burman, et al.           Expires October 7, 2018               [Page 21]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 22]
+Burman, et al.           Expires October 7, 2018               [Page 22]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 23]
+Burman, et al.           Expires October 7, 2018               [Page 23]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 24]
+Burman, et al.           Expires October 7, 2018               [Page 24]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 25]
+Burman, et al.           Expires October 7, 2018               [Page 25]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1453,7 +1453,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 26]
+Burman, et al.           Expires October 7, 2018               [Page 26]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1509,7 +1509,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 27]
+Burman, et al.           Expires October 7, 2018               [Page 27]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1545,30 +1545,33 @@ Internet-Draft                  Simulcast                     April 2018
 7.1.  Bitrate Adaptation
 
    Use of multiple simulcast streams can require a significant amount of
-   network resources.  It is assumed that a suitable congestion control
-   mechanism is used by the application to ensure that it doesn't cause
-   persistent congestion.  If the amount of available network resources
-   varies during an RTP session such that it does not match what is
-   negotiated in SDP, the bitrate used by the different simulcast
-   streams may have to be reduced dynamically.  What simulcast streams
-   to prioritize when allocating available bitrate among the simulcast
-   streams in such adaptation SHOULD be taken from the simulcast stream
-   order on the "a=simulcast" line and ordering of alternative simulcast
-   formats Section 5.2.  Simulcast streams that have pause/resume
-   capability and that would be given such low bitrate by the adaptation
-   process that they are considered not really useful can be temporarily
-   paused until the limiting condition clears.
+   network resources.  The aggregate bandwidth for all simulcast streams
+   for a media source (and thus SDP media description) is bounded by any
+   SDP "b=" line applicable to that media source.  It is assumed that a
+   suitable congestion control mechanism is used by the application to
+   ensure that it doesn't cause persistent congestion.  If the amount of
+   available network resources varies during an RTP session such that it
+   does not match what is negotiated in SDP, the bitrate used by the
+   different simulcast streams may have to be reduced dynamically.  When
+   a simulcasting media source uses a single media transport for all of
+   the simulcast streams, it is likely that a joint congestion control
+   across all simulcast streams is used for that media source.  What
+   simulcast streams to prioritize when allocating available bitrate
+   among the simulcast streams in such adaptation SHOULD be taken from
+   the simulcast stream order on the "a=simulcast" line and ordering of
+   alternative simulcast formats Section 5.2.  Simulcast streams that
+   have pause/resume capability and that would be given such low bitrate
 
 
 
 
-
-
-
-Burman, et al.           Expires October 6, 2018               [Page 28]
+Burman, et al.           Expires October 7, 2018               [Page 28]
 
 Internet-Draft                  Simulcast                     April 2018
 
+
+   by the adaptation process that they are considered not really useful
+   can be temporarily paused until the limiting condition clears.
 
 8.  Limitation
 
@@ -1614,17 +1617,17 @@ Internet-Draft                  Simulcast                     April 2018
 
    MUX category:  NORMAL
 
-   Note to RFC Editor: Please replace "RFC XXXX" with the assigned
-   number of this RFC.
 
 
 
 
-
-Burman, et al.           Expires October 6, 2018               [Page 29]
+Burman, et al.           Expires October 7, 2018               [Page 29]
 
 Internet-Draft                  Simulcast                     April 2018
 
+
+   Note to RFC Editor: Please replace "RFC XXXX" with the assigned
+   number of this RFC.
 
 10.  Security Considerations
 
@@ -1668,19 +1671,23 @@ Internet-Draft                  Simulcast                     April 2018
 
 13.  References
 
+
+
+
+
+
+
+Burman, et al.           Expires October 7, 2018               [Page 30]
+
+Internet-Draft                  Simulcast                     April 2018
+
+
 13.1.  Normative References
 
    [I-D.ietf-avtext-rid]
               Roach, A., Nandakumar, S., and P. Thatcher, "RTP Stream
               Identifier Source Description (SDES)", draft-ietf-avtext-
               rid-09 (work in progress), October 2016.
-
-
-
-Burman, et al.           Expires October 6, 2018               [Page 30]
-
-Internet-Draft                  Simulcast                     April 2018
-
 
    [I-D.ietf-mmusic-rid]
               Roach, A., "RTP Payload Format Restrictions", draft-ietf-
@@ -1724,19 +1731,14 @@ Internet-Draft                  Simulcast                     April 2018
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
-13.2.  Informative References
 
 
-
-
-
-
-
-
-Burman, et al.           Expires October 6, 2018               [Page 31]
+Burman, et al.           Expires October 7, 2018               [Page 31]
 
 Internet-Draft                  Simulcast                     April 2018
 
+
+13.2.  Informative References
 
    [I-D.ietf-avtcore-multiplex-guidelines]
               Westerlund, M., Burman, B., Perkins, C., Alvestrand, H.,
@@ -1787,9 +1789,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-
-
-Burman, et al.           Expires October 6, 2018               [Page 32]
+Burman, et al.           Expires October 7, 2018               [Page 32]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1845,7 +1845,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 33]
+Burman, et al.           Expires October 7, 2018               [Page 33]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1862,8 +1862,8 @@ Internet-Draft                  Simulcast                     April 2018
 
 Appendix A.  Requirements
 
-   The following requirements have been met by the defined solution to
-   support the use cases (Section 3):
+   The following requirements are met by the defined solution to support
+   the use cases (Section 3):
 
    REQ-1:  Identification:
 
@@ -1901,7 +1901,7 @@ Appendix A.  Requirements
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 34]
+Burman, et al.           Expires October 7, 2018               [Page 34]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1957,14 +1957,14 @@ B.1.  Modifications Between WG Version -11 and -12
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 35]
+Burman, et al.           Expires October 7, 2018               [Page 35]
 
 Internet-Draft                  Simulcast                     April 2018
 
 
    o  Editorial clarification in Section 5.2 and 5.3.2.
 
-   o  Various minor editorials and nits
+   o  Various minor editorials and nits.
 
 B.2.  Modifications Between WG Version -10 and -11
 
@@ -2013,7 +2013,7 @@ B.4.  Modifications Between WG Version -08 and -09
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 36]
+Burman, et al.           Expires October 7, 2018               [Page 36]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2069,7 +2069,7 @@ B.7.  Modifications Between WG Version -05 and -06
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 37]
+Burman, et al.           Expires October 7, 2018               [Page 37]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2125,7 +2125,7 @@ B.9.  Modifications Between WG Version -03 and -04
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 38]
+Burman, et al.           Expires October 7, 2018               [Page 38]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2181,7 +2181,7 @@ B.12.  Modifications Between WG Version -00 and -01
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 39]
+Burman, et al.           Expires October 7, 2018               [Page 39]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2237,4 +2237,4 @@ Authors' Addresses
 
 
 
-Burman, et al.           Expires October 6, 2018               [Page 40]
+Burman, et al.           Expires October 7, 2018               [Page 40]
