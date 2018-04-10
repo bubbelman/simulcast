@@ -5,10 +5,10 @@
 Network Working Group                                          B. Burman
 Internet-Draft                                             M. Westerlund
 Intended status: Standards Track                                Ericsson
-Expires: October 7, 2018                                   S. Nandakumar
+Expires: October 12, 2018                                  S. Nandakumar
                                                                M. Zanaty
                                                                    Cisco
-                                                           April 5, 2018
+                                                          April 10, 2018
 
 
                 Using Simulcast in SDP and RTP Sessions
@@ -42,7 +42,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 7, 2018.
+   This Internet-Draft will expire on October 12, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 1]
+Burman, et al.          Expires October 12, 2018                [Page 1]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -109,7 +109,7 @@ Table of Contents
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 2]
+Burman, et al.          Expires October 12, 2018                [Page 2]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 3]
+Burman, et al.          Expires October 12, 2018                [Page 3]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 4]
+Burman, et al.          Expires October 12, 2018                [Page 4]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 5]
+Burman, et al.          Expires October 12, 2018                [Page 5]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 6]
+Burman, et al.          Expires October 12, 2018                [Page 6]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 7]
+Burman, et al.          Expires October 12, 2018                [Page 7]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -445,7 +445,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 8]
+Burman, et al.          Expires October 12, 2018                [Page 8]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -501,7 +501,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018                [Page 9]
+Burman, et al.          Expires October 12, 2018                [Page 9]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -557,7 +557,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 10]
+Burman, et al.          Expires October 12, 2018               [Page 10]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -613,7 +613,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 11]
+Burman, et al.          Expires October 12, 2018               [Page 11]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -647,13 +647,13 @@ Internet-Draft                  Simulcast                     April 2018
    If the endpoint sending the SDP includes an "recv" direction
    simulcast stream that is initially paused, then the remote RTP sender
    receiving the SDP SHOULD put its RTP stream in a unsolicited locally
-   paused state.  This unless there are there are other RTP stream
-   receivers that do not mark the simulcast stream as initially paused.
-   The reason to require an initially paused "recv" stream to be
-   considered locally paused by the remote RTP sender, instead of making
-   it equivalent to implicitly sending a pause request, is because the
-   pausing RTP sender cannot know which receiving SSRC owns the
-   restriction when Temporary Maximum Media Stream Bit Rate Request
+   paused state.  However, this does not apply if there are other RTP
+   stream receivers that do not mark the simulcast stream as initially
+   paused.  The reason to require an initially paused "recv" stream to
+   be considered locally paused by the remote RTP sender, instead of
+   making it equivalent to implicitly sending a pause request, is
+   because the pausing RTP sender cannot know which receiving SSRC owns
+   the restriction when Temporary Maximum Media Stream Bit Rate Request
    (TMMBR) and Temporary Maximum Media Stream Bit Rate Notification
    (TMMBN) are used for pause/resume signaling (Section 5.6 of
    [RFC7728]) since the RTP receiver's SSRC in send direction is
@@ -669,7 +669,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 12]
+Burman, et al.          Expires October 12, 2018               [Page 12]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -725,7 +725,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 13]
+Burman, et al.          Expires October 12, 2018               [Page 13]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -781,7 +781,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 14]
+Burman, et al.          Expires October 12, 2018               [Page 14]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -837,7 +837,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 15]
+Burman, et al.          Expires October 12, 2018               [Page 15]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -893,7 +893,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 16]
+Burman, et al.          Expires October 12, 2018               [Page 16]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -949,7 +949,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 17]
+Burman, et al.          Expires October 12, 2018               [Page 17]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1005,7 +1005,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 18]
+Burman, et al.          Expires October 12, 2018               [Page 18]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1061,7 +1061,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 19]
+Burman, et al.          Expires October 12, 2018               [Page 19]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1117,7 +1117,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 20]
+Burman, et al.          Expires October 12, 2018               [Page 20]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1173,7 +1173,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 21]
+Burman, et al.          Expires October 12, 2018               [Page 21]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1229,7 +1229,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 22]
+Burman, et al.          Expires October 12, 2018               [Page 22]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1285,7 +1285,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 23]
+Burman, et al.          Expires October 12, 2018               [Page 23]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1341,7 +1341,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 24]
+Burman, et al.          Expires October 12, 2018               [Page 24]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1397,7 +1397,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 25]
+Burman, et al.          Expires October 12, 2018               [Page 25]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1453,7 +1453,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 26]
+Burman, et al.          Expires October 12, 2018               [Page 26]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1509,7 +1509,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 27]
+Burman, et al.          Expires October 12, 2018               [Page 27]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1565,7 +1565,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 28]
+Burman, et al.          Expires October 12, 2018               [Page 28]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1621,7 +1621,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 29]
+Burman, et al.          Expires October 12, 2018               [Page 29]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1677,7 +1677,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 30]
+Burman, et al.          Expires October 12, 2018               [Page 30]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1733,7 +1733,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 31]
+Burman, et al.          Expires October 12, 2018               [Page 31]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1789,7 +1789,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 32]
+Burman, et al.          Expires October 12, 2018               [Page 32]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1845,7 +1845,7 @@ Internet-Draft                  Simulcast                     April 2018
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 33]
+Burman, et al.          Expires October 12, 2018               [Page 33]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1901,7 +1901,7 @@ Appendix A.  Requirements
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 34]
+Burman, et al.          Expires October 12, 2018               [Page 34]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -1957,7 +1957,7 @@ B.1.  Modifications Between WG Version -11 and -12
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 35]
+Burman, et al.          Expires October 12, 2018               [Page 35]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2013,7 +2013,7 @@ B.4.  Modifications Between WG Version -08 and -09
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 36]
+Burman, et al.          Expires October 12, 2018               [Page 36]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2069,7 +2069,7 @@ B.7.  Modifications Between WG Version -05 and -06
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 37]
+Burman, et al.          Expires October 12, 2018               [Page 37]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2125,7 +2125,7 @@ B.9.  Modifications Between WG Version -03 and -04
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 38]
+Burman, et al.          Expires October 12, 2018               [Page 38]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2181,7 +2181,7 @@ B.12.  Modifications Between WG Version -00 and -01
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 39]
+Burman, et al.          Expires October 12, 2018               [Page 39]
 
 Internet-Draft                  Simulcast                     April 2018
 
@@ -2237,4 +2237,4 @@ Authors' Addresses
 
 
 
-Burman, et al.           Expires October 7, 2018               [Page 40]
+Burman, et al.          Expires October 12, 2018               [Page 40]
