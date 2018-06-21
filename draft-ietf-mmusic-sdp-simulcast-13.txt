@@ -92,7 +92,7 @@ Table of Contents
      5.6.  Signaling Examples  . . . . . . . . . . . . . . . . . . .  16
        5.6.1.  Single-Source Client  . . . . . . . . . . . . . . . .  17
        5.6.2.  Multi-Source Client . . . . . . . . . . . . . . . . .  18
-       5.6.3.  Simulcast and Redundancy  . . . . . . . . . . . . . .  20
+       5.6.3.  Simulcast and Redundancy  . . . . . . . . . . . . . .  21
    6.  RTP Aspects . . . . . . . . . . . . . . . . . . . . . . . . .  23
      6.1.  Outgoing from Endpoint with Media Source  . . . . . . . .  23
      6.2.  RTP Middlebox to Receiver . . . . . . . . . . . . . . . .  23
@@ -119,19 +119,20 @@ Internet-Draft                  Simulcast                      June 2018
      13.2.  Informative References . . . . . . . . . . . . . . . . .  32
    Appendix A.  Requirements . . . . . . . . . . . . . . . . . . . .  34
    Appendix B.  Changes From Earlier Versions  . . . . . . . . . . .  35
-     B.1.  Modifications Between WG Version -11 and -12  . . . . . .  35
-     B.2.  Modifications Between WG Version -10 and -11  . . . . . .  36
-     B.3.  Modifications Between WG Version -09 and -10  . . . . . .  36
-     B.4.  Modifications Between WG Version -08 and -09  . . . . . .  36
-     B.5.  Modifications Between WG Version -07 and -08  . . . . . .  37
-     B.6.  Modifications Between WG Version -06 and -07  . . . . . .  37
-     B.7.  Modifications Between WG Version -05 and -06  . . . . . .  38
-     B.8.  Modifications Between WG Version -04 and -05  . . . . . .  38
-     B.9.  Modifications Between WG Version -03 and -04  . . . . . .  38
-     B.10. Modifications Between WG Version -02 and -03  . . . . . .  39
-     B.11. Modifications Between WG Version -01 and -02  . . . . . .  39
-     B.12. Modifications Between WG Version -00 and -01  . . . . . .  40
-     B.13. Modifications Between Individual Version -00 and WG
+     B.1.  Modifications Between WG Version -12 and -13  . . . . . .  35
+     B.2.  Modifications Between WG Version -11 and -12  . . . . . .  36
+     B.3.  Modifications Between WG Version -10 and -11  . . . . . .  36
+     B.4.  Modifications Between WG Version -09 and -10  . . . . . .  36
+     B.5.  Modifications Between WG Version -08 and -09  . . . . . .  37
+     B.6.  Modifications Between WG Version -07 and -08  . . . . . .  37
+     B.7.  Modifications Between WG Version -06 and -07  . . . . . .  37
+     B.8.  Modifications Between WG Version -05 and -06  . . . . . .  38
+     B.9.  Modifications Between WG Version -04 and -05  . . . . . .  38
+     B.10. Modifications Between WG Version -03 and -04  . . . . . .  39
+     B.11. Modifications Between WG Version -02 and -03  . . . . . .  39
+     B.12. Modifications Between WG Version -01 and -02  . . . . . .  39
+     B.13. Modifications Between WG Version -00 and -01  . . . . . .  40
+     B.14. Modifications Between Individual Version -00 and WG
            Version -00 . . . . . . . . . . . . . . . . . . . . . . .  40
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  40
 
@@ -161,7 +162,6 @@ Internet-Draft                  Simulcast                      June 2018
 
    The intended scope of the defined mechanism is to support negotiation
    and usage of simulcast when using SDP offer/answer and media
-   transport over RTP.  The media transport topologies considered are
 
 
 
@@ -170,6 +170,7 @@ Burman, et al.          Expires December 23, 2018               [Page 3]
 Internet-Draft                  Simulcast                      June 2018
 
 
+   transport over RTP.  The media transport topologies considered are
    point to point RTP sessions as well as centralized multi-party RTP
    sessions, where a media sender will provide the simulcasted streams
    to an RTP middlebox or endpoint, and middleboxes may further
@@ -216,8 +217,7 @@ Internet-Draft                  Simulcast                      June 2018
       stream.  As for multiple RTP payload types on the m-line in offer/
       answer [RFC3264], any one of the negotiated alternative formats
       can be used in a single RTP stream at a given point in time, but
-      not more than one (based on RTP timestamp).  What format is used
-      can change dynamically from one RTP packet to another.
+
 
 
 
@@ -225,6 +225,9 @@ Burman, et al.          Expires December 23, 2018               [Page 4]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+      not more than one (based on RTP timestamp).  What format is used
+      can change dynamically from one RTP packet to another.
 
 2.2.  Requirements Language
 
@@ -271,9 +274,6 @@ Internet-Draft                  Simulcast                      June 2018
    The use of simulcast relates to the latter approach, where it is more
    important to reduce the load on the RTP Mixer and/or minimize QoE
    impact than to achieve an optimal adaptation of resource usage.
-
-
-
 
 
 
@@ -1104,16 +1104,16 @@ Internet-Draft                  Simulcast                      June 2018
    a=rid:3 send max-fs=230400;max-fps=30
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
    a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
+   a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id
    a=rtcp-fb:* ccm pause nowait
    a=simulcast:send 1;~3;~2
 
                Figure 7: Fred's Multi-Source Simulcast Offer
 
-5.6.3.  Simulcast and Redundancy
 
-   The example in this section looks at applying simulcast with audio
-   and video redundancy formats.  The audio media description uses codec
-   and bitrate restrictions, combining it with RTP Payload for Redundant
+
+
+
 
 
 
@@ -1122,6 +1122,11 @@ Burman, et al.          Expires December 23, 2018              [Page 20]
 Internet-Draft                  Simulcast                      June 2018
 
 
+5.6.3.  Simulcast and Redundancy
+
+   The example in this section looks at applying simulcast with audio
+   and video redundancy formats.  The audio media description uses codec
+   and bitrate restrictions, combining it with RTP Payload for Redundant
    Audio Data [RFC2198] for enhanced packet loss resilience.  The video
    media description applies both resolution and bitrate restrictions,
    combining it with FEC in the form of Flexible FEC
@@ -1142,11 +1147,6 @@ Internet-Draft                  Simulcast                      June 2018
    Flexible FEC is not bound to any particular RTP streams and is
    therefore possible to use across all RTP streams that are being sent
    as part of this media description.
-
-
-
-
-
 
 
 
@@ -1224,7 +1224,7 @@ Internet-Draft                  Simulcast                      June 2018
    a=rtcp-fb:* ccm pause nowait
    a=simulcast:send 1,2;3,4
 
-                                 Figure 8
+                Figure 8: Simulcast and Redundancy Example
 
 
 
@@ -1947,13 +1947,13 @@ Appendix B.  Changes From Earlier Versions
 
    NOTE TO RFC EDITOR: Please remove this section prior to publication.
 
-B.1.  Modifications Between WG Version -11 and -12
+B.1.  Modifications Between WG Version -12 and -13
 
-   o  Modified Normative statement regarding RTP stream duplication in
-      Section 5.2.
+   o  Examples corrected to follow RID ABNF
 
-   o  Clarified assumption about use of congestion control by
-      applications.
+   o  Added urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id in
+      examples with RTX.
+
 
 
 
@@ -1961,6 +1961,18 @@ Burman, et al.          Expires December 23, 2018              [Page 35]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   o  ABNF now uses RFC 7405 to indicate case sensitivity
+
+   o  Various minor editorials and nits.
+
+B.2.  Modifications Between WG Version -11 and -12
+
+   o  Modified Normative statement regarding RTP stream duplication in
+      Section 5.2.
+
+   o  Clarified assumption about use of congestion control by
+      applications.
 
    o  Changed to use RFC 8174 boilerplate instead of RFC 2119.
 
@@ -1971,7 +1983,7 @@ Internet-Draft                  Simulcast                      June 2018
 
    o  Various minor editorials and nits.
 
-B.2.  Modifications Between WG Version -10 and -11
+B.3.  Modifications Between WG Version -10 and -11
 
    o  Added new SDP example section on Simulcast and Redundancy,
       including both RED (RFC2198), RTP RTX (RFC4588), and FEC (draft-
@@ -1991,7 +2003,7 @@ B.2.  Modifications Between WG Version -10 and -11
 
    o  Changed reference from the obsoleted RFC 5285 to RFC 8285.
 
-B.3.  Modifications Between WG Version -09 and -10
+B.4.  Modifications Between WG Version -09 and -10
 
    o  Amended overview section with a bit more explanation on the
       examples, and added an rid-id alternative for one of the streams.
@@ -1999,7 +2011,14 @@ B.3.  Modifications Between WG Version -09 and -10
    o  Removed SCID also from the Terminology section, which was
       forgotten in -09 when changing SCID to rid-id.
 
-B.4.  Modifications Between WG Version -08 and -09
+
+
+Burman, et al.          Expires December 23, 2018              [Page 36]
+
+Internet-Draft                  Simulcast                      June 2018
+
+
+B.5.  Modifications Between WG Version -08 and -09
 
    o  Changed SCID to rid-id, to align with ietf-draft-mmusic-rid
       naming.
@@ -2010,13 +2029,6 @@ B.4.  Modifications Between WG Version -08 and -09
       offers from requiring it to follow actual RFC 7728 pause state to
       an informational offerer's opinion at the time of offer creation,
       not in any way overriding or amending RFC 7728 signaling.
-
-
-
-Burman, et al.          Expires December 23, 2018              [Page 36]
-
-Internet-Draft                  Simulcast                      June 2018
-
 
    o  Replaced text on ignoring all but the first of multiple
       "a=simulcast" lines in a media description with mandating that at
@@ -2030,7 +2042,7 @@ Internet-Draft                  Simulcast                      June 2018
 
    o  Editorial corrections and clarifications.
 
-B.5.  Modifications Between WG Version -07 and -08
+B.6.  Modifications Between WG Version -07 and -08
 
    o  Correcting syntax of SDP examples in section 6.6.1, as found by
       Inaki Baz Castillo.
@@ -2042,7 +2054,7 @@ B.5.  Modifications Between WG Version -07 and -08
 
    o  Adding list of modifications between -06 and -07.
 
-B.6.  Modifications Between WG Version -06 and -07
+B.7.  Modifications Between WG Version -06 and -07
 
    o  A scope clarification, as result of the discussion with Roni Even.
 
@@ -2051,18 +2063,6 @@ B.6.  Modifications Between WG Version -06 and -07
 
    o  Correcting the statement related to source specific signalling
       (RFC 5576) to address Roni Even's comment.
-
-   o  Update of the last paragraph in Section 6.2 regarding simulcast
-      stream differences as well as forbidding multiple instances of the
-      same SCID within a single a=simulcast line.
-
-   o  Removal of note in Section 6.4 as result of issue raised by Roni
-      Even.
-
-   o  Use of "m=" has been changed to media description and a few other
-      editorial improvements and clarifications.
-
-
 
 
 
@@ -2074,7 +2074,17 @@ Burman, et al.          Expires December 23, 2018              [Page 37]
 Internet-Draft                  Simulcast                      June 2018
 
 
-B.7.  Modifications Between WG Version -05 and -06
+   o  Update of the last paragraph in Section 6.2 regarding simulcast
+      stream differences as well as forbidding multiple instances of the
+      same SCID within a single a=simulcast line.
+
+   o  Removal of note in Section 6.4 as result of issue raised by Roni
+      Even.
+
+   o  Use of "m=" has been changed to media description and a few other
+      editorial improvements and clarifications.
+
+B.8.  Modifications Between WG Version -05 and -06
 
    o  Added section on RTP Aspects
 
@@ -2092,7 +2102,7 @@ B.7.  Modifications Between WG Version -05 and -06
 
    o  Editorial improvements and corrections.
 
-B.8.  Modifications Between WG Version -04 and -05
+B.9.  Modifications Between WG Version -04 and -05
 
    o  Aligned with recent changes in draft-ietf-mmusic-rid and draft-
       ietf-avtext-rid.
@@ -2113,22 +2123,21 @@ B.8.  Modifications Between WG Version -04 and -05
    o  Removed unused reference to draft-ietf-payload-flexible-fec-
       scheme.
 
-   o  Editorial improvements and corrections.
-
-B.9.  Modifications Between WG Version -03 and -04
-
-   o  Changed to only use RID identification, as was consensus during
-      IETF 94.
-
-   o  ABNF improvements.
-
-
 
 
 Burman, et al.          Expires December 23, 2018              [Page 38]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   o  Editorial improvements and corrections.
+
+B.10.  Modifications Between WG Version -03 and -04
+
+   o  Changed to only use RID identification, as was consensus during
+      IETF 94.
+
+   o  ABNF improvements.
 
    o  Clarified offer-answer rules for initially paused streams.
 
@@ -2144,7 +2153,7 @@ Internet-Draft                  Simulcast                      June 2018
 
    o  Editorial improvements.
 
-B.10.  Modifications Between WG Version -02 and -03
+B.11.  Modifications Between WG Version -02 and -03
 
    o  Removed text on multicast / broadcast from use cases, since it is
       not supported by the solution.
@@ -2161,12 +2170,21 @@ B.10.  Modifications Between WG Version -02 and -03
    o  Added a section on limitations of the current proposal, including
       identification method specific limitations.
 
-B.11.  Modifications Between WG Version -01 and -02
+B.12.  Modifications Between WG Version -01 and -02
 
    o  Relying on the new RID solution for codec constraints and
       configuration identification.  This has resulted in changes in
       syntax to identify if pt or RID is used to describe the simulcast
       stream.
+
+
+
+
+
+Burman, et al.          Expires December 23, 2018              [Page 39]
+
+Internet-Draft                  Simulcast                      June 2018
+
 
    o  Renamed simulcast version and simulcast version alternative to
       simulcast stream and simulcast format respectively, and improved
@@ -2179,18 +2197,11 @@ B.11.  Modifications Between WG Version -01 and -02
    o  Changed the definition so that ordering of simulcast formats for a
       specific simulcast stream do have a preference order.
 
-
-
-Burman, et al.          Expires December 23, 2018              [Page 39]
-
-Internet-Draft                  Simulcast                      June 2018
-
-
-B.12.  Modifications Between WG Version -00 and -01
+B.13.  Modifications Between WG Version -00 and -01
 
    o  No changes.  Only preventing expiry.
 
-B.13.  Modifications Between Individual Version -00 and WG Version -00
+B.14.  Modifications Between Individual Version -00 and WG Version -00
 
    o  Added this appendix.
 
@@ -2224,6 +2235,13 @@ Authors' Addresses
    Email: snandaku@cisco.com
 
 
+
+
+Burman, et al.          Expires December 23, 2018              [Page 40]
+
+Internet-Draft                  Simulcast                      June 2018
+
+
    Mo Zanaty
    Cisco
    170 West Tasman Drive
@@ -2237,4 +2255,42 @@ Authors' Addresses
 
 
 
-Burman, et al.          Expires December 23, 2018              [Page 40]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Burman, et al.          Expires December 23, 2018              [Page 41]
