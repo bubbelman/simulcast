@@ -122,15 +122,15 @@ Internet-Draft                  Simulcast                      June 2018
      B.1.  Modifications Between WG Version -12 and -13  . . . . . .  35
      B.2.  Modifications Between WG Version -11 and -12  . . . . . .  36
      B.3.  Modifications Between WG Version -10 and -11  . . . . . .  36
-     B.4.  Modifications Between WG Version -09 and -10  . . . . . .  36
+     B.4.  Modifications Between WG Version -09 and -10  . . . . . .  37
      B.5.  Modifications Between WG Version -08 and -09  . . . . . .  37
      B.6.  Modifications Between WG Version -07 and -08  . . . . . .  37
-     B.7.  Modifications Between WG Version -06 and -07  . . . . . .  37
+     B.7.  Modifications Between WG Version -06 and -07  . . . . . .  38
      B.8.  Modifications Between WG Version -05 and -06  . . . . . .  38
      B.9.  Modifications Between WG Version -04 and -05  . . . . . .  38
      B.10. Modifications Between WG Version -03 and -04  . . . . . .  39
      B.11. Modifications Between WG Version -02 and -03  . . . . . .  39
-     B.12. Modifications Between WG Version -01 and -02  . . . . . .  39
+     B.12. Modifications Between WG Version -01 and -02  . . . . . .  40
      B.13. Modifications Between WG Version -00 and -01  . . . . . .  40
      B.14. Modifications Between Individual Version -00 and WG
            Version -00 . . . . . . . . . . . . . . . . . . . . . . .  40
@@ -1951,9 +1951,9 @@ B.1.  Modifications Between WG Version -12 and -13
 
    o  Examples corrected to follow RID ABNF
 
-   o  Added urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id in
-      examples with RTX.
+   o  Example Figure 7 now comments on priority for second media source.
 
+   o  Clarified a SHOULD limitation.
 
 
 
@@ -1961,6 +1961,9 @@ Burman, et al.          Expires December 23, 2018              [Page 35]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   o  Added urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id in
+      examples with RTX.
 
    o  ABNF now uses RFC 7405 to indicate case sensitivity
 
@@ -2003,13 +2006,10 @@ B.3.  Modifications Between WG Version -10 and -11
 
    o  Changed reference from the obsoleted RFC 5285 to RFC 8285.
 
-B.4.  Modifications Between WG Version -09 and -10
 
-   o  Amended overview section with a bit more explanation on the
-      examples, and added an rid-id alternative for one of the streams.
 
-   o  Removed SCID also from the Terminology section, which was
-      forgotten in -09 when changing SCID to rid-id.
+
+
 
 
 
@@ -2017,6 +2017,14 @@ Burman, et al.          Expires December 23, 2018              [Page 36]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+B.4.  Modifications Between WG Version -09 and -10
+
+   o  Amended overview section with a bit more explanation on the
+      examples, and added an rid-id alternative for one of the streams.
+
+   o  Removed SCID also from the Terminology section, which was
+      forgotten in -09 when changing SCID to rid-id.
 
 B.5.  Modifications Between WG Version -08 and -09
 
@@ -2054,15 +2062,7 @@ B.6.  Modifications Between WG Version -07 and -08
 
    o  Adding list of modifications between -06 and -07.
 
-B.7.  Modifications Between WG Version -06 and -07
 
-   o  A scope clarification, as result of the discussion with Roni Even.
-
-   o  A reformulation of the identification requirements for simulcast
-      stream.
-
-   o  Correcting the statement related to source specific signalling
-      (RFC 5576) to address Roni Even's comment.
 
 
 
@@ -2073,6 +2073,16 @@ Burman, et al.          Expires December 23, 2018              [Page 37]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+B.7.  Modifications Between WG Version -06 and -07
+
+   o  A scope clarification, as result of the discussion with Roni Even.
+
+   o  A reformulation of the identification requirements for simulcast
+      stream.
+
+   o  Correcting the statement related to source specific signalling
+      (RFC 5576) to address Roni Even's comment.
 
    o  Update of the last paragraph in Section 6.2 regarding simulcast
       stream differences as well as forbidding multiple instances of the
@@ -2111,6 +2121,15 @@ B.9.  Modifications Between WG Version -04 and -05
       accepted structure, also adding a brief text on modifying the
       session that is aligned with draft-ietf-mmusic-rid.
 
+
+
+
+
+Burman, et al.          Expires December 23, 2018              [Page 38]
+
+Internet-Draft                  Simulcast                      June 2018
+
+
    o  Improved text around simulcast stream identification (as opposed
       to the simulcast stream itself) to consistently use the acronym
       SCID and defined that in the Terminology section.
@@ -2122,13 +2141,6 @@ B.9.  Modifications Between WG Version -04 and -05
 
    o  Removed unused reference to draft-ietf-payload-flexible-fec-
       scheme.
-
-
-
-Burman, et al.          Expires December 23, 2018              [Page 38]
-
-Internet-Draft                  Simulcast                      June 2018
-
 
    o  Editorial improvements and corrections.
 
@@ -2167,6 +2179,13 @@ B.11.  Modifications Between WG Version -02 and -03
 
    o  Added a preference indication also in send direction offers.
 
+
+
+Burman, et al.          Expires December 23, 2018              [Page 39]
+
+Internet-Draft                  Simulcast                      June 2018
+
+
    o  Added a section on limitations of the current proposal, including
       identification method specific limitations.
 
@@ -2176,15 +2195,6 @@ B.12.  Modifications Between WG Version -01 and -02
       configuration identification.  This has resulted in changes in
       syntax to identify if pt or RID is used to describe the simulcast
       stream.
-
-
-
-
-
-Burman, et al.          Expires December 23, 2018              [Page 39]
-
-Internet-Draft                  Simulcast                      June 2018
-
 
    o  Renamed simulcast version and simulcast version alternative to
       simulcast stream and simulcast format respectively, and improved
@@ -2226,6 +2236,12 @@ Authors' Addresses
    Email: magnus.westerlund@ericsson.com
 
 
+
+Burman, et al.          Expires December 23, 2018              [Page 40]
+
+Internet-Draft                  Simulcast                      June 2018
+
+
    Suhas Nandakumar
    Cisco
    170 West Tasman Drive
@@ -2235,13 +2251,6 @@ Authors' Addresses
    Email: snandaku@cisco.com
 
 
-
-
-Burman, et al.          Expires December 23, 2018              [Page 40]
-
-Internet-Draft                  Simulcast                      June 2018
-
-
    Mo Zanaty
    Cisco
    170 West Tasman Drive
@@ -2249,15 +2258,6 @@ Internet-Draft                  Simulcast                      June 2018
    USA
 
    Email: mzanaty@cisco.com
-
-
-
-
-
-
-
-
-
 
 
 

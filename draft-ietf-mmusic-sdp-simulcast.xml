@@ -1601,6 +1601,11 @@ a=simulcast:send 1,2;3,4
         <t><list style="symbols">
             <t>Examples corrected to follow RID ABNF</t>
 
+            <t>Example <xref target="fig-ms-offer"></xref> now comments on
+            priority for second media source. </t>
+
+            <t>Clarified a SHOULD limitation. </t>
+
             <t>Added urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id in
             examples with RTX.</t>
 
