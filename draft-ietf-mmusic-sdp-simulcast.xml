@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-12"
+<rfc category="std" docName="draft-ietf-mmusic-sdp-simulcast-13"
      ipr="trust200902" submissionType="IETF">
   <front>
     <title abbrev="Simulcast">Using Simulcast in SDP and RTP Sessions</title>
@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="10" month="April" year="2018" />
+    <date day="21" month="June" year="2018" />
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -223,7 +223,7 @@
       participants, and facilitate the media transport between participants.
       Thus, these cases target the RTP Mixer type of topology.</t>
 
-      <t>There are two principle approaches for an RTP Mixer to provide this
+      <t>There are two principal approaches for an RTP Mixer to provide this
       adapted view of the communication session to each receiving
       participant:<list style="symbols">
           <t>Transcoding (decoding and re-encoding) received RTP streams with
@@ -275,8 +275,7 @@
 
             <t hangText="Bitrate:">This relates to the number of bits sent per
             second to transmit the media source as an RTP stream, which
-            typically also affects the Quality of Experience (QoE) for the
-            receiving user.</t>
+            typically also affects the QoE for the receiving user.</t>
           </list>Letting the sending participant create a simulcast of a few
         differently configured RTP streams per media source can be a good
         tradeoff when using an RTP switch as middlebox, instead of sending a
@@ -308,14 +307,14 @@
         <t>It is also common that a currently active speaker participant is
         shown in larger size or higher quality than other participants (the
         sampling or bitrate aspects of <xref
-        target="sec-diverse-receivers"></xref>). Not sending the active
-        speaker media back to itself means there is some other participant's
-        media that instead has to receive special handling towards the active
-        speaker; typically the previous active speaker. This way, the
-        previously active speaker is needed both in larger size (to current
-        active speaker) and in small size (to the rest of the participants),
-        which can be solved with a simulcast from the previously active
-        speaker to the RTP switch.</t>
+        target="sec-diverse-receivers"></xref>). Many conferencing systems do
+        not send the active speaker's media back to the sender itself, which
+        means there is some other participant's media that instead is
+        forwarded to the active speaker; typically the previous active
+        speaker. This way, the previously active speaker is needed both in
+        larger size (to current active speaker) and in small size (to the rest
+        of the participants), which can be solved with a simulcast from the
+        previously active speaker to the RTP switch.</t>
       </section>
 
       <section anchor="sec-receiver-preferences"
@@ -594,17 +593,19 @@ sc-id        = [sc-id-paused] rid-id
         <t>If the endpoint sending the SDP includes an "recv" direction
         simulcast stream that is initially paused, then the remote RTP sender
         receiving the SDP SHOULD put its RTP stream in a unsolicited locally
-        paused state. However, this does not apply if there are other RTP
-        stream receivers that do not mark the simulcast stream as initially
-        paused. The reason to require an initially paused "recv" stream to be
-        considered locally paused by the remote RTP sender, instead of making
-        it equivalent to implicitly sending a pause request, is because the
-        pausing RTP sender cannot know which receiving SSRC owns the
-        restriction when Temporary Maximum Media Stream Bit Rate Request
-        (TMMBR) and Temporary Maximum Media Stream Bit Rate Notification
-        (TMMBN) are used for pause/resume signaling (<xref
-        target="RFC7728">Section 5.6 of </xref>) since the RTP receiver's SSRC
-        in send direction is sometimes not yet known.</t>
+        paused state. The simulcast stream sender does not put the stream in
+        the locally paused state if there are other RTP stream receivers in
+        the session that do not mark the simulcast stream as initially paused.
+        However, in centralized conferencing the sender usually does not see
+        the other receivers signalling to make this determination. The reason
+        to require an initially paused "recv" stream to be considered locally
+        paused by the remote RTP sender, instead of making it equivalent to
+        implicitly sending a pause request, is because the pausing RTP sender
+        cannot know which receiving SSRC owns the restriction when Temporary
+        Maximum Media Stream Bit Rate Request (TMMBR) and Temporary Maximum
+        Media Stream Bit Rate Notification (TMMBN) are used for pause/resume
+        signaling (<xref target="RFC7728">Section 5.6 of </xref>) since the
+        RTP receiver's SSRC in send direction is sometimes not yet known.</t>
 
         <t>Use of the <xref target="RFC2198">redundant audio data</xref>
         format could be seen as a form of simulcast for loss protection
