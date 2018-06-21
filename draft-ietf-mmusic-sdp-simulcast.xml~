@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="4" month="April" year="2018" />
+    <date day="10" month="April" year="2018" />
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -559,9 +559,9 @@ sc-id        = [sc-id-paused] rid-id
         format type ordering on the "m=" line, using regular SDP rules. This
         is to enable a separation of general codec preferences and simulcast
         stream configuration preferences. However, the choice of which
-        alternative to use per simulcast stream are independent, and there is
+        alternative to use per simulcast stream is independent, and there is
         currently no mechanism for align the choice between alternative
-        rid-ids between different simulcast streams. </t>
+        rid-ids between different simulcast streams.</t>
 
         <t>A simulcast stream can use a codec defined such that the same RTP
         SSRC can change RTP payload type multiple times during a session,
@@ -591,12 +591,12 @@ sc-id        = [sc-id-paused] rid-id
         <xref target="I-D.ietf-avtext-rid">RtpStreamId RTCP SDES
         item</xref>.</t>
 
-        <t>IIf the endpoint sending the SDP includes an "recv" direction
+        <t>If the endpoint sending the SDP includes an "recv" direction
         simulcast stream that is initially paused, then the remote RTP sender
         receiving the SDP SHOULD put its RTP stream in a unsolicited locally
-        paused state. This unless there are there are other RTP stream
-        receivers that do not mark the simulcast stream as initially paused.
-        The reason to require an initially paused "recv" stream to be
+        paused state. However, this does not apply if there are other RTP
+        stream receivers that do not mark the simulcast stream as initially
+        paused. The reason to require an initially paused "recv" stream to be
         considered locally paused by the remote RTP sender, instead of making
         it equivalent to implicitly sending a pause request, is because the
         pausing RTP sender cannot know which receiving SSRC owns the
@@ -618,8 +618,8 @@ sc-id        = [sc-id-paused] rid-id
         streams SHOULD be chosen such that they are different, e.g. as
         different SDP formats with differing "a=rtpmap" and/or "a=fmtp" lines,
         or as differently defined RTP payload format restrictions. If this
-        difference is not required, <xref target="RFC7104">RTP
-        duplication</xref> procedures RECOMMENDED to be used instead of
+        difference is not required, it is RECOMMENDED to use <xref
+        target="RFC7104">RTP duplication</xref> procedures instead of
         simulcast. To avoid complications in implementations, a single rid-id
         MUST NOT occur more than once per "a=simulcast" line. Note that this
         does not eliminate use of simulcast as an RTP duplication mechanism,
@@ -1324,19 +1324,25 @@ a=simulcast:send 1,2;3,4
 
       <section title="Bitrate Adaptation">
         <t>Use of multiple simulcast streams can require a significant amount
-        of network resources. It is assumed that a suitable congestion control
-        mechanism is used by the application to ensure that it doesn't cause
-        persistent congestion. If the amount of available network resources
-        varies during an RTP session such that it does not match what is
-        negotiated in SDP, the bitrate used by the different simulcast streams
-        may have to be reduced dynamically. What simulcast streams to
-        prioritize when allocating available bitrate among the simulcast
-        streams in such adaptation SHOULD be taken from the simulcast stream
-        order on the "a=simulcast" line and ordering of alternative simulcast
-        formats <xref target="sec-cap"></xref>. Simulcast streams that have
-        pause/resume capability and that would be given such low bitrate by
-        the adaptation process that they are considered not really useful can
-        be temporarily paused until the limiting condition clears.</t>
+        of network resources. The aggregate bandwidth for all simulcast
+        streams for a media source (and thus SDP media description) is bounded
+        by any SDP "b=" line applicable to that media source. It is assumed
+        that a suitable congestion control mechanism is used by the
+        application to ensure that it doesn't cause persistent congestion. If
+        the amount of available network resources varies during an RTP session
+        such that it does not match what is negotiated in SDP, the bitrate
+        used by the different simulcast streams may have to be reduced
+        dynamically. When a simulcasting media source uses a single media
+        transport for all of the simulcast streams, it is likely that a joint
+        congestion control across all simulcast streams is used for that media
+        source. What simulcast streams to prioritize when allocating available
+        bitrate among the simulcast streams in such adaptation SHOULD be taken
+        from the simulcast stream order on the "a=simulcast" line and ordering
+        of alternative simulcast formats <xref target="sec-cap"></xref>.
+        Simulcast streams that have pause/resume capability and that would be
+        given such low bitrate by the adaptation process that they are
+        considered not really useful can be temporarily paused until the
+        limiting condition clears.</t>
       </section>
     </section>
 
@@ -1497,9 +1503,8 @@ a=simulcast:send 1,2;3,4
     </references>
 
     <section anchor="sec-requirements" title="Requirements">
-      <t>The following requirements have been met by the defined solution to
-      support the <xref target="sec-use-cases">use cases</xref>:<list
-          style="hanging">
+      <t>The following requirements are met by the defined solution to support
+      the <xref target="sec-use-cases">use cases</xref>:<list style="hanging">
           <t anchor="req-1" hangText="REQ-1:">Identification:<list
               style="hanging">
               <t anchor="req-1.1" hangText="REQ-1.1:">It must be possible to
@@ -1592,14 +1597,14 @@ a=simulcast:send 1,2;3,4
             <t>Clarified assumption about use of congestion control by
             applications.</t>
 
-            <t>Changed to use RFC 8174 boilerplate instead of RFC 2119. </t>
+            <t>Changed to use RFC 8174 boilerplate instead of RFC 2119.</t>
 
             <t>Clarified explanation of syntax for simulcast attribute in
-            Section 4. </t>
+            Section 4.</t>
 
-            <t>Editorial clarification in Section 5.2 and 5.3.2. </t>
+            <t>Editorial clarification in Section 5.2 and 5.3.2.</t>
 
-            <t>Various minor editorials and nits</t>
+            <t>Various minor editorials and nits.</t>
           </list></t>
       </section>
 

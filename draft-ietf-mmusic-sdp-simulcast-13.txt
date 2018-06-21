@@ -125,12 +125,12 @@ Internet-Draft                  Simulcast                      June 2018
      B.4.  Modifications Between WG Version -08 and -09  . . . . . .  36
      B.5.  Modifications Between WG Version -07 and -08  . . . . . .  37
      B.6.  Modifications Between WG Version -06 and -07  . . . . . .  37
-     B.7.  Modifications Between WG Version -05 and -06  . . . . . .  37
+     B.7.  Modifications Between WG Version -05 and -06  . . . . . .  38
      B.8.  Modifications Between WG Version -04 and -05  . . . . . .  38
      B.9.  Modifications Between WG Version -03 and -04  . . . . . .  38
      B.10. Modifications Between WG Version -02 and -03  . . . . . .  39
      B.11. Modifications Between WG Version -01 and -02  . . . . . .  39
-     B.12. Modifications Between WG Version -00 and -01  . . . . . .  39
+     B.12. Modifications Between WG Version -00 and -01  . . . . . .  40
      B.13. Modifications Between Individual Version -00 and WG
            Version -00 . . . . . . . . . . . . . . . . . . . . . . .  40
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  40
@@ -175,9 +175,9 @@ Internet-Draft                  Simulcast                      June 2018
    to an RTP middlebox or endpoint, and middleboxes may further
    distribute the simulcast streams to other middleboxes or endpoints.
    Usage of multicast or broadcast transport is out of scope and left
-   for future extension.
+   for future extensions.
 
-   This document describes a few scenarios that motivates the use of
+   This document describes a few scenarios that motivate the use of
    simulcast, and also defines the needed RTP/RTCP and SDP signaling for
    it.
 
@@ -424,12 +424,12 @@ Internet-Draft                  Simulcast                      June 2018
    a=fmtp:97 profile-level-id=42c01f;max-fs=3600;max-mbps=108000
    a=fmtp:98 profile-level-id=42c00b;max-fs=240;max-mbps=3600
    a=fmtp:99 max-fs=240; max-fr=30
-   a=rid:1 send pt=97 max-width=1280;max-height=720
-   a=rid:2 send pt=98 max-width=320;max-height=180
-   a=rid:3 send pt=99 max-width=320;max-height=180
+   a=rid:1 send pt=97;max-width=1280;max-height=720
+   a=rid:2 send pt=98;max-width=320;max-height=180
+   a=rid:3 send pt=99;max-width=320;max-height=180
    a=rid:4 recv pt=97
    a=simulcast:send 1;2,3 recv 4
-   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
 
           Figure 1: Example Simulcast Media Description in Offer
 
@@ -473,7 +473,7 @@ Internet-Draft                  Simulcast                      June 2018
    a=rid:2 recv pt=98 max-width=320;max-height=180
    a=rid:4 send pt=97
    a=simulcast:recv 1;2 send 4
-   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
 
           Figure 2: Example Simulcast Media Description in Answer
 
@@ -512,11 +512,12 @@ Internet-Draft                  Simulcast                      June 2018
 5.1.  Simulcast Attribute
 
    This document defines a new SDP media-level "a=simulcast" attribute,
-   with value according to the following ABNF [RFC5234] syntax:
+   with value according to the following ABNF [RFC5234] syntax and its
+   update for Case-Sensitive String Support in ABNF [RFC7405]:
 
     sc-value     = ( sc-send [SP sc-recv] ) / ( sc-recv [SP sc-send] )
-    sc-send      = "send" SP sc-str-list
-    sc-recv      = "recv" SP sc-str-list
+    sc-send      = %s"send" SP sc-str-list
+    sc-recv      = %s"recv" SP sc-str-list
     sc-str-list  = sc-alt-list *( ";" sc-alt-list )
     sc-alt-list  = sc-id *( "," sc-id )
     sc-id-paused = "~"
@@ -551,7 +552,6 @@ Internet-Draft                  Simulcast                      June 2018
    to common payload types, it is unfeasible to pause streams with rid-
    id where any of the related RTP payload type(s) do not have pause
    capability.
-
 
 
 
@@ -607,7 +607,7 @@ Internet-Draft                  Simulcast                      June 2018
    This is to enable a separation of general codec preferences and
    simulcast stream configuration preferences.  However, the choice of
    which alternative to use per simulcast stream is independent, and
-   there is currently no mechanism for align the choice between
+   there is currently no mechanism to align the choice between
    alternative rid-ids between different simulcast streams.
 
 
@@ -927,7 +927,7 @@ Internet-Draft                  Simulcast                      June 2018
    a=rid:2 send pt=98
    a=rid:3 recv pt=97
    a=simulcast:send 1;2 recv 3
-   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
 
                   Figure 5: Single-Source Simulcast Offer
 
@@ -972,7 +972,7 @@ Internet-Draft                  Simulcast                      June 2018
    a=rid:2 recv pt=98
    a=rid:3 send pt=97
    a=simulcast:recv 1;2 send 3
-   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+   a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
 
                  Figure 6: Single-Source Simulcast Answer
 
@@ -998,10 +998,10 @@ Internet-Draft                  Simulcast                      June 2018
    The second media source is offered with three different simulcast
    streams.  All video streams of this second media source are loss
    protected by RTP retransmission [RFC4588].  Also here, all but the
-   highest fidelity simulcast stream are initially paused.
+   highest fidelity simulcast stream are initially paused.  Note that
+   the lower resolution is more prioritized than the medium resolution
+   simulcast stream.
 
-   Fred's client is also using BUNDLE to send all RTP streams from all
-   media descriptions in the same RTP session on a single media
 
 
 
@@ -1010,6 +1010,8 @@ Burman, et al.          Expires December 23, 2018              [Page 18]
 Internet-Draft                  Simulcast                      June 2018
 
 
+   Fred's client is also using BUNDLE to send all RTP streams from all
+   media descriptions in the same RTP session on a single media
    transport.  Although using many different simulcast streams in this
    example, the use of RtpStreamId as simulcast stream identification
    enables use of a low number of RTP payload types.  Note that the use
@@ -1019,8 +1021,6 @@ Internet-Draft                  Simulcast                      June 2018
    is consequently also included in the SDP.  Note also that for
    "a=rid", the corresponding SDES attribute is named RtpStreamId
    [I-D.ietf-avtext-rid].
-
-
 
 
 
@@ -1090,7 +1090,7 @@ Internet-Draft                  Simulcast                      June 2018
    a=rid:4 send pt=103;max-width=640;max-height=360
    a=depend:100 lay bar:101
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
-   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
    a=rtcp-fb:* ccm pause nowait
    a=simulcast:send 1;2;~4,3
    m=video 49602 RTP/AVPF 96 104
@@ -1099,13 +1099,13 @@ Internet-Draft                  Simulcast                      June 2018
    a=fmtp:96 max-fs=3600; max-fr=30
    a=rtpmap:104 rtx/90000
    a=fmtp:104 apt=96;rtx-time=200
-   a=rid:1 send pt=96;max-fs=921600;max-fps=30
-   a=rid:2 send pt=96;max-fs=614400;max-fps=15
-   a=rid:3 send pt=96;max-fs=230400;max-fps=30
+   a=rid:1 send max-fs=921600;max-fps=30
+   a=rid:2 send max-fs=614400;max-fps=15
+   a=rid:3 send max-fs=230400;max-fps=30
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
-   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
    a=rtcp-fb:* ccm pause nowait
-   a=simulcast:send 1;~2;~3
+   a=simulcast:send 1;~3;~2
 
                Figure 7: Fred's Multi-Source Simulcast Offer
 
@@ -1197,11 +1197,11 @@ Internet-Draft                  Simulcast                      June 2018
    a=fmtp:102 0-15
    a=ptime:20
    a=maxptime:40
-   a=rid:5 send pt=99,102;max-br=64000
-   a=rid:6 send pt=100,97,101,102
+   a=rid:1 send pt=99,102;max-br=64000
+   a=rid:2 send pt=100,97,101,102
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
-   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
-   a=simulcast:send 5;6
+   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
+   a=simulcast:send 1;2
    m=video 49600 RTP/AVPF 103 104 105 106 107
    a=mid:bar
    a=rtpmap:103 H264/90000
@@ -1219,12 +1219,12 @@ Internet-Draft                  Simulcast                      June 2018
    a=rid:3 send pt=103;max-width=640;max-height=360;max-br=300000
    a=rid:4 send pt=104;max-width=640;max-height=360;max-br=300000
    a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
-   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:RtpStreamId
+   a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
+   a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id
    a=rtcp-fb:* ccm pause nowait
    a=simulcast:send 1,2;3,4
 
-
-
+                                 Figure 8
 
 
 
@@ -1723,13 +1723,13 @@ Internet-Draft                  Simulcast                      June 2018
               DOI 10.17487/RFC5234, January 2008,
               <https://www.rfc-editor.org/info/rfc5234>.
 
+   [RFC7405]  Kyzivat, P., "Case-Sensitive String Support in ABNF",
+              RFC 7405, DOI 10.17487/RFC7405, December 2014,
+              <https://www.rfc-editor.org/info/rfc7405>.
+
    [RFC7728]  Burman, B., Akram, A., Even, R., and M. Westerlund, "RTP
               Stream Pause and Resume", RFC 7728, DOI 10.17487/RFC7728,
               February 2016, <https://www.rfc-editor.org/info/rfc7728>.
-
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
-              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
-              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
 
 
@@ -1737,6 +1737,10 @@ Burman, et al.          Expires December 23, 2018              [Page 31]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
 13.2.  Informative References
 
@@ -1783,16 +1787,16 @@ Internet-Draft                  Simulcast                      June 2018
               with Feedback (AVPF)", RFC 5104, DOI 10.17487/RFC5104,
               February 2008, <https://www.rfc-editor.org/info/rfc5104>.
 
-   [RFC5109]  Li, A., Ed., "RTP Payload Format for Generic Forward Error
-              Correction", RFC 5109, DOI 10.17487/RFC5109, December
-              2007, <https://www.rfc-editor.org/info/rfc5109>.
-
 
 
 Burman, et al.          Expires December 23, 2018              [Page 32]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   [RFC5109]  Li, A., Ed., "RTP Payload Format for Generic Forward Error
+              Correction", RFC 5109, DOI 10.17487/RFC5109, December
+              2007, <https://www.rfc-editor.org/info/rfc5109>.
 
    [RFC5583]  Schierl, T. and S. Wenger, "Signaling Media Decoding
               Dependency in the Session Description Protocol (SDP)",
@@ -1835,10 +1839,6 @@ Internet-Draft                  Simulcast                      June 2018
               DOI 10.17487/RFC7667, November 2015,
               <https://www.rfc-editor.org/info/rfc7667>.
 
-   [RFC7741]  Westin, P., Lundin, H., Glover, M., Uberti, J., and F.
-              Galligan, "RTP Payload Format for VP8 Video", RFC 7741,
-              DOI 10.17487/RFC7741, March 2016,
-              <https://www.rfc-editor.org/info/rfc7741>.
 
 
 
@@ -1849,6 +1849,11 @@ Burman, et al.          Expires December 23, 2018              [Page 33]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   [RFC7741]  Westin, P., Lundin, H., Glover, M., Uberti, J., and F.
+              Galligan, "RTP Payload Format for VP8 Video", RFC 7741,
+              DOI 10.17487/RFC7741, March 2016,
+              <https://www.rfc-editor.org/info/rfc7741>.
 
    [RFC8108]  Lennox, J., Westerlund, M., Wu, Q., and C. Perkins,
               "Sending Multiple RTP Streams in a Single RTP Session",
@@ -1892,11 +1897,6 @@ Appendix A.  Requirements
       REQ-3.3:  Sender can express maximum number of simulcast streams
          that can be provided.
 
-      REQ-3.4:  Receiver can express maximum number of simulcast streams
-         that can be received.
-
-      REQ-3.5:  Sender can detail the characteristics of the simulcast
-         streams that can be provided.
 
 
 
@@ -1905,6 +1905,12 @@ Burman, et al.          Expires December 23, 2018              [Page 34]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+      REQ-3.4:  Receiver can express maximum number of simulcast streams
+         that can be received.
+
+      REQ-3.5:  Sender can detail the characteristics of the simulcast
+         streams that can be provided.
 
       REQ-3.6:  Receiver can detail the characteristics of the simulcast
          streams that it prefers to receive.
@@ -1949,18 +1955,17 @@ B.1.  Modifications Between WG Version -11 and -12
    o  Clarified assumption about use of congestion control by
       applications.
 
-   o  Changed to use RFC 8174 boilerplate instead of RFC 2119.
-
-   o  Clarified explanation of syntax for simulcast attribute in
-      Section 4.
-
-
 
 
 Burman, et al.          Expires December 23, 2018              [Page 35]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   o  Changed to use RFC 8174 boilerplate instead of RFC 2119.
+
+   o  Clarified explanation of syntax for simulcast attribute in
+      Section 4.
 
    o  Editorial clarification in Section 5.2 and 5.3.2.
 
@@ -2006,17 +2011,16 @@ B.4.  Modifications Between WG Version -08 and -09
       an informational offerer's opinion at the time of offer creation,
       not in any way overriding or amending RFC 7728 signaling.
 
-   o  Replaced text on ignoring all but the first of multiple
-      "a=simulcast" lines in a media description with mandating that at
-      most one "a=simulcast" line is included.
-
-
 
 
 Burman, et al.          Expires December 23, 2018              [Page 36]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   o  Replaced text on ignoring all but the first of multiple
+      "a=simulcast" lines in a media description with mandating that at
+      most one "a=simulcast" line is included.
 
    o  Clarified with a note that, for the case it is clear from the SDP
       that RTP PT uniquely maps to RtpStreamId, an RTP receiver can use
@@ -2058,12 +2062,8 @@ B.6.  Modifications Between WG Version -06 and -07
    o  Use of "m=" has been changed to media description and a few other
       editorial improvements and clarifications.
 
-B.7.  Modifications Between WG Version -05 and -06
 
-   o  Added section on RTP Aspects
 
-   o  Added a requirement (5-4) on that capability exchange must be
-      capable of handling multi RTP stream cases.
 
 
 
@@ -2073,6 +2073,13 @@ Burman, et al.          Expires December 23, 2018              [Page 37]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+B.7.  Modifications Between WG Version -05 and -06
+
+   o  Added section on RTP Aspects
+
+   o  Added a requirement (5-4) on that capability exchange must be
+      capable of handling multi RTP stream cases.
 
    o  Added extmap attribute also on first signalling example as it is a
       recommended to use mechanism.
@@ -2115,13 +2122,6 @@ B.9.  Modifications Between WG Version -03 and -04
 
    o  ABNF improvements.
 
-   o  Clarified offer-answer rules for initially paused streams.
-
-   o  Changed references for RTP topologies and RTP taxonomy documents
-      that are now published as RFC.
-
-   o  Added reference to the new RID draft in AVTEXT.
-
 
 
 
@@ -2129,6 +2129,13 @@ Burman, et al.          Expires December 23, 2018              [Page 38]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+   o  Clarified offer-answer rules for initially paused streams.
+
+   o  Changed references for RTP topologies and RTP taxonomy documents
+      that are now published as RFC.
+
+   o  Added reference to the new RID draft in AVTEXT.
 
    o  Re-structured section 6 to provide an easy reference by the
       updated IANA section.
@@ -2172,19 +2179,16 @@ B.11.  Modifications Between WG Version -01 and -02
    o  Changed the definition so that ordering of simulcast formats for a
       specific simulcast stream do have a preference order.
 
-B.12.  Modifications Between WG Version -00 and -01
-
-   o  No changes.  Only preventing expiry.
-
-
-
-
 
 
 Burman, et al.          Expires December 23, 2018              [Page 39]
 
 Internet-Draft                  Simulcast                      June 2018
 
+
+B.12.  Modifications Between WG Version -00 and -01
+
+   o  No changes.  Only preventing expiry.
 
 B.13.  Modifications Between Individual Version -00 and WG Version -00
 
@@ -2227,10 +2231,6 @@ Authors' Addresses
    USA
 
    Email: mzanaty@cisco.com
-
-
-
-
 
 
 
