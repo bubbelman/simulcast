@@ -574,7 +574,7 @@ sc-id        = [sc-id-paused] rid-id
         that the corresponding simulcast stream is initially paused already
         from start of the RTP session. In this case, support for RTP stream
         pause/resume MUST also be included under the same "m=" line where
-        "a=simulcast" is included. All RTP payload types related to such
+        "a=simulcast" is included. All RTP payload types related to such an
         initially paused simulcast stream MUST be listed in the SDP as
         pause/resume capable as specified by <xref target="RFC7728"></xref>,
         e.g. by using the "*" wildcard format for "a=rtcp-fb".</t>
@@ -969,7 +969,7 @@ a=rid:2 send max-fs=614400;max-fps=15
 a=rid:3 send max-fs=230400;max-fps=30
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
 a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
-a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id
+a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id
 a=rtcp-fb:* ccm pause nowait
 a=simulcast:send 1;~3;~2
 ]]></artwork>
@@ -1046,7 +1046,7 @@ a=rid:3 send pt=103;max-width=640;max-height=360;max-br=300000
 a=rid:4 send pt=104;max-width=640;max-height=360;max-br=300000
 a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:mid
 a=extmap:2 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
-a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id
+a=extmap:3 urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id
 a=rtcp-fb:* ccm pause nowait
 a=simulcast:send 1,2;3,4
 ]]></artwork>
@@ -1602,11 +1602,11 @@ a=simulcast:send 1,2;3,4
             <t>Examples corrected to follow RID ABNF</t>
 
             <t>Example <xref target="fig-ms-offer"></xref> now comments on
-            priority for second media source. </t>
+            priority for second media source.</t>
 
-            <t>Clarified a SHOULD limitation. </t>
+            <t>Clarified a SHOULD limitation.</t>
 
-            <t>Added urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-sream-id in
+            <t>Added urn:ietf:params:rtp-hdrext:sdes:repaired-rtp-stream-id in
             examples with RTX.</t>
 
             <t>ABNF now uses RFC 7405 to indicate case sensitivity</t>
