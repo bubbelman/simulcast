@@ -111,7 +111,7 @@
       </address>
     </author>
 
-    <date day="25" month="June" year="2018"/>
+    <date day="27" month="June" year="2018"/>
 
     <abstract>
       <t>In some application scenarios it may be desirable to send multiple
@@ -929,8 +929,8 @@ a=extmap:1 urn:ietf:params:rtp-hdrext:sdes:rtp-stream-id
           the <xref target="RFC8285">RTP header extension</xref> for carrying
           these RTP stream identification fields, which is consequently also
           included in the SDP. Note also that for "a=rid", the corresponding
-          SDES attribute is named <xref
-          target="I-D.ietf-avtext-rid">RtpStreamId</xref>.</t>
+          RtpStreamId SDES attribute RTP header extension is named <xref
+          target="I-D.ietf-avtext-rid">rtp-stream-id</xref>.</t>
 
           <figure anchor="fig-ms-offer"
                   title="Fred's Multi-Source Simulcast Offer">
